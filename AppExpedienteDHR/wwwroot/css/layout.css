@@ -1,0 +1,21 @@
+﻿/* wwwroot/css/layout.css */
+
+/* Full-height layout */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+.footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
