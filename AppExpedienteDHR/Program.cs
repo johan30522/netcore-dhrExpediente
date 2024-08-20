@@ -5,6 +5,10 @@ using AppExpedienteDHR.Infrastructure.Data;
 using AppExpedienteDHR.Core.Domain.IdentityEntities;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 using BlogCore.Infrastructure.Repositories;
+using AppExpedienteDHR.Core.Profiles;
+using AppExpedienteDHR.Core.Services;
+using AppExpedienteDHR.Core.ServiceContracts;
+using AppExpedienteDHR.Core.Resolver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,9 +31,17 @@ builder.Services.AddControllersWithViews();
 //Add container to container IcC of dependency injection
 builder.Services.AddScoped<IContainerWork, ContainerWork>();
 
+// Configuracion de AutoMapper
+builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(RoleProfile));
 
 //Add container to container IcC of dependency injection
 builder.Services.AddScoped<IContainerWork, ContainerWork>();
+
+// add services to container
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 
 
 

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using AppExpedienteDHR.Utils.Constants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,14 +34,17 @@
                                 <span class="visually-hidden">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Administración</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item text-white" asp-area="" asp-controller="Home" asp-action="Index">Usuarios</a>
-                                <a class="dropdown-item text-white" asp-area="" asp-controller="Home" asp-action="Index">Perfiles</a>
-                                <div class="dropdown-divider"></div>
-                            </div>
-                        </li>
+                        @if (User.IsInRole(Roles.Admin))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Administración</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item text-white" asp-area="Admin" asp-controller="User" asp-action="Index">Usuarios</a>
+                                    <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Role" asp-action="Index">Perfiles</a>
+                                    <div class="dropdown-divider"></div>
+                                </div>
+                            </li>
+                        } 
                     </ul>
                     <form class="d-flex">
                         <input class="form-control me-sm-2" type="search" placeholder="Busca lo que quieras">

@@ -14,9 +14,13 @@ namespace BlogCore.Infrastructure.Repositories
         {
             _context = context;
             Category = new CategoryRepository(_context);
+            User = new UserRepository(_context);
+           
            
         }
         public ICategoryRepository Category { get; private set; }
+
+        public IUserRepository User { get; private set; }
       
 
         public void Dispose()

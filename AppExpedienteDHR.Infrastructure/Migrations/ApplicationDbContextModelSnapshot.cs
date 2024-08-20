@@ -40,7 +40,7 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.IdentityEntities.ApplicationUser", b =>

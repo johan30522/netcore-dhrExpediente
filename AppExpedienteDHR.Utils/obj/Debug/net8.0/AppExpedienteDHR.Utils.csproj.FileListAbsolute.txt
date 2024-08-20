@@ -5,6 +5,7 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Deb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.AssemblyInfoInputs.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.AssemblyInfo.cs
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.csproj.CoreCompileInputs.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.sourcelink.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\refint\AppExpedienteDHR.Utils.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.pdb

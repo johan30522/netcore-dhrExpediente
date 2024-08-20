@@ -279,6 +279,7 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.RazorAssemblyInfo.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.RazorAssemblyInfo.cs
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.sourcelink.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\staticwebassets\msbuild.AppExpedienteDHR.Microsoft.AspNetCore.StaticWebAssets.props

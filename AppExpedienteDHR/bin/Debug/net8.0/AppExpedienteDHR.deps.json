@@ -3013,8 +3013,10 @@
       },
       "AppExpedienteDHR.Core/1.0.0": {
         "dependencies": {
+          "AppExpedienteDHR.Utils": "1.0.0",
           "AutoMapper": "13.0.1",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.7",
+          "Microsoft.AspNetCore.Identity.UI": "8.0.7",
           "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.2.0"
         },
         "runtime": {

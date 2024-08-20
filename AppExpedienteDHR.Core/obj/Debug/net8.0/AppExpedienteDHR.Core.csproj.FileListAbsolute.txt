@@ -2,11 +2,15 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\bin\Debu
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\bin\Debug\net8.0\AppExpedienteDHR.Core.runtimeconfig.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\bin\Debug\net8.0\AppExpedienteDHR.Core.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\bin\Debug\net8.0\AppExpedienteDHR.Core.pdb
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\bin\Debug\net8.0\AppExpedienteDHR.Utils.dll
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\bin\Debug\net8.0\AppExpedienteDHR.Utils.pdb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.csproj.AssemblyReference.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.AssemblyInfoInputs.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.AssemblyInfo.cs
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.csproj.CoreCompileInputs.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.sourcelink.json
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExped.01424115.Up2Date
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\refint\AppExpedienteDHR.Core.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Core\obj\Debug\net8.0\AppExpedienteDHR.Core.pdb

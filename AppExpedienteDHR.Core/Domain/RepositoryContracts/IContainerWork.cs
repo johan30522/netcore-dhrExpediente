@@ -6,6 +6,7 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
     {
         // Add repositories here
         ICategoryRepository Category { get; }
+        IUserRepository User { get; }
 
 
         Task Save();
