@@ -9,17 +9,23 @@ using AppExpedienteDHR.Core.Profiles;
 using AppExpedienteDHR.Core.Services;
 using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.Resolver;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Configure serilog
+builder.Host.UseSerilog((HostBuilderContext hostBuilderContext, IServiceProvider services, LoggerConfiguration LoggerConfiguration) =>
+{
+    LoggerConfiguration
+        .ReadFrom.Configuration(hostBuilderContext.Configuration)
+        .ReadFrom.Services(services);
+});
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
