@@ -6,8 +6,8 @@ namespace AppExpedienteDHR.Core.ServiceContracts
     {
         Task<IEnumerable<FlowWfViewModel>> GetFlows();
         Task<FlowWfViewModel> GetFlow(int id);
-        Task CreateFlow(FlowWfViewModel flowViewModel);
-        Task UpdateFlow(FlowWfViewModel flowViewModel);
+        Task<FlowWfViewModel> CreateFlow(FlowWfViewModel flowViewModel);
+        Task<FlowWfViewModel> UpdateFlow(FlowWfViewModel flowViewModel);
         Task DeleteFlow(int id);
  
     }

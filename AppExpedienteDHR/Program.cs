@@ -40,6 +40,13 @@ builder.Services.AddScoped<IContainerWork, ContainerWork>();
 // Configuracion de AutoMapper
 builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddAutoMapper(typeof(RoleProfile));
+builder.Services.AddAutoMapper(typeof(StateWfProfile));
+builder.Services.AddAutoMapper(typeof(ActionWfProfile));
+builder.Services.AddAutoMapper(typeof(FlowWfProfile));
+builder.Services.AddAutoMapper(typeof(GroupWfProfile));
+builder.Services.AddAutoMapper(typeof(ActionRuleWfProfile));
+
+
 
 //Add container to container IcC of dependency injection
 builder.Services.AddScoped<IContainerWork, ContainerWork>();
@@ -47,6 +54,12 @@ builder.Services.AddScoped<IContainerWork, ContainerWork>();
 // add services to container
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddScoped<IStateWfService, StateWfService>();
+builder.Services.AddScoped<IActionWfService, ActionWfService>();
+builder.Services.AddScoped<IFlowWfService, FlowWfService>();
+builder.Services.AddScoped<IGroupWfService, GroupWfService>();
+builder.Services.AddScoped<IActionRuleWfService, ActionRuleWfService>();
 
 
 
@@ -56,12 +69,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
+
 app.UseStaticFiles();
 
 app.UseRouting();

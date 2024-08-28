@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -16,8 +17,11 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         public int PreviousStateId { get; set; }
         public int NewStateId { get; set; }
         public int ActionPerformedId { get; set; }
+        [Required]
         public string PerformedByUserId { get; set; } // Assuming Identity uses string for UserId
         public DateTime ActionDate { get; set; } = DateTime.UtcNow;
+        [Required]
+        [StringLength(500)]
         public string Comments { get; set; }
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }

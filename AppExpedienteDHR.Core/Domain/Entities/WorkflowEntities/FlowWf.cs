@@ -7,14 +7,18 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
     {
         public int Id { get; set; }
         [StringLength(100)]
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int? Order { get; set; }
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }
 
-        // Navigation properties
-        public ICollection<FlowGroupWf> FlowGroups { get; set; } = new List<FlowGroupWf>();
-        public ICollection<FlowStateWf> FlowStates { get; set; } = new List<FlowStateWf>();
+        // Relación uno a muchos con StateWf
+        public ICollection<StateWf> States { get; set; } = new List<StateWf>();
+
+        // Relación uno a muchos con GroupWf
+        public ICollection<GroupWf> Groups { get; set; } = new List<GroupWf>();
 
     }
 }

@@ -14,5 +14,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
         [Required(ErrorMessage = "El {0} es requerido")]
         [Display(Name = "Orden")]
         public int? Order { get; set; }
+
+        public int FlowWfId { get; set; }
     }
 }

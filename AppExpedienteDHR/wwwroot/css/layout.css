@@ -19,3 +19,37 @@ body {
     bottom: 0;
     width: 100%;
 }
+
+
+
+.custom-container-lg-xl {
+    max-width: 100%; /* Predeterminado para pantallas pequeñas y medianas */
+}
+
+@media (min-width: 992px) {
+    /* Para pantallas grandes (lg) */
+    .custom-container-lg-xl {
+        max-width: 1200px; /* Más ancho que el valor por defecto de Bootstrap */
+    }
+}
+
+@media (min-width: 1200px) {
+    /* Para pantallas extra grandes (xl) */
+    .custom-container-lg-xl {
+        max-width: 1400px; /* Mayor ancho para pantallas extra grandes */
+    }
+}
+
+@media (min-width: 1400px) {
+    /* Para pantallas extra extra grandes (xxl) */
+    .custom-container-lg-xl {
+        max-width: 1600px; /* Ancho aún mayor para pantallas muy grandes */
+    }
+}
+
+@media (min-width: 1600px) {
+    /* Para pantallas ultra grandes */
+    .custom-container-lg-xl {
+        max-width: 1800px; /* Ajusta este valor según lo que necesites */
+    }
+}

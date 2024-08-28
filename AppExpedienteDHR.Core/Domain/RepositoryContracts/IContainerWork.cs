@@ -14,13 +14,10 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
         IActionGroupWfRepository ActionGroupWf { get; }
         IGroupWfRepository GroupWf { get; }
         IActionRuleWfRespository ActionRuleWf { get; }
-        IFlowGroupWfRepository FlowGroupWf { get; }
         IFlowHistoryWfRepository FlowHistoryWf { get; }
-        IFlowStateWfRepository FlowStateWf { get; }
         IFlowWfRepository FlowWf { get; }
         IGroupUserWfRepository GroupUserWf { get; }
         IRequestFlowHistoryWfRepository RequestFlowHistoryWf { get; }
-        IStateActionWfRepository StateActionWf { get; }
 
          Task Save();
 

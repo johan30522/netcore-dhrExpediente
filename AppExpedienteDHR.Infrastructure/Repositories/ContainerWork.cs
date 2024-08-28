@@ -23,13 +23,10 @@ namespace BlogCore.Infrastructure.Repositories
             ActionGroupWf = new ActionGroupWfRepository(_context);
             GroupWf = new GroupWfRepository(_context);
             ActionRuleWf = new ActionRuleWfRepository(_context);
-            FlowGroupWf = new FlowGroupWfRepository(_context);
             FlowHistoryWf = new FlowHistoryWfRepository(_context);
-            FlowStateWf = new FlowStateWfRepository(_context);
             FlowWf = new FlowWfRepository(_context);
             GroupUserWf = new GroupUserWfRepository(_context);
             RequestFlowHistoryWf = new RequestFlowHistoryWfRepository(_context);
-            StateActionWf = new StateActionWfRepository(_context);
 
         }
         public ICategoryRepository Category { get; private set; }
@@ -49,19 +46,16 @@ namespace BlogCore.Infrastructure.Repositories
 
         public IActionRuleWfRespository ActionRuleWf { get; private set; }
 
-        public IFlowGroupWfRepository FlowGroupWf { get; private set; }
 
         public IFlowHistoryWfRepository FlowHistoryWf { get; private set; }
 
-        public IFlowStateWfRepository FlowStateWf { get; private set; }
-
+    
         public IFlowWfRepository FlowWf { get; private set; }
 
         public IGroupUserWfRepository GroupUserWf { get; private set; }
 
         public IRequestFlowHistoryWfRepository RequestFlowHistoryWf { get; private set; }
 
-        public IStateActionWfRepository StateActionWf { get; private set; }
 
         #endregion
 

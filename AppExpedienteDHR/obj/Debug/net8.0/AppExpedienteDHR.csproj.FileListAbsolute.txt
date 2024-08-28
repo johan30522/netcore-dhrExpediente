@@ -15,7 +15,6 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.UI.dll
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.Build.dll
@@ -64,7 +63,6 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Newtonsoft.Json.dll
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\NuGet.Common.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\NuGet.Configuration.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\NuGet.DependencyResolver.Core.dll
@@ -102,7 +100,6 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\System.Reflection.MetadataLoadContext.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\System.Runtime.Caching.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\System.Security.Permissions.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\System.Text.Json.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\af\Humanizer.resources.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\ar\Humanizer.resources.dll
@@ -312,3 +309,4 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.pdb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.genruntimeconfig.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\ref\AppExpedienteDHR.dll
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.Production.json

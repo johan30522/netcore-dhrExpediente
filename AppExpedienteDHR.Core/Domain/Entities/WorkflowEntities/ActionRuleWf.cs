@@ -9,11 +9,15 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
     {
         public int Id { get; set; }
         public int ActionId { get; set; }
+        [Required]
         [StringLength(100)]
         public string Name { get; set; }
+        [Required]
         public int? Order { get; set; }
+        [Required]
         [StringLength(50)]
         public string FieldEvaluated { get; set; }
+        [Required]
         [StringLength(20)]
         public string Operator { get; set; }
         [StringLength(100)]

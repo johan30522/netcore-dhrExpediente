@@ -8,6 +8,11 @@ $(document).ready(function () {
 }
 );
 
+function saveTableState(tableId) {
+    const state = $(`#${tableId}`).DataTable().state();
+    localStorage.setItem(`${tableId}_tableState`, JSON.stringify(state));
+}
+
  
 
 function loadDataTable() {

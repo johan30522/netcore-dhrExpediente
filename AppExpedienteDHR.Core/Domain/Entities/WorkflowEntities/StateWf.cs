@@ -1,20 +1,26 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 {
     public class StateWf
     {
         public int Id { get; set; }
+        [Required]
         [StringLength(100)]
         public string Name { get; set; }
+        [Required]
         public int? Order { get; set; }
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }
 
-        // Navigation properties
-        public ICollection<FlowStateWf> FlowStates { get; set; } = new List<FlowStateWf>();
-        public ICollection<StateActionWf> StateActions { get; set; } = new List<StateActionWf>();
-        public ICollection<ActionRuleWf> ActionRules { get; set; } = new List<ActionRuleWf>();
+        // Foreign Key y navegación hacia FlowWf
+        public int FlowId { get; set; }
+        [ForeignKey("FlowId")]
+        public FlowWf Flow { get; set; }
+
+        // Relación uno a muchos con ActionWf
+        public ICollection<ActionWf> Actions { get; set; } = new List<ActionWf>();
     }
 }

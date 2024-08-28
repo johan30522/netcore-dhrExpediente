@@ -2,7 +2,8 @@
 using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using AutoMapper;
-using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;   
+using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
+using Serilog;
 
 namespace AppExpedienteDHR.Core.Services
 {
@@ -11,55 +12,105 @@ namespace AppExpedienteDHR.Core.Services
 
         private readonly IContainerWork _containerWork;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public FlowWfService(IContainerWork containerWork, IMapper mapper)
+        public FlowWfService(IContainerWork containerWork, IMapper mapper, ILogger logger)
         {
             _containerWork = containerWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task CreateFlow(FlowWfViewModel flowViewModel)
+
+        public async Task<FlowWfViewModel> CreateFlow(FlowWfViewModel flowViewModel)
         {
-            FlowWf flow = _mapper.Map<FlowWf>(flowViewModel);
-            await _containerWork.FlowWf.Add(flow);
-            await _containerWork.Save();
+            try
+            {
+                FlowWf flow = _mapper.Map<FlowWf>(flowViewModel);
+                await _containerWork.FlowWf.Add(flow);
+                await _containerWork.Save();
+                FlowWfViewModel flowViewModelRes = _mapper.Map<FlowWfViewModel>(flow);
+                return flowViewModelRes;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error creating flow");
+                throw;
+            }
         }
 
         public async Task DeleteFlow(int id)
         {
-            FlowWf flow = await _containerWork.FlowWf.Get(id);
-            if (flow == null) {
-                throw new Exception("Flow not found");
+            try
+            {
+
+                FlowWf flow = await _containerWork.FlowWf.Get(id);
+                if (flow == null)
+                {
+                    throw new Exception("Flow not found");
+                }
+                await _containerWork.FlowWf.Remove(flow);
+                await _containerWork.Save();
             }
-            await _containerWork.FlowWf.Remove(flow);
-            await _containerWork.Save();
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error deleting flow");
+                throw;
+            }
 
         }
 
         public async Task<FlowWfViewModel> GetFlow(int id)
         {
-            FlowWf flow = await _containerWork.FlowWf.Get(id);
+            try
+            {
+                FlowWf flow = await _containerWork.FlowWf.Get(id);
 
-            FlowWfViewModel flowViewModel = _mapper.Map<FlowWfViewModel>(flow);
+                FlowWfViewModel flowViewModel = _mapper.Map<FlowWfViewModel>(flow);
 
-            return flowViewModel;
+                return flowViewModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting flow");
+                throw;
+            }
         }
 
         public async Task<IEnumerable<FlowWfViewModel>> GetFlows()
         {
-            IEnumerable<FlowWf> flows = await _containerWork.FlowWf.GetAll(includeProperties: "ActionGroupWf, ActionWf");
+            try
+            {
+                //IEnumerable<FlowWf> flows = await _containerWork.FlowWf.GetAll(includeProperties: "ActionGroupWf, ActionWf");
+                IEnumerable<FlowWf> flows = await _containerWork.FlowWf.GetAll();
 
-            IEnumerable<FlowWfViewModel> flowViewModels = _mapper.Map<IEnumerable<FlowWfViewModel>>(flows);
+                IEnumerable<FlowWfViewModel> flowViewModels = _mapper.Map<IEnumerable<FlowWfViewModel>>(flows);
 
-            return flowViewModels;
+                return flowViewModels;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting flows");
+                throw;
+            }
 
         }
 
-        public async Task UpdateFlow(FlowWfViewModel flowViewModel)
+        public async Task<FlowWfViewModel> UpdateFlow(FlowWfViewModel flowViewModel)
         {
-            FlowWf flow = _mapper.Map<FlowWf>(flowViewModel);
-            await _containerWork.FlowWf.Update(flow);
-            await _containerWork.Save();
+            try
+            {
+                FlowWf flow = _mapper.Map<FlowWf>(flowViewModel);
+                await _containerWork.FlowWf.Update(flow);
+                await _containerWork.Save();
+                FlowWfViewModel flowViewModelRes = _mapper.Map<FlowWfViewModel>(flow);
+                return flowViewModelRes;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error updating flow");
+                throw;
+            }
         }
     }
 }
