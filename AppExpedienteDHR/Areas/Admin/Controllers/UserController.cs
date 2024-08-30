@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -118,6 +118,13 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         {
             await _userService.DeleteUser(id);
             return Json(new { success = true, message = "Eliminado correctamente" });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchUsers(string search)
+        {
+            var users = await _userService.SearchUser(search);
+            return Json(new { users });
         }
 
         #endregion

@@ -17,6 +17,8 @@ namespace AppExpedienteDHR.Core.ServiceContracts
         Task DeleteUser(string id);
         Task<bool> HasUserNameAsync(string userName);
         Task<bool> HasUserEmailAsync(string email);
+        Task<IEnumerable<UserViewModel>> SearchUser(string search);
+
 
 
     }

@@ -1,6 +1,8 @@
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\bin\Debug\net8.0\AppExpedienteDHR.Utils.deps.json
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\bin\Debug\net8.0\AppExpedienteDHR.Utils.runtimeconfig.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\bin\Debug\net8.0\AppExpedienteDHR.Utils.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\bin\Debug\net8.0\AppExpedienteDHR.Utils.pdb
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.csproj.AssemblyReference.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.AssemblyInfoInputs.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.AssemblyInfo.cs
@@ -9,7 +11,5 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Deb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\refint\AppExpedienteDHR.Utils.dll
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.pdb
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\ref\AppExpedienteDHR.Utils.dll
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\bin\Debug\net8.0\AppExpedienteDHR.Utils.runtimeconfig.json
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.csproj.AssemblyReference.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\AppExpedienteDHR.Utils.genruntimeconfig.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR.Utils\obj\Debug\net8.0\ref\AppExpedienteDHR.Utils.dll

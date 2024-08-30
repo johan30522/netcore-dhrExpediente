@@ -32,15 +32,23 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return PartialView("_GroupFormPartial", viewModel);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetGroup([FromQuery] int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetGroup(int id)
         {
             var group = await _groupWfService.GetGroup(id);
+
+            if(group == null)
+            {
+                return NotFound();
+            }
+
+
+
             return PartialView("_GroupFormPartial", group);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveGroup(GroupWfViewModel groupViewModel)
+        public async Task<IActionResult> Save(GroupWfViewModel groupViewModel, List<string> selectedUsers)
         {
             if(groupViewModel.FlowWfId == 0)
             {
@@ -51,11 +59,11 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             {
                 if (groupViewModel.Id == 0)
                 {
-                    await _groupWfService.CreateGroup(groupViewModel, groupViewModel.FlowWfId);
+                    await _groupWfService.CreateGroup(groupViewModel, groupViewModel.FlowWfId, selectedUsers);
                 }
                 else
                 {
-                    await _groupWfService.UpdateGroup(groupViewModel);
+                    await _groupWfService.UpdateGroup(groupViewModel, selectedUsers);
                 }
 
                 return Json(new { success = true });
@@ -70,6 +78,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             await _groupWfService.DeleteGroup(id);
             return Json(new { success = true });
         }
+
 
 
 

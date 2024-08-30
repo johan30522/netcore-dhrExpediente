@@ -1,5 +1,6 @@
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.json
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.Production.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\AppExpedienteDHR.staticwebassets.runtime.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\AppExpedienteDHR.exe
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\AppExpedienteDHR.deps.json
@@ -309,4 +310,3 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.pdb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.genruntimeconfig.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\ref\AppExpedienteDHR.dll
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.Production.json

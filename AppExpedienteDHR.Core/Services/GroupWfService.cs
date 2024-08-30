@@ -21,7 +21,7 @@ namespace AppExpedienteDHR.Core.Services
         }
 
 
-        public async Task CreateGroup(GroupWfViewModel groupViewModel, int flowId)
+        public async Task<GroupWfViewModel> CreateGroup(GroupWfViewModel groupViewModel, int flowId, List<string>? UserIds)
         {
             try
             {
@@ -35,6 +35,30 @@ namespace AppExpedienteDHR.Core.Services
                 group.Flow = flow;
                 await _containerWork.GroupWf.Add(group);
                 await _containerWork.Save();
+
+                if (UserIds != null)
+                {
+                    foreach (var userId in UserIds)
+                    {
+                        GroupUserWf userGroup = new GroupUserWf
+                        {
+                            UserId = userId,
+                            GroupId = group.Id
+                        };
+                        await _containerWork.GroupUserWf.Add(userGroup);
+                    }
+                    await _containerWork.Save();
+                }
+
+                // Cargar usuarios asociados
+                var groupWithUsers = await _containerWork.GroupWf.GetFirstOrDefault(
+                    g => g.Id == group.Id,
+                    includeProperties: "GroupUsers.User");
+
+                GroupWfViewModel groupViewModelRes = _mapper.Map<GroupWfViewModel>(groupWithUsers);
+
+                return groupViewModelRes;
+
             }
             catch (Exception ex)
             {
@@ -67,9 +91,18 @@ namespace AppExpedienteDHR.Core.Services
             try
             {
 
+                GroupWf group = await _containerWork.GroupWf.GetFirstOrDefault(
+                   g => g.Id == id,
+                   includeProperties: "GroupUsers.User");
 
-                GroupWf group = await _containerWork.GroupWf.Get(id);
                 GroupWfViewModel groupViewModel = _mapper.Map<GroupWfViewModel>(group);
+
+                // si hay usuarios asociados, carga en una lista los ids asociados
+                if (group.GroupUsers != null)
+                {
+                    groupViewModel.SelectedUserIds = group.GroupUsers.Select(gu => gu.UserId).ToList();
+                }
+
                 return groupViewModel;
             }
             catch (Exception ex)
@@ -94,12 +127,54 @@ namespace AppExpedienteDHR.Core.Services
             }
         }
 
-        public async Task UpdateGroup(GroupWfViewModel groupViewModel)
+        public async Task<GroupWfViewModel> UpdateGroup(GroupWfViewModel groupViewModel, List<string>? UserIds)
         {
             try
             {
                 GroupWf group = _mapper.Map<GroupWf>(groupViewModel);
                 await _containerWork.GroupWf.Update(group);
+                await _containerWork.Save();
+
+                //Todo: Revisar si esta logica se puede pasar a un Store Procedure
+
+                // verifica si los usuarios asociados han cambiado
+                if (UserIds != null)
+                {
+                    // obtiene los usuarios asociados al grupo
+                    IEnumerable<GroupUserWf> groupUsers = await _containerWork.GroupUserWf.GetAll(gu => gu.GroupId == group.Id);
+
+                    // obtiene los ids de los usuarios asociados
+                    List<string> groupUserIds = groupUsers.Select(gu => gu.UserId).ToList();
+
+                    // obtiene los ids de los usuarios que se quieren asociar
+                    List<string> newUserIds = UserIds.Except(groupUserIds).ToList();
+
+                    // obtiene los ids de los usuarios que se quieren desasociar
+                    List<string> removeUserIds = groupUserIds.Except(UserIds).ToList();
+
+                    // se asocian los nuevos usuarios
+                    foreach (var userId in newUserIds)
+                    {
+                        GroupUserWf userGroup = new GroupUserWf
+                        {
+                            UserId = userId,
+                            GroupId = group.Id
+                        };
+                        await _containerWork.GroupUserWf.Add(userGroup);
+                    }
+
+                    // se desasocian los usuarios
+                    foreach (var userId in removeUserIds)
+                    {
+                        GroupUserWf userGroup = groupUsers.FirstOrDefault(gu => gu.UserId == userId);
+                        await _containerWork.GroupUserWf.Remove(userGroup);
+                    }
+
+                    await _containerWork.Save();
+                }
+
+
+                return groupViewModel;
             }
             catch (Exception ex)
             {

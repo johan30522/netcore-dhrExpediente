@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "+vy079Xm+q7L/rCqO8Lx1a3kxFT0xoVzeBwjavlWv1I=",
+  "Hash": "nvE6DzNwyoxbCj8Vs3Sn+Ie0AaJedf8hi0YUlducG2o=",
   "Source": "AppExpedienteDHR",
   "BasePath": "_content/AppExpedienteDHR",
   "Mode": "Default",
@@ -1307,6 +1307,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\flow\\flowForm.js"
+    },
+    {
+      "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\flow\\stateAction.js",
+      "SourceId": "AppExpedienteDHR",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\",
+      "BasePath": "_content/AppExpedienteDHR",
+      "RelativePath": "js/flow/stateAction.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\flow\\stateAction.js"
     },
     {
       "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\site.js",

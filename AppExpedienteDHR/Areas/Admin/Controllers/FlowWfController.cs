@@ -15,11 +15,14 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
     {
         private readonly IFlowWfService _flowWfService;
         private readonly IGroupWfService _groupWfService;
+        private readonly IStateWfService _stateWfService;
+        
 
-        public FlowWfController(IFlowWfService flowWfService, IGroupWfService groupWfService)
+        public FlowWfController(IFlowWfService flowWfService, IGroupWfService groupWfService, IStateWfService stateWfService)
         {
             _flowWfService = flowWfService;
             _groupWfService = groupWfService;
+            _stateWfService = stateWfService;
         }
 
         public IActionResult Index()
@@ -98,8 +101,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return Json(new { data = allObj });
         }
 
-        // flowId se debe obtener desde la url ejem: /Admin/FlowWf/GetGroups/1
-        //[HttpGet("Admin/FlowWf/GetGroups/{id}")]
+ 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGroups(int id)
         {
@@ -108,6 +110,18 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 return Json(new { data = new List<GroupWfViewModel>() });
             }
             var allObj = await _groupWfService.GetGroups(id);
+
+            return Json(new { data = allObj });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStates(int id)
+        {
+            if (id == 0)
+            {
+                return Json(new { data = new List<StateWfViewModel>() });
+            }
+            var allObj = await _stateWfService.GetStates(id);
 
             return Json(new { data = allObj });
         }

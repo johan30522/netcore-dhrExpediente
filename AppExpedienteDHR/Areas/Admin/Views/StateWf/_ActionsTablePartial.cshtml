@@ -1,0 +1,25 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Workflow
+@model List<ActionWfViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Orden</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var action in Model)
+        {
+            <tr>
+                <td>@action.Name</td>
+                <td>@action.Order</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-success" onclick="editAction(@action.StateId, @action.Id)">Editar</button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteAction(@action.StateId, @action.Id)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -25,7 +25,21 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
+                StateWf state = await _containerWork.StateWf.Get(actionViewModel.StateId);
+                if (state == null)
+                {
+                    throw new Exception("State not found");
+                }
+
+
+
+
+
                 ActionWf action = _mapper.Map<ActionWf>(actionViewModel);
+                action.StateId = actionViewModel.StateId;
+
+                action.State = state;
+
                 await _containerWork.ActionWf.Add(action);
                 await _containerWork.Save();
             }
@@ -71,11 +85,12 @@ namespace AppExpedienteDHR.Core.Services
             }
         }
 
-        public async Task<IEnumerable<ActionWfViewModel>> GetActions()
+        public async Task<IEnumerable<ActionWfViewModel>> GetActions(int stateId)
         {
             try
             {
-                IEnumerable<ActionWf> actions = await _containerWork.ActionWf.GetAll();
+                IEnumerable<ActionWf> actions = await _containerWork.ActionWf.GetAll(
+                    a => a.StateId == stateId);
                 IEnumerable<ActionWfViewModel> actionViewModels = _mapper.Map<IEnumerable<ActionWfViewModel>>(actions);
                 return actionViewModels;
             }

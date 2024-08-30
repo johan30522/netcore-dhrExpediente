@@ -295,5 +295,21 @@ namespace AppExpedienteDHR.Core.Services
             }
 
         }
+
+        public async Task<IEnumerable<UserViewModel>> SearchUser(string search)
+        {
+            try
+            {
+                // buscar usuarios por nombre, correo, etc
+                IEnumerable<ApplicationUser> users = await _containerWork.User.GetAll(u => u.UserName.Contains(search) || u.Email.Contains(search) || u.FullName.Contains(search));
+                IEnumerable<UserViewModel> userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users);
+                return userViewModels;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener el usuario por nombre de usuario");
+                throw;
+            }
+        }
     }
 }

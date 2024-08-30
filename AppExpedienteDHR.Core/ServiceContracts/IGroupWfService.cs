@@ -6,8 +6,8 @@ namespace AppExpedienteDHR.Core.ServiceContracts
     {
         Task<IEnumerable<GroupWfViewModel>> GetGroups(int flowId);
         Task<GroupWfViewModel> GetGroup(int id);
-        Task CreateGroup(GroupWfViewModel groupViewModel, int flowId);
-        Task UpdateGroup(GroupWfViewModel groupViewModel);
+        Task<GroupWfViewModel> CreateGroup(GroupWfViewModel groupViewModel, int flowId, List<string>? UserIds);
+        Task<GroupWfViewModel> UpdateGroup(GroupWfViewModel groupViewModel, List<string>? UserIds);
         Task DeleteGroup(int id);
     }
 }
