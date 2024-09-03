@@ -8,7 +8,6 @@ using BlogCore.Infrastructure.Repositories;
 using AppExpedienteDHR.Core.Profiles;
 using AppExpedienteDHR.Core.Services;
 using AppExpedienteDHR.Core.ServiceContracts;
-using AppExpedienteDHR.Core.Resolver;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

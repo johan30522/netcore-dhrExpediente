@@ -114,17 +114,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return Json(new { data = allObj });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetStates(int id)
-        {
-            if (id == 0)
-            {
-                return Json(new { data = new List<StateWfViewModel>() });
-            }
-            var allObj = await _stateWfService.GetStates(id);
 
-            return Json(new { data = allObj });
-        }
 
 
         #endregion

@@ -26,12 +26,24 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Admin/Views/ActionRuleWf/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWN0aW9uUnVsZVdmXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Admin/Views/ActionRuleWf/_RuleFormPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWN0aW9uUnVsZVdmXF9SdWxlRm9ybVBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Admin/Views/ActionWf/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWN0aW9uV2ZcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Admin/Views/ActionWf/_ActionFormPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWN0aW9uV2ZcX0FjdGlvbkZvcm1QYXJ0aWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Admin/Views/ActionWf/_RulesTablePartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWN0aW9uV2ZcX1J1bGVzVGFibGVQYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Admin/Views/FlowWf/FlowForm.cshtml]

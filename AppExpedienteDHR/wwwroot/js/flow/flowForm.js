@@ -145,17 +145,39 @@ function editGroup(flowId, groupId) {
  * @param {any} groupId, id del grupo a borrar
  */
 function deleteGroup(groupId) {
-    if (confirm('¿Estás seguro de que quieres borrar este grupo?')) {
-        $.ajax({
-            url: `/admin/GroupWf/DeleteGroup/${groupId}`,
-            type: 'DELETE',
-            success: function (response) {
-                if (response.success) {
-                    $('#tblGroups').DataTable().ajax.reload();
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `/admin/GroupWf/DeleteGroup/${groupId}`,
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        $('#tblGroups').DataTable().ajax.reload();
+                        Swal.fire(
+                            'Eliminado!',
+                            'El grupo ha sido eliminado.',
+                            'success'
+                        );
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Hubo un problema al eliminar el grupo.',
+                            'error'
+                        );
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
 }
 
 /**
@@ -208,7 +230,7 @@ function initializeGroupUserSelect() {
 */
 function initializeStateDataTable(flowId, tableStateId) {
     console.log(`Inicializando tabla de Estados para el flujo ${flowId} con el id ${tableStateId}`);
-    const ajaxUrl = `/admin/flowwf/GetStates/${flowId}`;
+    const ajaxUrl = `/admin/StateWf/GetStates/${flowId}`;
     const columns = [
         { "data": "order", "width": "10%" },
         { "data": "name", "width": "70%" },
@@ -345,15 +367,37 @@ function editState(flowId, stateId) {
  * @param {any} stateId, id del grupo a borrar
  */
 function deleteState(stateId) {
-    if (confirm('¿Estás seguro de que quieres borrar este grupo?')) {
-        $.ajax({
-            url: `/admin/StateWf/DeleteState/${stateId}`,
-            type: 'DELETE',
-            success: function (response) {
-                if (response.success) {
-                    $('#tblStates').DataTable().ajax.reload();
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `/admin/StateWf/DeleteState/${stateId}`,
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        $('#tblStates').DataTable().ajax.reload();
+                        Swal.fire(
+                            'Eliminado!',
+                            'El estado ha sido eliminado.',
+                            'success'
+                        );
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Hubo un problema al eliminar el estado.',
+                            'error'
+                        );
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
 }

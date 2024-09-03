@@ -9,11 +9,16 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
     public class ActionWfController : Controller
     {
         private readonly IActionWfService _actionWfService;
+        private readonly IStateWfService _stateWfService;
+        private readonly IActionRuleWfService _actionRuleWfService;
 
-        public ActionWfController(IActionWfService actionWfService)
+        public ActionWfController(IActionWfService actionWfService, IStateWfService stateWfService, IActionRuleWfService actionRuleWfService)
         {
             _actionWfService = actionWfService;
+            _stateWfService = stateWfService;
+            _actionRuleWfService = actionRuleWfService;
         }
+        
 
 
         public IActionResult Index()
@@ -22,11 +27,17 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetActionForm([FromQuery] int stateId)
+        public async Task<IActionResult> GetActionForm([FromQuery] int stateId)
         {
+            StateWfViewModel state = await _stateWfService.GetState(stateId);
+            if (state == null)
+            {
+                return NotFound();
+            }
             var viewModel = new ActionWfViewModel
             {
-                StateId = stateId
+                StateId = stateId,
+                FlowId = state.FlowWfId
             };
             return PartialView("_ActionFormPartial", viewModel);
         }
@@ -39,6 +50,15 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            StateWfViewModel state = await _stateWfService.GetState(action.StateId);
+            if (state == null)
+            {
+                return NotFound();
+            }
+            action.FlowId = state.FlowWfId;
+
+
+
             return PartialView("_ActionFormPartial", action);
         }
 
@@ -65,7 +85,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return PartialView("_ActionFormPartial", actionViewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
         public async Task<IActionResult> DeleteAction(int id)
         {
             try
@@ -78,6 +98,17 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 return Json(new { success = false });
             }
         }
+
+        #region API CALLS
+
+        [HttpGet]
+        public async Task<IActionResult> GetActionRulesTable([FromQuery] int actionId)
+        {
+            var rules = await _actionRuleWfService.GetActionRules(actionId);
+            return PartialView("_RulesTablePartial", rules);
+        }
+
+        #endregion
 
 
 

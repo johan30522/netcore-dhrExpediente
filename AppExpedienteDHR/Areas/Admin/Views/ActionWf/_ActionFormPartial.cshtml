@@ -10,17 +10,71 @@
 <br />
 
 
-<form id="actionForm" method="post" asp-action="SaveAction">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="StateId" />
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<div class="row">
+    <div class="col-md-6">
+        <form id="actionForm" method="post" asp-action="SaveAction">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="StateId" />
+            <input type="hidden" asp-for="FlowId" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order" class="control-label"></label>
+                <input asp-for="Order" class="form-control" />
+                <span asp-validation-for="Order" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label>Tipo de Evaluación</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="EvaluationType" id="staticEvaluation" value="Static"
+                    @(Model.EvaluationType == "Static" ? "checked" : "") />
+                    <label class="form-check-label" for="staticEvaluation">Estático</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="EvaluationType" id="ruleEvaluation" value="Rules"
+                    @(Model.EvaluationType == "Rules" ? "checked" : "") />
+                    <label class="form-check-label" for="ruleEvaluation">Reglas</label>
+                </div>
+            </div>
+
+            <div class="form-group" id="staticStateSelect" style="display: none;">
+                <label for="NextState">Siguiente Estado Estático</label>
+                <select id="NextState" name="NextStateId" class="form-control" data-selected="@Model.NextStateId">
+                    <option value="">Seleccione un estado</option>
+                    <!-- Opciones se llenarán con AJAX -->
+                </select>
+            </div>
+
+
+            <hr />
+
+            <div class="form-group border border-light rounded" id="rulesTableContainer" style="display: none;">
+                <div class="text-center">
+                <h4>Reglas</h4>
+
+                </div>
+                <button type="button" class="btn btn-primary mt-3" onclick="addRule(@Model.Id)"> <i class="fas fa-plus"></i> Crear</button>
+                <div id="rulesTablePartial">
+
+                    @await Html.PartialAsync("_RulesTablePartial", Model.Rules)
+                </div>
+                @* <button type="button" class="btn btn-primary" onclick="addRule(@Model.Id)">Agregar Regla</button> *@
+            </div>
+
+
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="Order" class="control-label"></label>
-        <input asp-for="Order" class="form-control" />
-        <span asp-validation-for="Order" class="text-danger"></span>
+
+    <div class="col-md-6">
+        <!-- Formulario de creación/edición de reglas -->
+        <div id="ruleFormContainer">
+            <!-- Aquí se cargará dinámicamente el formulario de creación/edición de reglas -->
+        </div>
     </div>
-</form>
+
+</div>

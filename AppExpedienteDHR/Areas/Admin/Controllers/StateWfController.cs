@@ -16,7 +16,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             _stateWfService = stateWfService;
             _actionService = actionService;
         }
- 
+
 
         public IActionResult Index()
         {
@@ -37,7 +37,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         {
             var state = await _stateWfService.GetState(id);
 
-            if(state == null)
+            if (state == null)
             {
                 return NotFound();
             }
@@ -48,11 +48,11 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(StateWfViewModel stateViewModel)
         {
-            if(stateViewModel.FlowWfId == 0)
+            if (stateViewModel.FlowWfId == 0)
             {
                 return Json(new { success = false, message = "Debe seleccionar un flujo" });
             }
-            
+
             if (ModelState.IsValid)
             {
                 if (stateViewModel.Id == 0)
@@ -68,7 +68,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return Json(new { success = false, message = "Error al guardar el estado" });
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -88,6 +88,21 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             var actions = await _actionService.GetActions(stateId);
             return PartialView("_ActionsTablePartial", actions);
         }
+
+
+        #region API CALLS
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStates(int id)
+        {
+            if (id == 0)
+            {
+                return Json(new { data = new List<StateWfViewModel>() });
+            }
+            var allObj = await _stateWfService.GetStates(id);
+
+            return Json(new { data = allObj });
+        }
+        #endregion
 
 
     }

@@ -15,14 +15,10 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         [Required]
         public int? Order { get; set; }
         [Required]
-        [StringLength(50)]
-        public string FieldEvaluated { get; set; }
-        [Required]
-        [StringLength(20)]
-        public string Operator { get; set; }
-        [StringLength(100)]
-        public string ComparisonValue { get; set; }
         public int ResultStateId { get; set; }
+
+        public string? RuleJson { get; set; } // JSON string to store complex rules
+
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }
 

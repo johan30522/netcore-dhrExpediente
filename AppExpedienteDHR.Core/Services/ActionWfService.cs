@@ -56,11 +56,14 @@ namespace AppExpedienteDHR.Core.Services
             try
             {
                 ActionWf action = await _containerWork.ActionWf.Get(id);
+
                 if (action == null)
                 {
                     throw new Exception("Action not found");
                 }
-                await _containerWork.ActionWf.Remove(action);
+                action.IsDeleted = true;
+                action.DeletedAt = DateTime.Now;
+                await _containerWork.ActionWf.Update(action);
                 await _containerWork.Save();
             }
             catch (Exception ex)
@@ -74,7 +77,11 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                ActionWf action = await _containerWork.ActionWf.Get(id);
+                // selecciona solo los no eliminados IsDeleted
+                ActionWf action = await _containerWork.ActionWf.GetFirstOrDefault(
+                    a => a.Id == id && a.IsDeleted == false,
+                    includeProperties: "ActionRules"
+                 );
                 ActionWfViewModel actionViewModel = _mapper.Map<ActionWfViewModel>(action);
                 return actionViewModel;
             }
@@ -89,8 +96,9 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
+               
                 IEnumerable<ActionWf> actions = await _containerWork.ActionWf.GetAll(
-                    a => a.StateId == stateId);
+                    a => a.StateId == stateId && a.IsDeleted == false);
                 IEnumerable<ActionWfViewModel> actionViewModels = _mapper.Map<IEnumerable<ActionWfViewModel>>(actions);
                 return actionViewModels;
             }

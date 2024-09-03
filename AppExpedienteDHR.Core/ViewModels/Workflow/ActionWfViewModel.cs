@@ -15,9 +15,12 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
         [Display(Name = "Orden")]
 
         public string EvaluationType { get; set; }= "Status";
-
         public int? Order { get; set; }
-
         public int StateId { get; set; }
+        public int? NextStateId { get; set; }
+
+        public int? FlowId { get; set; }
+
+        public List<ActionRuleWfViewModel>? Rules { get; set; } = new List<ActionRuleWfViewModel>();
     }
 }

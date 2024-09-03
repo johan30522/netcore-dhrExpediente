@@ -46,7 +46,9 @@ namespace AppExpedienteDHR.Core.Services
                 {
                     throw new Exception("ActionRule not found");
                 }
-                await _containerWork.ActionRuleWf.Remove(actionRule);
+                actionRule.IsDeleted = true;
+                actionRule.DeletedAt = DateTime.Now;
+                await _containerWork.ActionRuleWf.Update(actionRule);
                 await _containerWork.Save();
             }
             catch (Exception ex)
@@ -60,7 +62,9 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                ActionRuleWf actionRule = await _containerWork.ActionRuleWf.Get(id);
+                ActionRuleWf actionRule = await _containerWork.ActionRuleWf.GetFirstOrDefault(
+                    rule => rule.Id == id && rule.IsDeleted == false
+                );
                 ActionRuleWfViewModel actionRuleViewModel = _mapper.Map<ActionRuleWfViewModel>(actionRule);
                 return actionRuleViewModel;
             }
@@ -71,11 +75,13 @@ namespace AppExpedienteDHR.Core.Services
             }
         }
 
-        public async Task<IEnumerable<ActionRuleWfViewModel>> GetActionRules()
+        public async Task<IEnumerable<ActionRuleWfViewModel>> GetActionRules(int ActionId)
         {
             try
             {
-                IEnumerable<ActionRuleWf> actionRules = await _containerWork.ActionRuleWf.GetAll();
+                IEnumerable<ActionRuleWf> actionRules = await _containerWork.ActionRuleWf.GetAll(
+                    rule => rule.ActionId == ActionId && rule.IsDeleted == false
+                );
                 IEnumerable<ActionRuleWfViewModel> actionRuleViewModels = _mapper.Map<IEnumerable<ActionRuleWfViewModel>>(actionRules);
                 return actionRuleViewModels;
             }

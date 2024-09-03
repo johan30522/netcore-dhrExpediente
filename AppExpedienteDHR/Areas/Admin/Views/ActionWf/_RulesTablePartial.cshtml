@@ -1,0 +1,31 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Workflow
+@model IEnumerable<ActionRuleWfViewModel>
+
+<table id="rulesTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Orden</th>
+            <th>Estado de Resultado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rule in Model)
+        {
+            <tr>
+                <td>@rule.Name</td>
+                <td>@rule.Order</td>
+                <td>@rule.ResultStateId</td>
+                <td>
+                    <button type="button" class="btn btn-success btn-sm" onclick="editRule(@rule.Id)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteRule(@rule.Id)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

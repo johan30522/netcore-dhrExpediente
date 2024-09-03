@@ -16,8 +16,12 @@
                 <td>@action.Name</td>
                 <td>@action.Order</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-success" onclick="editAction(@action.StateId, @action.Id)">Editar</button>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteAction(@action.StateId, @action.Id)">Eliminar</button>
+                    <button type="button" class="btn btn-sm btn-success" onclick="editAction(@action.StateId, @action.Id)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteAction(@action.StateId, @action.Id)">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </td>
             </tr>
         }

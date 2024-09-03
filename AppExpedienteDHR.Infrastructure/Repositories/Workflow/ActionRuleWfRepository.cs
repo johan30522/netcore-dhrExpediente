@@ -23,9 +23,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Workflow
                 actionRuleToUpdate.ActionId = actionRule.ActionId;
                 actionRuleToUpdate.Name = actionRule.Name;
                 actionRuleToUpdate.Order = actionRule.Order;
-                actionRuleToUpdate.FieldEvaluated = actionRule.FieldEvaluated;
-                actionRuleToUpdate.Operator = actionRule.Operator;
-                actionRuleToUpdate.ComparisonValue = actionRule.ComparisonValue;
+                actionRuleToUpdate.RuleJson = actionRule.RuleJson;
                 actionRuleToUpdate.ResultStateId = actionRule.ResultStateId;
 
                 await _context.SaveChangesAsync();

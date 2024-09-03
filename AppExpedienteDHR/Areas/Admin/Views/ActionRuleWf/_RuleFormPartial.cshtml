@@ -1,0 +1,80 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Workflow
+@model ActionRuleWfViewModel
+
+
+
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Crear Regla" : "Editar Regla";
+}
+
+<div class="border border-light rounded">
+
+    <h4 class="text-center">@ViewData["Title"]</h4>
+    <br />
+
+    <form id="ruleForm" method="post" asp-action="SaveRule">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ActionId" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Order" class="control-label"></label>
+            <input asp-for="Order" class="form-control" />
+            <span asp-validation-for="Order" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label for="ResultState">Estado Resultante</label>
+            <select id="ResultState" name="ResultStateId" class="form-control" data-selected="@Model.ResultStateId">
+                <option value="">Seleccione un estado</option>
+                <!-- Opciones se llenarán con AJAX -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="RuleJson" class="control-label">Conditions (JSON Format)</label>
+            <textarea asp-for="RuleJson" class="form-control" rows="5"></textarea>
+            <p class="text-info">
+                {
+                    "conditions": [
+                        {
+                            "field": "Field1",
+                            "operator": "Equals",
+                            "value": "Value1"
+                        },
+                        {
+                            "field": "Field2",
+                            "operator": "GreaterThan",
+                            "value": "Value2",
+                            "logicalOperator": "AND"
+                        },
+                        {
+                            "field": "Field3",
+                            "operator": "LessThan",
+                            "value": "Value3",
+                            "logicalOperator": "OR"
+                        }
+                    ]
+                }
+            </p>
+            <span asp-validation-for="RuleJson" class="text-danger"></span>
+        </div>
+
+
+        <br />
+        <div class="d-flex align-items-center justify-content-end">
+            <div class="form-group text-right">
+                <button type="button" class="btn btn-primary" onclick="saveRule()">Guardar</button>
+                <button type="button" class="btn btn-secondary" onclick="clearRuleForm()">Cancelar</button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+
+

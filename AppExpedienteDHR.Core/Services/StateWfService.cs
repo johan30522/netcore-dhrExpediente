@@ -53,7 +53,9 @@ namespace AppExpedienteDHR.Core.Services
                 {
                     throw new Exception("State not found");
                 }
-                await _containerWork.StateWf.Remove(state);
+                state.IsDeleted = true;
+                state.DeletedAt = DateTime.Now;
+                await _containerWork.StateWf.Update(state);
                 await _containerWork.Save();
             }
             catch (Exception ex)
@@ -67,10 +69,9 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                //StateWf state = await _containerWork.StateWf.Get(id);
-                // incluye las acciones asociadas al estado
+
                 StateWf state = await _containerWork.StateWf.GetFirstOrDefault(
-                    s => s.Id == id,
+                    s => s.Id == id && s.IsDeleted == false,
                     includeProperties: "Actions");
                 StateWfViewModel stateViewModel = _mapper.Map<StateWfViewModel>(state);
                 return stateViewModel;
@@ -86,7 +87,8 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                IEnumerable<StateWf> states = await _containerWork.StateWf.GetAll(s => s.FlowId == flowId);
+                IEnumerable<StateWf> states = await _containerWork.StateWf.GetAll(
+                    s => s.FlowId == flowId && s.IsDeleted == false);
                 IEnumerable<StateWfViewModel> stateViewModels = _mapper.Map<IEnumerable<StateWfViewModel>>(states);
                 return stateViewModels;
             }

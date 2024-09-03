@@ -76,7 +76,9 @@ namespace AppExpedienteDHR.Core.Services
                 {
                     throw new Exception("Group not found");
                 }
-                await _containerWork.GroupWf.Remove(group);
+                group.IsDeleted = true;
+                group.DeletedAt = DateTime.Now;
+                await _containerWork.GroupWf.Update(group);
                 await _containerWork.Save();
             }
             catch (Exception ex)
@@ -92,7 +94,7 @@ namespace AppExpedienteDHR.Core.Services
             {
 
                 GroupWf group = await _containerWork.GroupWf.GetFirstOrDefault(
-                   g => g.Id == id,
+                   g => g.Id == id && g.IsDeleted == false,
                    includeProperties: "GroupUsers.User");
 
                 GroupWfViewModel groupViewModel = _mapper.Map<GroupWfViewModel>(group);
@@ -116,7 +118,8 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                IEnumerable<GroupWf> groups = await _containerWork.GroupWf.GetAll(g => g.FlowId == flowId);
+                IEnumerable<GroupWf> groups = await _containerWork.GroupWf.GetAll(
+                    g => g.FlowId == flowId && g.IsDeleted == false);
                 IEnumerable<GroupWfViewModel> groupViewModels = _mapper.Map<IEnumerable<GroupWfViewModel>>(groups);
                 return groupViewModels;
             }

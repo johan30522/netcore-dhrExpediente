@@ -49,7 +49,10 @@ namespace AppExpedienteDHR.Core.Services
                 {
                     throw new Exception("Flow not found");
                 }
-                await _containerWork.FlowWf.Remove(flow);
+                //await _containerWork.FlowWf.Remove(flow);
+                flow.IsDeleted = true;
+                flow.DeletedAt = DateTime.Now;
+                await _containerWork.FlowWf.Update(flow);
                 await _containerWork.Save();
             }
             catch (Exception ex)
@@ -64,7 +67,9 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                FlowWf flow = await _containerWork.FlowWf.Get(id);
+                FlowWf flow = await _containerWork.FlowWf.GetFirstOrDefault(
+                    flow => flow.Id == id && flow.IsDeleted == false
+                );
 
                 FlowWfViewModel flowViewModel = _mapper.Map<FlowWfViewModel>(flow);
 
@@ -81,8 +86,10 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                //IEnumerable<FlowWf> flows = await _containerWork.FlowWf.GetAll(includeProperties: "ActionGroupWf, ActionWf");
-                IEnumerable<FlowWf> flows = await _containerWork.FlowWf.GetAll();
+                
+                IEnumerable<FlowWf> flows = await _containerWork.FlowWf.GetAll(
+                    flow => flow.IsDeleted == false
+                );
 
                 IEnumerable<FlowWfViewModel> flowViewModels = _mapper.Map<IEnumerable<FlowWfViewModel>>(flows);
 

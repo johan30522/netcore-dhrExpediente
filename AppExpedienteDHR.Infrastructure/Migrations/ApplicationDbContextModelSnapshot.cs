@@ -83,18 +83,8 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.Property<int>("ActionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ComparisonValue")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("FieldEvaluated")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -104,17 +94,15 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Operator")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<int?>("Order")
                         .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("ResultStateId")
                         .HasColumnType("int");
+
+                    b.Property<string>("RuleJson")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

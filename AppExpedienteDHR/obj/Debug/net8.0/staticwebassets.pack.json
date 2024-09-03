@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets\\js\\datatable\\user.js"
     },
     {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\flow\\actionRule.js",
+      "PackagePath": "staticwebassets\\js\\flow\\actionRule.js"
+    },
+    {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\flow\\flowForm.js",
       "PackagePath": "staticwebassets\\js\\flow\\flowForm.js"
     },

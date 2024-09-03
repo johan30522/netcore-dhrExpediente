@@ -14,15 +14,9 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
         [Required(ErrorMessage = "El {0} es requerido")]
         [Display(Name = "Orden")]
         public int Order { get; set; }
-        [Required(ErrorMessage = "El {0} es requerido")]
-        [Display(Name = "Campo a evaluar")]
-        public string FieldEvaluated { get; set; }
-        [Required(ErrorMessage = "El {0} es requerido")]
-        [Display(Name = "Operador")]
-        public string Operator { get; set; }
-        [Required(ErrorMessage = "El {0} es requerido")]
-        [Display(Name = "Valor de comparación")]
-        public string ComparisonValue { get; set; }
+
+        public string? RuleJson { get; set; } // JSON string to store complex rules
+
         [Required(ErrorMessage = "El {0} es requerido")]
         [Display(Name = "Estado de resultado")]
         public int ResultStateId { get; set; }

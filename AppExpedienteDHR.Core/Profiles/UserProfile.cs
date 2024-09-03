@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AppExpedienteDHR.Core.Domain.IdentityEntities;
 using AppExpedienteDHR.Core.ViewModels.User;
-using AppExpedienteDHR.Core.Resolver;
 
 
 namespace AppExpedienteDHR.Core.Profiles
