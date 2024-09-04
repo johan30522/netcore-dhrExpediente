@@ -20,7 +20,14 @@ function editRule(ruleId) {
     });
 }
 
+
+
+
+
 function saveRule() {
+
+
+
     const form = $('#ruleForm');
     $.ajax({
         url: form.attr('action'),

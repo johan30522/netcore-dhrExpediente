@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AppExpedienteDHR.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2c27598b47eb6f47cb08c26d58d96dc53aaeef46")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d71fabb0263cc363244531e2d420c8672a7e2817")]
 [assembly: System.Reflection.AssemblyProductAttribute("AppExpedienteDHR.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AppExpedienteDHR.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

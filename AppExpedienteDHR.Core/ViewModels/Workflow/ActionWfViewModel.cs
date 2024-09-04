@@ -11,10 +11,9 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
         [Required(ErrorMessage = "El {0} es requerido")]
         [Display(Name = "Nombre")]
         public string Name { get; set; }
+        public string EvaluationType { get; set; }= "Static";
         [Required(ErrorMessage = "El {0} es requerido")]
         [Display(Name = "Orden")]
-
-        public string EvaluationType { get; set; }= "Status";
         public int? Order { get; set; }
         public int StateId { get; set; }
         public int? NextStateId { get; set; }

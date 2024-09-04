@@ -10,6 +10,9 @@
 }
 
 function saveAction() {
+
+
+
     const form = $('#actionForm');
 
     $.ajax({
@@ -77,7 +80,7 @@ function deleteAction(stateId, actionId) {
 
 function InitActionForm() {
     console.log('Inicializando formulario de acción...');
-        // se obtiene el id del flujo del campo oculto FlowId  <input type="hidden" asp-for="FlowId" />
+    // se obtiene el id del flujo del campo oculto FlowId  <input type="hidden" asp-for="FlowId" />
     const flowId = $('#FlowId').val();
     const selectedStateId = $('#NextState').data('selected'); // Obtener el estado seleccionado si existe
 
@@ -100,7 +103,7 @@ function InitActionForm() {
 
 
 // 
-function loadStateOptions(flowId, selectedStateId=null) {
+function loadStateOptions(flowId, selectedStateId = null) {
     console.log(`Cargando estados del flujo ${flowId}...`);
     console.log(`selectedStateId: ${selectedStateId}`);
     $.ajax({

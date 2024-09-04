@@ -91,6 +91,21 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         }
 
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _flowWfService.DeleteFlow(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
         #region API CALLS
 
         [HttpGet]

@@ -15,10 +15,11 @@ function initializeGroupDataTable(flowId, tableGroupId) {
             "render": function (data) {
                 return `
                     <div class="text-center">
-                       <a href="#" class="btn btn-success text-white" style="cursor:pointer" onclick="editGroup(${flowId},${data})">
+                       <a href="#" class="btn btn-success text-white" style="cursor:pointer" onclick="editGroup(${flowId},${data});return false;">
                             <i class="fas fa-edit"></i>
-                        </a> &nbsp;
-                        <a href="#" class="btn btn-danger text-white" style="cursor:pointer" onclick="deleteGroup(${data})">
+                        </a>
+                        &nbsp;
+                        <a href="#" class="btn btn-danger text-white" style="cursor:pointer" onclick="deleteGroup(${data});return false;">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>
@@ -43,11 +44,27 @@ function initializeGroupDataTable(flowId, tableGroupId) {
  */
 function loadGroupForm(flowId, groupId = 0) {
     console.log(`testCargando formulario de grupo para el flujo ${flowId} y el grupo ${groupId}`);
+
+    // Guardar la posición actual del scroll
+    const scrollPosition = $(window).scrollTop();
+
+    $('#editFormContainer').hide(); // Ocultar el contenedor del formulario
+    //const containerHeight = $('#editFormContainer').height();
+    //$('#editFormContainer').hide().after(`<div id="tempContainer" style="height:${containerHeight}px;"></div>`);
+
+
     const url = groupId ? `/admin/GroupWf/GetGroup/${groupId}` : `/admin/GroupWf/GetGroupForm?flowId=${flowId}`;
-    $.get(url, function (data) {
+    //const url = `/admin/GroupWf/GetGroupForm?flowId=${flowId}`;
+    $.get(url, function (data) { 
         $('#editFormContainer').html(data);
         initializeGroupUserSelect();
         $.validator.unobtrusive.parse('#groupForm'); // Reinicializar validaciones
+
+        // Restaurar la posición del scroll
+        $(window).scrollTop(scrollPosition);
+
+        $('#editFormContainer').fadeIn(); // Mostrar el contenedor del formulario
+        $('#tempContainer').remove(); // Eliminar el contenedor temporal
 
     });
 }
@@ -239,10 +256,10 @@ function initializeStateDataTable(flowId, tableStateId) {
             "render": function (data) {
                 return `
                     <div class="text-center">
-                       <a href="#" class="btn btn-success text-white" style="cursor:pointer" onclick="editState(${flowId},${data})">
+                       <a href="#" class="btn btn-success text-white" style="cursor:pointer" onclick="editState(${flowId},${data});return false;">
                             <i class="fas fa-edit"></i>
                         </a> &nbsp;
-                        <a href="#" class="btn btn-danger text-white" style="cursor:pointer" onclick="deleteState(${data})">
+                        <a href="#" class="btn btn-danger text-white" style="cursor:pointer" onclick="deleteState(${data});return false;">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>
