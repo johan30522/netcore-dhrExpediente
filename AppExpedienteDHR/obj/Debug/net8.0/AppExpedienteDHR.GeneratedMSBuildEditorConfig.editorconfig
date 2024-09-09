@@ -122,6 +122,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQ2xpZW50XFZpZXdzXF9WaWV3U3RhcnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Denuncia/Views/Solicitud/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRGVudW5jaWFcVmlld3NcU29saWNpdHVkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Denuncia/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRGVudW5jaWFcVmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Denuncia/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRGVudW5jaWFcVmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/jjoha/source/repos/ExpedienteDHRSolution/AppExpedienteDHR/Areas/Identity/Pages/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

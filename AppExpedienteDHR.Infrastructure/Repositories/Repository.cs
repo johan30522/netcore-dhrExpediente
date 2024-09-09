@@ -10,10 +10,12 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
     public class Repository<T> : IRepository<T> where T : class
     {
 
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
+        private readonly DbContext _context;
         internal DbSet<T> dbSet;
 
-        public Repository(ApplicationDbContext context)
+        //public Repository(ApplicationDbContext context)
+        public Repository(DbContext context)
         {
             _context = context;
             dbSet = _context.Set<T>();

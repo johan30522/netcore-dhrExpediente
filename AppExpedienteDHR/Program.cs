@@ -4,11 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using AppExpedienteDHR.Infrastructure.Data;
 using AppExpedienteDHR.Core.Domain.IdentityEntities;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts;
-using BlogCore.Infrastructure.Repositories;
+using AppExpedienteDHR.Infrastructure.Repositories;
 using AppExpedienteDHR.Core.Profiles;
 using AppExpedienteDHR.Core.Services;
 using AppExpedienteDHR.Core.ServiceContracts;
 using Serilog;
+using AppExpedienteDHR.Core.ServiceContracts.General;
+using AppExpedienteDHR.Core.Services.General;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +24,19 @@ builder.Host.UseSerilog((HostBuilderContext hostBuilderContext, IServiceProvider
 });
 
 // Add services to the container.
+
+// conexiones a base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var catalogosConnectionString = builder.Configuration.GetConnectionString("CatalogConnection") ?? throw new InvalidOperationException("Connection string 'CatalogosConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddDbContext<CatalogDbContext>(options =>
+    options.UseSqlServer(catalogosConnectionString));
+
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -54,11 +67,24 @@ builder.Services.AddScoped<IContainerWork, ContainerWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
+//services workflow
 builder.Services.AddScoped<IStateWfService, StateWfService>();
 builder.Services.AddScoped<IActionWfService, ActionWfService>();
 builder.Services.AddScoped<IFlowWfService, FlowWfService>();
 builder.Services.AddScoped<IGroupWfService, GroupWfService>();
 builder.Services.AddScoped<IActionRuleWfService, ActionRuleWfService>();
+
+//services general
+builder.Services.AddScoped<IDistritoService, DistritoService>();
+builder.Services.AddScoped<ICantonService, CantonService>();
+builder.Services.AddScoped<IEstadoCivilService, EstadoCivilService>();
+builder.Services.AddScoped<IPaisService, PaisService>();
+builder.Services.AddScoped<IProvinciaService, ProvinciaService>();
+builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
+builder.Services.AddScoped<IEscolaridadService, EscolaridadService>();
+builder.Services.AddScoped<ISexoService, SexoService>();
+builder.Services.AddScoped<IPadronService, PadronService>();
+
 
 
 

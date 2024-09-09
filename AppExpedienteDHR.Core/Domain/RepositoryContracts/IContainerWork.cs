@@ -1,6 +1,8 @@
 ﻿
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.Workflow;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.General;
+
+
 namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
 {
     public interface IContainerWork : IDisposable
@@ -18,6 +20,10 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
         ITipoIdentificacionRepository TipoIdentificacion { get; }
         IEscolaridadRepository Escolaridad { get; }
         ISexoRepository Sexo { get; }
+        IPadronRepository Padron { get; }
+
+
+
 
 
 

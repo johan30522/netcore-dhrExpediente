@@ -5,7 +5,7 @@ using Serilog;
 
 namespace AppExpedienteDHR.Core.Services.General
 {
-    public class PaisService
+    public class PaisService: IPaisService
     {
         private readonly IContainerWork _containerWork;
         private readonly ILogger _logger;

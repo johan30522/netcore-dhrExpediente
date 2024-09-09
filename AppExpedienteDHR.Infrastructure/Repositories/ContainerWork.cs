@@ -8,19 +8,22 @@ using AppExpedienteDHR.Infrastructure.Repositories.General;
 
 
 
-namespace BlogCore.Infrastructure.Repositories
+namespace AppExpedienteDHR.Infrastructure.Repositories
 {
     public class ContainerWork : IContainerWork
     {
         private readonly ApplicationDbContext _context;
+        private readonly CatalogDbContext _catalogContext;
 
 
-        public ContainerWork(ApplicationDbContext context)
+        public ContainerWork(ApplicationDbContext context, CatalogDbContext catalogContext)
         {
             _context = context;
+            _catalogContext = catalogContext;
 
             Category = new CategoryRepository(_context);
             User = new UserRepository(_context);
+
             // Workflow repositories
             ActionWf = new ActionWfRepository(_context);
             StateWf = new StateWfRepository(_context);
@@ -41,6 +44,9 @@ namespace BlogCore.Infrastructure.Repositories
             TipoIdentificacion = new TipoIdentificacionRepository(_context);
             Escolaridad = new EscolaridadRepository(_context);
             Sexo= new SexoRepository(_context);
+
+            // Catalog repositories
+            Padron = new PadronRepository(_catalogContext);
 
 
 
@@ -89,6 +95,8 @@ namespace BlogCore.Infrastructure.Repositories
         public IEscolaridadRepository Escolaridad { get; private set; }
 
         public ISexoRepository Sexo { get; private set; }
+
+        public IPadronRepository Padron { get; private set; }
 
 
         #endregion
