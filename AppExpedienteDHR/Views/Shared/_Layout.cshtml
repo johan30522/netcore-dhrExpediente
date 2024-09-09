@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - AppExpedienteDHR</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap5.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" /> <!-- Nuevo archivo CSS -->
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" /> 
 
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" />
@@ -30,7 +30,7 @@
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active text-white" href="#">
+                            <a class="nav-link active text-white" asp-area="Client" asp-controller="Home" asp-action="Index">
                                 Inicio
                                 <span class="visually-hidden">(current)</span>
                             </a>

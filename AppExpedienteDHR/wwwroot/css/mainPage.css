@@ -1,0 +1,36 @@
+﻿.card {
+    border-radius: 10px; /* Bordes redondeados para la tarjeta */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombras suaves para la tarjeta */
+    text-align: center; /* Centra el contenido dentro de la tarjeta */
+    height: 450px; /* Establece una altura fija para todas las tarjetas */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribuye el contenido dentro de la tarjeta */
+}
+
+.card-body {
+    padding: 15px; /* Ajuste de padding para un mejor diseño */
+    flex-grow: 1; /* Hace que el cuerpo crezca para ocupar el espacio adicional */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Asegura que el contenido del cuerpo esté distribuido uniformemente */
+}
+
+.card-img-top {
+    width: 250px; /* Ajusta el ancho de la imagen */
+    height: 230px; /* Mantén la altura fija de las imágenes */
+    object-fit: cover; /* Asegura que la imagen se escale y recorte sin distorsión */
+    border-radius: 10px; /* Bordes redondeados para la imagen */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra alrededor de la imagen */
+    display: block; /* Hace que la imagen se comporte como un bloque */
+    margin-left: auto; /* Centra horizontalmente la imagen */
+    margin-right: auto; /* Centra horizontalmente la imagen */
+    margin-top: 10px; /* Añade un espacio superior */
+}
+
+.text-center {
+    margin-bottom: 30px; /* Añade espacio debajo del encabezado */
+}
+.card-body .btn {
+    margin-top: auto; /* Hace que el botón se quede al final del contenido */
+}

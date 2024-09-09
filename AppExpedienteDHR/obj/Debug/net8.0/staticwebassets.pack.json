@@ -9,12 +9,28 @@
       "PackagePath": "staticwebassets\\css\\layout.css"
     },
     {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\css\\mainPage.css",
+      "PackagePath": "staticwebassets\\css\\mainPage.css"
+    },
+    {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\Denuncia.jpg",
+      "PackagePath": "staticwebassets\\images\\Denuncia.jpg"
+    },
+    {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\Documentacion.jpg",
+      "PackagePath": "staticwebassets\\images\\Documentacion.jpg"
+    },
+    {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\Expediente.jpg",
+      "PackagePath": "staticwebassets\\images\\Expediente.jpg"
     },
     {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\logo.jpg",

@@ -4,6 +4,8 @@ using AppExpedienteDHR.Core.ViewModels.Workflow;
 using AutoMapper;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using Serilog;
+using AppExpedienteDHR.Core.Domain.IdentityEntities;
+using AppExpedienteDHR.Core.ViewModels.User;
 
 namespace AppExpedienteDHR.Core.Services
 {
@@ -185,6 +187,21 @@ namespace AppExpedienteDHR.Core.Services
                 throw;
             }
         }
+    public async Task<IEnumerable<GroupWfViewModel>> SearchGroup(string search)
+    {
+        try
+        {
+            // buscar grupos por nombre, correo, etc
+            IEnumerable<GroupWf> group = await _containerWork.GroupWf.GetAll(g => g.Name.Contains(search));
+            IEnumerable<GroupWfViewModel> groupViewModels = _mapper.Map<IEnumerable<GroupWfViewModel>>(group);
+            return groupViewModels;
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "Error al obtener el usuario por nombre de usuario");
+            throw;
+        }
+    }
     }
 
 }

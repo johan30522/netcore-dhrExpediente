@@ -1,4 +1,5 @@
 ﻿using AppExpedienteDHR.Core.Domain.Entities;
+using AppExpedienteDHR.Core.Domain.Entities.General;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using AppExpedienteDHR.Core.Domain.IdentityEntities;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +19,19 @@ namespace AppExpedienteDHR.Infrastructure.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+
+        #region Tablas de Catalogos
+
+        public DbSet<Canton> Cantones { get; set; }
+        public DbSet<Distrito> Distritos { get; set; }
+        public DbSet<Escolaridad> Escolaridades { get; set; }
+        public DbSet<EstadoCivil> EstadosCiviles { get; set; }
+        public DbSet<TipoIdentificacion> TiposIdentificacion { get; set; }
+        public DbSet<Pais> Paises { get; set; }
+        public DbSet<Provincia> Provincias { get; set; }
+        public DbSet<Sexo> Sexos { get; set; }
+
+        #endregion
 
         #region Workflow entities
         public DbSet<FlowWf> FlowWfs { get; set; }
@@ -54,6 +68,38 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .WithMany(u => u.UserRoles)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
+            #endregion
+
+            #region Catalog entities Fluent API configuration
+            // Configuración de Provincia -> Canton (uno a muchos)
+            modelBuilder.Entity<Provincia>()
+                .HasMany(p => p.Cantones)
+                .WithOne(c => c.Provincia)
+                .HasForeignKey(c => c.CodigoProvincia)
+                .OnDelete(DeleteBehavior.Restrict);
+            // Configuración de Canton -> Distrito (uno a muchos)
+            modelBuilder.Entity<Canton>()
+                .HasMany(c => c.Distritos)
+                .WithOne(d => d.Canton)
+                .HasForeignKey(d => d.CodigoCanton)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Canton -> Provincia (muchos a uno)
+            modelBuilder.Entity<Canton>()
+                .HasOne(c => c.Provincia)
+                .WithMany(p => p.Cantones)
+                .HasForeignKey(c => c.CodigoProvincia)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Distrito -> Canton (muchos a uno)
+            modelBuilder.Entity<Distrito>()
+                .HasOne(d => d.Canton)
+                .WithMany(c => c.Distritos)
+                .HasForeignKey(d => d.CodigoCanton)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
             #endregion
 
             #region Workflow entities Fluent API configuration

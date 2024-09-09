@@ -5,7 +5,13 @@
         $.validator.unobtrusive.parse('#actionForm'); // Reinicializar validaciones
         $('#actionModal').modal('show');
         console.log('llamar a InitActionForm');
-        InitActionForm(); // Inicializar eventos del formulario
+
+        // Inicializar eventos cuando el modal esté completamente mostrado
+        //$('#actionModal').on('shown.bs.modal', function () {
+            console.log('llamar a InitActionForm');
+            InitActionForm(); // Inicializar eventos del formulario
+        //});
+
     });
 }
 
@@ -84,8 +90,10 @@ function InitActionForm() {
     const flowId = $('#FlowId').val();
     const selectedStateId = $('#NextState').data('selected'); // Obtener el estado seleccionado si existe
 
+
     $(document).ready(function () {
         // Mostrar el combo de estados cuando se selecciona la opción "Estático"
+    InitializeActionGroupSelect(); 
         $('input[name="EvaluationType"]').change(function () {
             if ($('#staticEvaluation').is(':checked')) {
                 $('#staticStateSelect').show();
@@ -99,6 +107,8 @@ function InitActionForm() {
             }
         }).trigger('change'); // Trigger para inicializar correctamente al cargar la vista
     });
+
+
 }
 
 
@@ -121,5 +131,41 @@ function loadStateOptions(flowId, selectedStateId = null) {
                 select.val(selectedStateId);
             }
         }
+    });
+
+
+}
+
+
+function InitializeActionGroupSelect() {
+    console.log('Inicializando select2 de grupos');
+    $('#Groups').select2({
+        ajax: {
+            url: '/Admin/GroupWf/SearchGroups', // Ruta del controlador para buscar grupos
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term // término de búsqueda
+                };
+            },
+            processResults: function (data) {
+                console.log(data);
+                return {
+                    results: $.map(data.groups, function (item) { // Accede al array 'groups'
+                        console.log(item);
+                        return {
+                            text: item.name, // Texto que se mostrará en el select
+                            id: item.id // Valor del item en el select
+                        };
+                    })
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 1,
+        placeholder: 'Seleccione Grupos',
+        allowClear: true,
+        dropdownParent: $('#actionModal') 
     });
 }

@@ -105,8 +105,20 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         public async Task<IActionResult> GetActionRulesTable([FromQuery] int actionId)
         {
             var rules = await _actionRuleWfService.GetActionRules(actionId);
+         
             return PartialView("_RulesTablePartial", rules);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetActionsStates([FromQuery] int flowId)
+        {
+            var states = await _stateWfService.GetStates(flowId);
+            return Json(new { data = states });
+        }
+
+
+
 
         #endregion
 

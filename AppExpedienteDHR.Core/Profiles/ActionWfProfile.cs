@@ -14,7 +14,9 @@ namespace AppExpedienteDHR.Core.Profiles
                 .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => src.StateId))
                 .ForMember(dest => dest.NextStateId, opt => opt.MapFrom(src => src.NextStateId))
                 .ForMember(dest => dest.EvaluationType, opt => opt.MapFrom(src => src.EvaluationType))
-                .ForMember(dest => dest.Rules, opt => opt.MapFrom(src => src.ActionRules));
+                .ForMember(dest => dest.Rules, opt => opt.MapFrom(src => src.ActionRules))
+                .ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.ActionGroups.Select(ag => ag.Group)));
+
 
 
             CreateMap<ActionWfViewModel, ActionWf>()

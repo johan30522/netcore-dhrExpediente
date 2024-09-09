@@ -30,15 +30,19 @@
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label for="Users">Usuarios</label>
-        <select id="Users" name="SelectedUsers" class="form-control" multiple="multiple">
-            @foreach (var user in Model.Users)
-            {
-                <option value="@user.Id" selected="@(Model.SelectedUserIds.Contains(user.Id) ? "selected" : null)">
-                    @user.FullName
-                </option>
-            }
-        </select>
+        <div>
+            <label for="Users">Usuarios</label>
+        </div>
+        <div>
+            <select id="Users" name="SelectedUsers" class="form-control" multiple="multiple" style="width: 100%;">
+                @foreach (var user in Model.Users)
+                {
+                    <option value="@user.Id" selected="@(Model.SelectedUserIds.Contains(user.Id) ? "selected" : null)">
+                        @user.FullName
+                    </option>
+                }
+            </select>
+        </div>
     </div>
 </form>
 @section Scripts {

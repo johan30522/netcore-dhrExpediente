@@ -117,17 +117,6 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         }
 
  
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetGroups(int id)
-        {
-            if (id == 0)
-            {
-                return Json(new { data = new List<GroupWfViewModel>() });
-            }
-            var allObj = await _groupWfService.GetGroups(id);
-
-            return Json(new { data = allObj });
-        }
 
 
 

@@ -1,12 +1,3 @@
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.csproj.AssemblyReference.cache
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.AssemblyInfoInputs.cache
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.AssemblyInfo.cs
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.csproj.CoreCompileInputs.cache
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.RazorAssemblyInfo.cache
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.RazorAssemblyInfo.cs
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.sourcelink.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\appsettings.Production.json
@@ -293,6 +284,16 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\AppExpedienteDHR.Core.pdb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\AppExpedienteDHR.Infrastructure.pdb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\AppExpedienteDHR.Utils.pdb
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.csproj.AssemblyReference.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.AssemblyInfoInputs.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.AssemblyInfo.cs
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.csproj.CoreCompileInputs.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.RazorAssemblyInfo.cache
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.RazorAssemblyInfo.cs
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.sourcelink.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\staticwebassets\msbuild.AppExpedienteDHR.Microsoft.AspNetCore.StaticWebAssets.props
@@ -309,4 +310,3 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.pdb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.genruntimeconfig.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\ref\AppExpedienteDHR.dll
-C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.MvcApplicationPartsAssemblyInfo.cs

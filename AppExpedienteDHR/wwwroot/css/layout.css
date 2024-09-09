@@ -3,25 +3,28 @@
 /* Full-height layout */
 html, body {
     height: 100%;
+    margin: 0;
 }
 
 body {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
-.content {
-    flex: 1;
+.container-fluid {
+    flex: 1 0 auto; /* Hace que el contenido ocupe todo el espacio disponible */
 }
 
 .footer {
-    position: relative;
-    bottom: 0;
+    flex-shrink: 0; /* Evita que el footer se colapse */
     width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    text-align: center;
 }
 
-
-
+/* Resto de las clases que ya tienes */
 .custom-container-lg-xl {
     max-width: 100%; /* Predeterminado para pantallas pequeñas y medianas */
 }

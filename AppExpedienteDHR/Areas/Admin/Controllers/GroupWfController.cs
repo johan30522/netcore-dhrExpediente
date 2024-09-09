@@ -1,4 +1,5 @@
 ﻿using AppExpedienteDHR.Core.ServiceContracts;
+using AppExpedienteDHR.Core.Services;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using Microsoft.AspNetCore.Mvc;
 
@@ -78,6 +79,28 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             await _groupWfService.DeleteGroup(id);
             return Json(new { success = true });
         }
+
+
+        #region API CALLS
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetGroups(int id)
+        {
+            if (id == 0)
+            {
+                return Json(new { data = new List<GroupWfViewModel>() });
+            }
+            var allObj = await _groupWfService.GetGroups(id);
+
+            return Json(new { data = allObj });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchGroups(string search)
+        {
+            var groups = await _groupWfService.SearchGroup(search);
+            return Json(new { groups });
+        }
+        #endregion
 
 
 

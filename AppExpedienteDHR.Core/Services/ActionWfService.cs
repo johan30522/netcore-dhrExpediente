@@ -31,17 +31,45 @@ namespace AppExpedienteDHR.Core.Services
                     throw new Exception("State not found");
                 }
 
-
-
-
-
                 ActionWf action = _mapper.Map<ActionWf>(actionViewModel);
                 action.StateId = actionViewModel.StateId;
 
                 action.State = state;
 
+                // si tiene un grupo asociado en NextStateId lo agrega
+                if (actionViewModel.NextStateId != null)
+                {
+                    StateWf nextState = await _containerWork.StateWf.Get(actionViewModel.NextStateId.Value);
+                    if (nextState == null)
+                    {
+                        throw new Exception("Next State not found");
+                    }
+                    action.NextStateId = actionViewModel.NextStateId;
+                    action.NextState = nextState;
+                }
+
+
                 await _containerWork.ActionWf.Add(action);
                 await _containerWork.Save();
+
+                // si tiene Grupos asociados los agrega
+                if (actionViewModel.SelectedGroupIds.Any())
+                {
+                    foreach (var groupId in actionViewModel.SelectedGroupIds)
+                    {
+                        ActionGroupWf actionGroup = new ActionGroupWf
+                        {
+                            GroupId = groupId,
+                            ActionId = action.Id
+                        };
+                        await _containerWork.ActionGroupWf.Add(actionGroup);
+                    }
+                    await _containerWork.Save();
+                }
+
+
+
+
             }
             catch (Exception ex)
             {
@@ -77,12 +105,18 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                // selecciona solo los no eliminados IsDeleted
+
                 ActionWf action = await _containerWork.ActionWf.GetFirstOrDefault(
                     a => a.Id == id && a.IsDeleted == false,
-                    includeProperties: "ActionRules"
+                    includeProperties: "ActionRules,ActionGroups.Group"
                  );
                 ActionWfViewModel actionViewModel = _mapper.Map<ActionWfViewModel>(action);
+
+                if (action.ActionGroups.Any())
+                {
+                    actionViewModel.SelectedGroupIds = action.ActionGroups.Select(ag => ag.GroupId).ToList();
+                }
+
                 return actionViewModel;
             }
             catch (Exception ex)
@@ -96,7 +130,7 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-               
+
                 IEnumerable<ActionWf> actions = await _containerWork.ActionWf.GetAll(
                     a => a.StateId == stateId && a.IsDeleted == false);
                 IEnumerable<ActionWfViewModel> actionViewModels = _mapper.Map<IEnumerable<ActionWfViewModel>>(actions);
@@ -113,8 +147,54 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
+                StateWf state = await _containerWork.StateWf.Get(actionViewModel.StateId);
+                if (state == null)
+                {
+                    throw new Exception("State not found");
+                }
+                if (actionViewModel.NextStateId != null)
+                {
+                    StateWf nextState = await _containerWork.StateWf.Get(actionViewModel.NextStateId.Value);
+                    if (nextState == null)
+                    {
+                        throw new Exception("Next State not found");
+                    }
+                }
+
                 ActionWf action = _mapper.Map<ActionWf>(actionViewModel);
+
                 await _containerWork.ActionWf.Update(action);
+                await _containerWork.Save();
+
+
+                // verifica si hubo cambios en los grupos asociados, si los hay los elimina y agrega los nuevos
+                IEnumerable<ActionGroupWf> actionGroups = await _containerWork.ActionGroupWf.GetAll(ag => ag.ActionId == action.Id);
+                if (actionGroups.Any())
+                {
+                    foreach (var actionGroup in actionGroups)
+                    {
+                        // elimina los grupos asociados que no estan en la lista de SelectedGroupIds
+                        if (!actionViewModel.SelectedGroupIds.Contains(actionGroup.GroupId))
+                        {
+                            await _containerWork.ActionGroupWf.Remove(actionGroup);
+                        }
+                    }
+                }
+                // agrega los nuevos grupos asociados de la lista SelectedGroupIds solo si no existen
+                foreach (var groupId in actionViewModel.SelectedGroupIds)
+                {
+                    if (!actionGroups.Any(ag => ag.GroupId == groupId))
+                    {
+                        ActionGroupWf actionGroup = new ActionGroupWf
+                        {
+                            GroupId = groupId,
+                            ActionId = action.Id
+                        };
+                        await _containerWork.ActionGroupWf.Add(actionGroup);
+                    }
+                }
+
+                await _containerWork.Save();
             }
             catch (Exception ex)
             {

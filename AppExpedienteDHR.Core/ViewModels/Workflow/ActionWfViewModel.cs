@@ -18,8 +18,13 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
         public int StateId { get; set; }
         public int? NextStateId { get; set; }
 
+        // Lista de grupos seleccionados
+        public List<int>? SelectedGroupIds { get; set; } = new List<int>();
+
         public int? FlowId { get; set; }
 
         public List<ActionRuleWfViewModel>? Rules { get; set; } = new List<ActionRuleWfViewModel>();
+
+        public List<GroupWfViewModel>? Groups { get; set; } = new List<GroupWfViewModel>();
     }
 }

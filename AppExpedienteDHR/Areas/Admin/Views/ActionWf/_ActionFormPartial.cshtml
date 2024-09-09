@@ -27,6 +27,22 @@
                 <span asp-validation-for="Order" class="text-danger"></span>
             </div>
 
+            <div class="form-group">
+                <div>
+                    <label for="Groups">Grupos Autorizados a esta Acción</label>
+                </div>
+                <div>
+                    <select id="Groups" name="SelectedGroupIds" class="form-control" multiple="multiple" style="width: 100%;">
+                        @foreach (var group in Model.Groups)
+                        {
+                            <option value="@group.Id" selected="@(Model.SelectedGroupIds.Contains(group.Id) ? "selected" : null)">
+                                @group.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+
 
             <div class="form-group">
                 <label>Tipo de Evaluación</label>

@@ -6,7 +6,7 @@
  */
 function initializeGroupDataTable(flowId, tableGroupId) {
     console.log(`Inicializando tabla de grupos para el flujo ${flowId} con el id ${tableGroupId}`);
-    const ajaxUrl = `/admin/flowwf/GetGroups/${flowId}`;
+    const ajaxUrl = `/admin/GroupWf/GetGroups/${flowId}`;
     const columns = [
         { "data": "order", "width": "10%" },
         { "data": "name", "width": "70%" },
@@ -15,11 +15,11 @@ function initializeGroupDataTable(flowId, tableGroupId) {
             "render": function (data) {
                 return `
                     <div class="text-center">
-                       <a href="#" class="btn btn-success text-white" style="cursor:pointer" onclick="editGroup(${flowId},${data});return false;">
+                       <a href="#" class="btn btn-success text-white m-1" style="cursor:pointer" onclick="editGroup(${flowId},${data});return false;">
                             <i class="fas fa-edit"></i>
                         </a>
                         &nbsp;
-                        <a href="#" class="btn btn-danger text-white" style="cursor:pointer" onclick="deleteGroup(${data});return false;">
+                        <a href="#" class="btn btn-danger text-white m-1" style="cursor:pointer" onclick="deleteGroup(${data});return false;">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>
@@ -49,8 +49,6 @@ function loadGroupForm(flowId, groupId = 0) {
     const scrollPosition = $(window).scrollTop();
 
     $('#editFormContainer').hide(); // Ocultar el contenedor del formulario
-    //const containerHeight = $('#editFormContainer').height();
-    //$('#editFormContainer').hide().after(`<div id="tempContainer" style="height:${containerHeight}px;"></div>`);
 
 
     const url = groupId ? `/admin/GroupWf/GetGroup/${groupId}` : `/admin/GroupWf/GetGroupForm?flowId=${flowId}`;
@@ -64,7 +62,6 @@ function loadGroupForm(flowId, groupId = 0) {
         $(window).scrollTop(scrollPosition);
 
         $('#editFormContainer').fadeIn(); // Mostrar el contenedor del formulario
-        $('#tempContainer').remove(); // Eliminar el contenedor temporal
 
     });
 }
@@ -256,10 +253,10 @@ function initializeStateDataTable(flowId, tableStateId) {
             "render": function (data) {
                 return `
                     <div class="text-center">
-                       <a href="#" class="btn btn-success text-white" style="cursor:pointer" onclick="editState(${flowId},${data});return false;">
+                       <a href="#" class="btn btn-success text-white m-1" style="cursor:pointer" onclick="editState(${flowId},${data});return false;">
                             <i class="fas fa-edit"></i>
                         </a> &nbsp;
-                        <a href="#" class="btn btn-danger text-white" style="cursor:pointer" onclick="deleteState(${data});return false;">
+                        <a href="#" class="btn btn-danger text-white m-1" style="cursor:pointer" onclick="deleteState(${data});return false;">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>
@@ -287,10 +284,12 @@ function initializeStateDataTable(flowId, tableStateId) {
 function loadStateForm(flowId, stateId = 0) {
     console.log(`testCargando formulario de grupo para el flujo ${flowId} y el grupo ${stateId}`);
     const url = stateId ? `/admin/StateWf/GetState/${stateId}` : `/admin/StateWf/GetStateForm?flowId=${flowId}`;
+    $('#editFormContainer').hide(); // Ocultar el contenedor del formulario
+
     $.get(url, function (data) {
         $('#editFormContainer').html(data);
         $.validator.unobtrusive.parse('#stateForm'); // Reinicializar validaciones
-
+        $('#editFormContainer').fadeIn(); // Mostrar el contenedor del formulario
     });
 }
 
@@ -418,3 +417,6 @@ function deleteState(stateId) {
         }
     });
 }
+
+
+
