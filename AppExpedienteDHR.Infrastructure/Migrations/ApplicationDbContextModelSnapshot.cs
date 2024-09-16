@@ -43,6 +43,459 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Adjunto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FechaSubida")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NombreOriginal")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Ruta")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Adjuntos", "dhr");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AceptaTerminos")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("DenuncianteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DetalleDenuncia")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("FechaDenuncia")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("PersonaAfectadaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Petitoria")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DenuncianteId");
+
+                    b.HasIndex("PersonaAfectadaId");
+
+                    b.ToTable("Denuncias", "dhr");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.DenunciaAdjunto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdjuntoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DenunciaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdjuntoId");
+
+                    b.HasIndex("DenunciaId");
+
+                    b.ToTable("DenunciaAdjuntos", "dhr");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denunciante", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CantonCodigo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CorreoElectronico")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DireccionExacta")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DistritoCodigo")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EsMenorEdad")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("EscolaridadId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstadoCivilId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NumeroIdentificacion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("PaisOrigenCodigo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PrimerApellido")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("ProvinciaCodigo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SegundoApellido")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("SexoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TelefonoCelular")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("TieneRequerimientoEspecial")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TipoIdentificacionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CantonCodigo");
+
+                    b.HasIndex("DistritoCodigo");
+
+                    b.HasIndex("EscolaridadId");
+
+                    b.HasIndex("EstadoCivilId");
+
+                    b.HasIndex("PaisOrigenCodigo");
+
+                    b.HasIndex("ProvinciaCodigo");
+
+                    b.HasIndex("SexoId");
+
+                    b.HasIndex("TipoIdentificacionId");
+
+                    b.ToTable("Denunciantes", "dhr");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DenunciaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DenuncianteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EstadoActual")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DenunciaId")
+                        .IsUnique();
+
+                    b.HasIndex("DenuncianteId");
+
+                    b.ToTable("Expedientes", "dhr");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NumeroIdentificacion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PrimerApellido")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SegundoApellido")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("SexoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoIdentificacionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SexoId");
+
+                    b.HasIndex("TipoIdentificacionId");
+
+                    b.ToTable("PersonasAfectada", "dhr");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Canton", b =>
+                {
+                    b.Property<int>("CodigoCanton")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CodigoCanton"));
+
+                    b.Property<decimal?>("AreaCantonKm2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("CodigoProvincia")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CodigoCanton");
+
+                    b.HasIndex("CodigoProvincia");
+
+                    b.ToTable("Cantones", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Distrito", b =>
+                {
+                    b.Property<int>("CodigoDistrito")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CodigoDistrito"));
+
+                    b.Property<decimal?>("AreaDistritoKm2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("CodigoCanton")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CodigoDistrito");
+
+                    b.HasIndex("CodigoCanton");
+
+                    b.ToTable("Distritos", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Escolaridad", b =>
+                {
+                    b.Property<int>("EscolaridadId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EscolaridadId"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("EscolaridadId");
+
+                    b.ToTable("Escolaridad", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.EstadoCivil", b =>
+                {
+                    b.Property<int>("EstadoCivilId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EstadoCivilId"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("EstadoCivilId");
+
+                    b.ToTable("EstadoCivil", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Pais", b =>
+                {
+                    b.Property<int>("CodigoNumerico")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CodigoNumerico"));
+
+                    b.Property<string>("CodigoISOAlfa2")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("CodigoISOAlfa3")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("DenominacionPais")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CodigoNumerico");
+
+                    b.ToTable("Paises", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Provincia", b =>
+                {
+                    b.Property<int>("Codigo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Codigo"));
+
+                    b.Property<decimal?>("AreaKm2")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Area_Km2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Codigo");
+
+                    b.ToTable("Provincias", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Sexo", b =>
+                {
+                    b.Property<int>("SexoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SexoId"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("SexoId");
+
+                    b.ToTable("Sexo", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.TipoIdentificacion", b =>
+                {
+                    b.Property<int>("TipoIdentificacionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIdentificacionId"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("TipoIdentificacionId");
+
+                    b.ToTable("TipoIdentificacion", "gen", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.ActionGroupWf", b =>
                 {
                     b.Property<int>("Id")
@@ -567,6 +1020,168 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denunciante", "Denunciante")
+                        .WithMany("Denuncias")
+                        .HasForeignKey("DenuncianteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", "PersonaAfectada")
+                        .WithMany("Denuncias")
+                        .HasForeignKey("PersonaAfectadaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Denunciante");
+
+                    b.Navigation("PersonaAfectada");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.DenunciaAdjunto", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Adjunto", "Adjunto")
+                        .WithMany()
+                        .HasForeignKey("AdjuntoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", "Denuncia")
+                        .WithMany("DenunciaAdjuntos")
+                        .HasForeignKey("DenunciaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adjunto");
+
+                    b.Navigation("Denuncia");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denunciante", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Canton", "Canton")
+                        .WithMany()
+                        .HasForeignKey("CantonCodigo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Distrito", "Distrito")
+                        .WithMany()
+                        .HasForeignKey("DistritoCodigo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Escolaridad", "Escolaridad")
+                        .WithMany()
+                        .HasForeignKey("EscolaridadId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.EstadoCivil", "EstadoCivil")
+                        .WithMany()
+                        .HasForeignKey("EstadoCivilId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Pais", "PaisOrigen")
+                        .WithMany()
+                        .HasForeignKey("PaisOrigenCodigo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Provincia", "Provincia")
+                        .WithMany()
+                        .HasForeignKey("ProvinciaCodigo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Sexo", "Sexo")
+                        .WithMany()
+                        .HasForeignKey("SexoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.TipoIdentificacion", "TipoIdentificacion")
+                        .WithMany()
+                        .HasForeignKey("TipoIdentificacionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Canton");
+
+                    b.Navigation("Distrito");
+
+                    b.Navigation("Escolaridad");
+
+                    b.Navigation("EstadoCivil");
+
+                    b.Navigation("PaisOrigen");
+
+                    b.Navigation("Provincia");
+
+                    b.Navigation("Sexo");
+
+                    b.Navigation("TipoIdentificacion");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", "Denuncia")
+                        .WithOne("Expediente")
+                        .HasForeignKey("AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente", "DenunciaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denunciante", "Denunciante")
+                        .WithMany("Expedientes")
+                        .HasForeignKey("DenuncianteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Denuncia");
+
+                    b.Navigation("Denunciante");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Sexo", "Sexo")
+                        .WithMany()
+                        .HasForeignKey("SexoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.TipoIdentificacion", "TipoIdentificacion")
+                        .WithMany()
+                        .HasForeignKey("TipoIdentificacionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Sexo");
+
+                    b.Navigation("TipoIdentificacion");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Canton", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Provincia", "Provincia")
+                        .WithMany("Cantones")
+                        .HasForeignKey("CodigoProvincia")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Provincia");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Distrito", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.General.Canton", "Canton")
+                        .WithMany("Distritos")
+                        .HasForeignKey("CodigoCanton")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Canton");
+                });
+
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.ActionGroupWf", b =>
                 {
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.ActionWf", "Action")
@@ -770,6 +1385,36 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", b =>
+                {
+                    b.Navigation("DenunciaAdjuntos");
+
+                    b.Navigation("Expediente")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denunciante", b =>
+                {
+                    b.Navigation("Denuncias");
+
+                    b.Navigation("Expedientes");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", b =>
+                {
+                    b.Navigation("Denuncias");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Canton", b =>
+                {
+                    b.Navigation("Distritos");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.General.Provincia", b =>
+                {
+                    b.Navigation("Cantones");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.ActionWf", b =>

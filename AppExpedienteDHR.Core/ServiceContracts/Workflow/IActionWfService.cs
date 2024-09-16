@@ -1,6 +1,6 @@
 ﻿using AppExpedienteDHR.Core.ViewModels.Workflow;
 
-namespace AppExpedienteDHR.Core.ServiceContracts
+namespace AppExpedienteDHR.Core.ServiceContracts.Workflow
 {
     public interface IActionWfService
     {

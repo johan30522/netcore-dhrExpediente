@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
 {
+    [Table("Expedientes", Schema = "dhr")]
     public class Expediente
     {
         [Key]
-        public int ExpedienteId { get; set; }
+        public int Id { get; set; }
         public int DenunciaId { get; set; }
         public int DenuncianteId { get; set; }
         [StringLength(100)]

@@ -87,6 +87,12 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
+        if (performance.navigation.type === 2) {
+            location.reload(true); // Forzar recarga de la página desde el servidor
+        }
+    </script>
 }
 
 

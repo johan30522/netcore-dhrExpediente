@@ -1,4 +1,5 @@
 ﻿using AppExpedienteDHR.Core.Domain.Entities;
+using AppExpedienteDHR.Core.Domain.Entities.Dhr;
 using AppExpedienteDHR.Core.Domain.Entities.General;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using AppExpedienteDHR.Core.Domain.IdentityEntities;
@@ -45,6 +46,16 @@ namespace AppExpedienteDHR.Infrastructure.Data
         public DbSet<RequestFlowHistoryWf> RequestFlowHistoryWfs { get; set; }
         #endregion
 
+        #region Dhr Entities
+        public DbSet<Denunciante> Denunciantes { get; set; }
+        public DbSet<Denuncia> Denuncias { get; set; }
+        public DbSet<PersonaAfectada> PersonasAfectadas { get; set; }
+        public DbSet<DenunciaAdjunto> DenunciaAdjuntos { get; set; }
+        public DbSet<Expediente> Expedientes { get; set; }
+        public DbSet<Adjunto> Adjuntos { get; set; }
+
+        #endregion
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,12 +82,24 @@ namespace AppExpedienteDHR.Infrastructure.Data
             #endregion
 
             #region Catalog entities Fluent API configuration
+
+            // Configuración para ignorar la recreación de tablas existentes en las migraciones
+            modelBuilder.Entity<TipoIdentificacion>().ToTable("TipoIdentificacion", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<Sexo>().ToTable("Sexo", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<Provincia>().ToTable("Provincias", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<Canton>().ToTable("Cantones", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<Distrito>().ToTable("Distritos", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<Escolaridad>().ToTable("Escolaridad", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<EstadoCivil>().ToTable("EstadoCivil", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<Pais>().ToTable("Paises", "gen").Metadata.SetIsTableExcludedFromMigrations(true);
+
             // Configuración de Provincia -> Canton (uno a muchos)
             modelBuilder.Entity<Provincia>()
                 .HasMany(p => p.Cantones)
                 .WithOne(c => c.Provincia)
                 .HasForeignKey(c => c.CodigoProvincia)
                 .OnDelete(DeleteBehavior.Restrict);
+
             // Configuración de Canton -> Distrito (uno a muchos)
             modelBuilder.Entity<Canton>()
                 .HasMany(c => c.Distritos)
@@ -84,21 +107,122 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .HasForeignKey(d => d.CodigoCanton)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configuración de Canton -> Provincia (muchos a uno)
-            modelBuilder.Entity<Canton>()
-                .HasOne(c => c.Provincia)
-                .WithMany(p => p.Cantones)
-                .HasForeignKey(c => c.CodigoProvincia)
+
+
+            #endregion
+
+            #region Dhr entities Fluent API configuration
+            // Configuración de Denunciante -> Denuncia (uno a muchos)
+            modelBuilder.Entity<Denuncia>()
+                .HasOne(d => d.Denunciante)
+                .WithMany(den => den.Denuncias)
+                .HasForeignKey(d => d.DenuncianteId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configuración de Distrito -> Canton (muchos a uno)
-            modelBuilder.Entity<Distrito>()
+            // Configuración de Denuncia -> PersonaAfectada (Opcional, uno a muchos)
+            modelBuilder.Entity<Denuncia>()
+                .HasOne(d => d.PersonaAfectada)
+                .WithMany(pa => pa.Denuncias)
+                .HasForeignKey(d => d.PersonaAfectadaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Denuncia -> DenunciaAdjunto (uno a muchos)
+            modelBuilder.Entity<DenunciaAdjunto>()
+                .HasOne(da => da.Denuncia)
+                .WithMany(d => d.DenunciaAdjuntos)
+                .HasForeignKey(da => da.DenunciaId)
+                .OnDelete(DeleteBehavior.Cascade);
+            // Configuración de la relación entre DenunciaAdjunto y Anexo
+            modelBuilder.Entity<DenunciaAdjunto>()
+                .HasOne(da => da.Adjunto)
+                .WithMany()
+                .HasForeignKey(da => da.AdjuntoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configuración de Denuncia -> Expediente (uno a uno)
+            modelBuilder.Entity<Denuncia>()
+                .HasOne(d => d.Expediente)
+                .WithOne(e => e.Denuncia)
+                .HasForeignKey<Expediente>(e => e.DenunciaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Expediente -> Denunciante (uno a muchos)
+            modelBuilder.Entity<Expediente>()
+                .HasOne(e => e.Denunciante)
+                .WithMany(den => den.Expedientes)
+                .HasForeignKey(e => e.DenuncianteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            // Configuración de Denunciante -> TipoIdentificacion (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
+                .HasOne(d => d.TipoIdentificacion)
+                .WithMany()
+                .HasForeignKey(d => d.TipoIdentificacionId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            // Configuración de Denunciante -> Sexo (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
+                .HasOne(d => d.Sexo)
+                .WithMany()
+                .HasForeignKey(d => d.SexoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Denunciante -> EstadoCivil (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
+                .HasOne(d => d.EstadoCivil)
+                .WithMany()
+                .HasForeignKey(d => d.EstadoCivilId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Denunciante -> Pais (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
+                .HasOne(d => d.PaisOrigen)
+                .WithMany()
+                .HasForeignKey(d => d.PaisOrigenCodigo)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Denunciante -> Escolaridad (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
+                .HasOne(d => d.Provincia)
+                .WithMany()
+                .HasForeignKey(d => d.ProvinciaCodigo)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de Denunciante -> Canton (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
                 .HasOne(d => d.Canton)
-                .WithMany(c => c.Distritos)
-                .HasForeignKey(d => d.CodigoCanton)
+                .WithMany()
+                .HasForeignKey(d => d.CantonCodigo)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Configuración de Denunciante -> Distrito (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
+                .HasOne(d => d.Distrito)
+                .WithMany()
+                .HasForeignKey(d => d.DistritoCodigo)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            // Configuración de Denunciante -> Escolaridad (uno a muchos)
+            modelBuilder.Entity<Denunciante>()
+                .HasOne(d => d.Escolaridad)
+                .WithMany()
+                .HasForeignKey(d => d.EscolaridadId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de PersonaAfectada -> TipoIdentificacion (uno a muchos)
+            modelBuilder.Entity<PersonaAfectada>()
+                .HasOne(pa => pa.TipoIdentificacion)
+                .WithMany()
+                .HasForeignKey(pa => pa.TipoIdentificacionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de PersonaAfectada -> Sexo (uno a muchos)
+            modelBuilder.Entity<PersonaAfectada>()
+                .HasOne(pa => pa.Sexo)
+                .WithMany()
+                .HasForeignKey(pa => pa.SexoId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             #endregion
 

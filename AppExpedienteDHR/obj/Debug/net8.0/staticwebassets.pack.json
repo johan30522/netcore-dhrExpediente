@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\AppExpedienteDHR.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\css\\denunciaForm.css",
+      "PackagePath": "staticwebassets\\css\\denunciaForm.css"
+    },
+    {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\css\\file-upload.css",
+      "PackagePath": "staticwebassets\\css\\file-upload.css"
+    },
+    {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\css\\layout.css",
       "PackagePath": "staticwebassets\\css\\layout.css"
     },
@@ -39,6 +47,14 @@
     {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\datatable\\user.js",
       "PackagePath": "staticwebassets\\js\\datatable\\user.js"
+    },
+    {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\dhr\\denuncia.js",
+      "PackagePath": "staticwebassets\\js\\dhr\\denuncia.js"
+    },
+    {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\file-upload.js",
+      "PackagePath": "staticwebassets\\js\\file-upload.js"
     },
     {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\flow\\actionRule.js",

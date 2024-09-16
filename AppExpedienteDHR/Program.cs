@@ -10,7 +10,15 @@ using AppExpedienteDHR.Core.Services;
 using AppExpedienteDHR.Core.ServiceContracts;
 using Serilog;
 using AppExpedienteDHR.Core.ServiceContracts.General;
+using AppExpedienteDHR.Core.Services.Dhr;
 using AppExpedienteDHR.Core.Services.General;
+using AppExpedienteDHR.Core.ServiceContracts.Workflow;
+using AppExpedienteDHR.Core.Services.WorkFlow;
+using AppExpedienteDHR.Core.ServiceContracts.Dhr;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using Microsoft.Extensions.Options;
+using AppExpedienteDHR.Core.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,8 +51,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI();
 
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 
 //Add container to container IcC of dependency injection
 builder.Services.AddScoped<IContainerWork, ContainerWork>();
@@ -57,6 +67,7 @@ builder.Services.AddAutoMapper(typeof(ActionWfProfile));
 builder.Services.AddAutoMapper(typeof(FlowWfProfile));
 builder.Services.AddAutoMapper(typeof(GroupWfProfile));
 builder.Services.AddAutoMapper(typeof(ActionRuleWfProfile));
+builder.Services.AddAutoMapper(typeof(DhrProfile));
 
 
 
@@ -85,8 +96,26 @@ builder.Services.AddScoped<IEscolaridadService, EscolaridadService>();
 builder.Services.AddScoped<ISexoService, SexoService>();
 builder.Services.AddScoped<IPadronService, PadronService>();
 
+//services dhr
+builder.Services.AddScoped<IDenunciaService, DenunciaService>();
+builder.Services.AddScoped<IDenuncianteService, DenuncianteService>();
+builder.Services.AddScoped<IExpedienteService, ExpedienteService>();
+builder.Services.AddScoped<IAdjuntoService, AdjuntoService>();
 
 
+
+// Configurar cultura predeterminada
+var supportedCultures = new[] { new CultureInfo("es-ES"), new CultureInfo("en-US") };
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("es-ES");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
+
+// Configurar la opción de almacenamiento de archivos
+builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorage"));
 
 
 var app = builder.Build();
@@ -107,6 +136,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+// Configuración de localización en el pipeline
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
 
 app.MapControllerRoute(
     name: "default",

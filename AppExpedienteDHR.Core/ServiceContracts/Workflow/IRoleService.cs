@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppExpedienteDHR.Core.ServiceContracts
+namespace AppExpedienteDHR.Core.ServiceContracts.Workflow
 {
     public interface IRoleService
     {

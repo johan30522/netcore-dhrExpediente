@@ -16,7 +16,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.General
         public async Task Update(Provincia provincia)
         {
             var currentProvincia = await _context.Provincias.FindAsync(provincia.Codigo);
-            currentProvincia.NombreProvincia = provincia.NombreProvincia;
+            currentProvincia.Nombre = provincia.Nombre;
             await _context.SaveChangesAsync();
         }
     }

@@ -1,0 +1,181 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Workflow
+@model DenunciaViewModel
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="TipoIdentificacionId" class="form-label"><strong>Tipo de Identificación</strong></label>
+            <select asp-for="Denunciante.TipoIdentificacionId" class="form-select" asp-items="@(new SelectList(Model.ListTiposIdentificacion, "TipoIdentificacionId", "Descripcion",Model.Denunciante?.TipoIdentificacionId ?? 0))" id="tipoIdentificacionSelect">
+                <option value="">Seleccione una opción</option>
+            </select>
+
+            <span asp-validation-for="Denunciante.TipoIdentificacionId" class="text-danger text-center"></span>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="NumeroIdentificacion" class="form-label"><strong>Número de Identificación</strong></label>
+            <div class="input-group">
+                <input asp-for="Denunciante.NumeroIdentificacion" class="form-control" id="numeroIdentificacion" />
+                <button type="button" class="btn btn-outline-info" id="consultaCiudadanoBtn" style="display: none;">Buscar</button>
+            </div>
+            <span asp-validation-for="Denunciante.NumeroIdentificacion" class="text-danger text-center"></span>
+            <!-- Mensaje de error al buscar el ciudadano -->
+            <div id="errorCiudadano" class="text-danger" style="display: none;">
+                Ciudadano no encontrado.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="Nombre" class="form-label"><strong>Nombre</strong></label>
+            <input asp-for="Denunciante.Nombre" class="form-control" id="nombreDenunciante" />
+            <span asp-validation-for="Denunciante.Nombre" class="text-danger text-center"></span>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="PrimerApellido" class="form-label"><strong>Primer Apellido</strong></label>
+            <input asp-for="Denunciante.PrimerApellido" class="form-control" id="primerApellidoDenunciante" />
+            <span asp-validation-for="Denunciante.PrimerApellido" class="text-danger text-center"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="SegundoApellido" class="form-label"><strong>Segundo Apellido</strong></label>
+            <input asp-for="Denunciante.SegundoApellido" class="form-control" id="segundoApellidoDenunciante" />
+            <span asp-validation-for="Denunciante.SegundoApellido" class="text-danger text-center"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="SexoId" class="form-label"><strong>Sexo</strong></label>
+            <select asp-for="Denunciante.SexoId" class="form-select" asp-items="@(new SelectList(Model.ListSexos, "SexoId", "Descripcion",Model.Denunciante?.SexoId ?? 0))">
+                <option value="">Seleccione una opción</option>
+            </select>
+            <span asp-validation-for="Denunciante.SexoId" class="text-danger text-center"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="EstadoCivilId" class="form-label"><strong>Estado Civil</strong></label>
+            <select asp-for="Denunciante.EstadoCivilId" class="form-select" asp-items="@(new SelectList(Model.ListEstadosCiviles, "EstadoCivilId", "Descripcion",Model.Denunciante?.EstadoCivilId ?? 0))">
+                <option value="">Seleccione una opción</option>
+            </select>
+            <span asp-validation-for="Denunciante.EstadoCivilId" class="text-danger text-center"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="PaisOrigenCodigo" class="form-label"><strong>País de Origen</strong></label>
+            <select asp-for="Denunciante.PaisOrigenCodigo" class="form-select" asp-items="@(new SelectList(Model.ListPaises, "CodigoNumerico", "DenominacionPais",Model.Denunciante?.PaisOrigenCodigo ?? 0))">
+                <option value="">Seleccione un país</option>
+            </select>
+            <span asp-validation-for="Denunciante.PaisOrigenCodigo" class="text-danger text-center"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="EscolaridadId" class="form-label"><strong>Escolaridad</strong></label>
+            <select asp-for="Denunciante.EscolaridadId" class="form-select" asp-items="@(new SelectList(Model.ListEscolaridades, "EscolaridadId", "Descripcion",Model.Denunciante?.EscolaridadId ?? 0))">
+                <option value="">Seleccione una opción</option>
+            </select>
+            <span asp-validation-for="Denunciante.EscolaridadId" class="text-danger text-center"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="TelefonoCelular" class="form-label"><strong>Teléfono Celular</strong></label>
+            <input asp-for="Denunciante.TelefonoCelular" class="form-control" id="telefonoCelularDenunciante" />
+            <span asp-validation-for="Denunciante.TelefonoCelular" class="text-danger text-center"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="CorreoElectronico" class="form-label"><strong>Correo Electrónico</strong></label>
+            <input asp-for="Denunciante.CorreoElectronico" class="form-control" id="correoElectronicoDenunciante" />
+            <span asp-validation-for="Denunciante.CorreoElectronico" class="text-danger text-center"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <br />
+            <input asp-for="Denunciante.EsMenorEdad" class="form-check-input" id="esMenorEdad" />
+            <label class="form-check-label" for="esMenorEdad">
+                &nbsp; Menor de Edad
+            </label>
+            <br />
+            <input asp-for="Denunciante.TieneRequerimientoEspecial" class="form-check-input" id="tieneRequerimientoEspecial" />
+            <label class="form-check-label" for="esMenorEdad">
+                &nbsp; Tiene requerimiento especial
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="ProvinciaCodigo" class="form-label"><strong>Provincia</strong></label>
+@*             <select asp-for="Denunciante.ProvinciaCodigo" id="provinciaSelect" class="form-select">
+                <option value="">Seleccione una provincia</option>
+                @foreach (var provincia in Model.ListProvincias)
+                {
+                    <option value="@provincia.Codigo">@provincia.Nombre</option>
+                }
+            </select> *@
+            <select asp-for="Denunciante.ProvinciaCodigo" class="form-select" id="provinciaSelect" asp-items="@(new SelectList(Model.ListProvincias, "Codigo", "Nombre",Model.Denunciante?.ProvinciaCodigo ?? 0))">
+                <option value="">Seleccione una opción</option>
+            </select>
+            <span asp-validation-for="Denunciante.ProvinciaCodigo" class="text-danger text-center"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="CantonCodigo" class="form-label"><strong>Cantón</strong></label>
+            <select asp-for="Denunciante.CantonCodigo" id="cantonSelect" class="form-select">
+                <option value="">Seleccione un cantón</option>
+            </select>
+            <span asp-validation-for="Denunciante.ProvinciaCodigo" class="text-danger text-center"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="DistritoCodigo" class="form-label"><strong>Distrito</strong></label>
+            <select asp-for="Denunciante.DistritoCodigo" id="distritoSelect" class="form-select">
+                <option value="">Seleccione un distrito</option>
+            </select>
+            <span asp-validation-for="Denunciante.DistritoCodigo" class="text-danger text-center"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="mb-3">
+        <label for="DireccionExacta" class="form-label"><strong>Direccción Exacta</strong></label>
+        <textarea asp-for="Denunciante.DireccionExacta" class="form-control" style="height: 100px;"></textarea>
+        <span asp-validation-for="Denunciante.DireccionExacta" class="text-danger text-center"></span>
+    </div>
+</div>

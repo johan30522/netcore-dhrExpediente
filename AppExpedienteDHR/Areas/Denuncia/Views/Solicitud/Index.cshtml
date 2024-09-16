@@ -1,2 +1,97 @@
 ﻿
-<h4>Denuncias web</h4>
+
+@{
+    ViewData["Title"] = "Lista de Denuncias";
+    var tableId = "tblDenuncias"; // Identificador único para la tabla
+}
+
+
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-8">
+            <h2 class="text-primary">Denuncias</h2>
+        </div>
+        <div class="col-4 text-right">
+            <a asp-action="Create" asp-area="Denuncia" class="btn btn-primary">
+                <i class="fas fa-plus"></i> &nbsp;
+                Nueva Denuncia
+            </a>
+
+        </div>
+    </div>
+    <br />
+    <br />
+    <table id="@tableId" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Denunciante</th>
+                <th>Detalle</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/datatable/datatableServerSide.js"></script>
+    <script>
+        $(document).ready(function () {
+            const tableId = '@tableId'; // Usamos la variable tableId aquí
+            const ajaxUrl = '/Denuncia/Solicitud/GetAllDenuncias';
+            const columns = [
+                { "data": "denuncianteNombre", "width": "20%" },
+                {
+                    "data": "detalleDenuncia",
+                    "width": "30%",
+                    "render": function (data) {
+                        if (data.length > 60) {
+                            return data.substring(0, 60) + "...";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "data": "fechaDenuncia",
+                    "width": "15%",
+                    "render": function (data) {
+                        if (data) {
+                            var date = new Date(data);
+                            return date.toLocaleDateString("es-ES") + " " + date.toLocaleTimeString("es-ES", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true // Especifica formato de 12 horas con AM/PM
+                            });
+                        }
+                        return "";
+                    }
+                },
+                {
+                    "data": "id",
+                    "render": function (data) {
+                        return `
+                                            <div class="text-center">
+                                                <a href="/Denuncia/Solicitud/Info/${data}" class="btn btn-success text-white btn-edit-${tableId}" style="cursor:pointer">
+                                                                    <i class="fas fa-folder-open"></i>
+                                                </a>
+                                                <a onclick="Delete('/Denuncia/Solicitud/Delete/${data}')" class="btn btn-danger text-white" style="cursor:pointer">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        `;
+                    }, "width": "15%"
+                }
+            ];
+
+            const dataTable = loadDataTable(tableId, ajaxUrl, columns);
+
+            // Asociar la función de guardado de estado al botón de edición
+            $(document).on('click', `.btn-edit-${tableId}`, function () {
+                saveTableState(tableId);
+            });
+        });
+    </script>
+}

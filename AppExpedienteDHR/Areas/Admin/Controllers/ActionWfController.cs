@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
+using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {

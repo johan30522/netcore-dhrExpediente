@@ -1,10 +1,11 @@
-﻿using AppExpedienteDHR.Core.ServiceContracts;
-using AppExpedienteDHR.Core.Services;
+﻿using AppExpedienteDHR.Core.Services;
 using AppExpedienteDHR.Core.ViewModels.User;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AppExpedienteDHR.Utils.Validation;
+using AppExpedienteDHR.Core.ServiceContracts.Workflow;
+using NuGet.Protocol;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
@@ -33,6 +34,8 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+
+
             FlowFormViewModel viewModel = new FlowFormViewModel
             {
                 Flow = new FlowWfViewModel()
@@ -62,10 +65,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
 
             if (flowFormViewModel.Flow.Id == 0)
             {
-                // remover la validaciones de las propiedades que no se deben validar
-                //RemoveModelStateForObject("Group");
-                //RemoveModelStateForObject("State");
-                // Remover la validación para todas las propiedades del objeto Group y State
+                
                 ModelStateHelper.RemoveModelStateForObject(ModelState, "Group");
                 ModelStateHelper.RemoveModelStateForObject(ModelState, "State");
             }
@@ -84,7 +84,8 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 }
                 flowFormViewModel.Flow = flowViewModel;
 
-                return View("FlowForm", flowFormViewModel);
+                //return View("FlowForm", flowFormViewModel);
+                return RedirectToAction("Edit", new { id = flowViewModel.Id });
 
             }
             return View("FlowForm", flowFormViewModel);

@@ -13,7 +13,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.General
         public int? CodigoCanton { get; set; }
 
         [MaxLength(50)]
-        public string NombreDistrito { get; set; }
+        public string Nombre { get; set; }
 
         public decimal? AreaDistritoKm2 { get; set; }
 

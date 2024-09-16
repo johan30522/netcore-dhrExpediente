@@ -15,7 +15,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.General
         public async Task Update(Distrito distrito)
         {
             var currentDistrito = await _context.Distritos.FindAsync(distrito.CodigoDistrito);
-            currentDistrito.NombreDistrito = distrito.NombreDistrito;
+            currentDistrito.Nombre = distrito.Nombre;
             await _context.SaveChangesAsync();
            
         }

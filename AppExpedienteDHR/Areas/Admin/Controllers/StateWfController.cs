@@ -1,4 +1,4 @@
-﻿using AppExpedienteDHR.Core.ServiceContracts;
+﻿using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using Microsoft.AspNetCore.Mvc;
 

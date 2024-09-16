@@ -310,3 +310,4 @@ C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.pdb
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\AppExpedienteDHR.genruntimeconfig.cache
 C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\obj\Debug\net8.0\ref\AppExpedienteDHR.dll
+C:\Users\jjoha\source\repos\ExpedienteDHRSolution\AppExpedienteDHR\bin\Debug\net8.0\System.Linq.Dynamic.Core.dll

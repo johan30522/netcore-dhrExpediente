@@ -1,13 +1,13 @@
 ﻿using AppExpedienteDHR.Core.Domain.RepositoryContracts;
-using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using AutoMapper;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using Serilog;
 using AppExpedienteDHR.Core.Domain.IdentityEntities;
 using AppExpedienteDHR.Core.ViewModels.User;
+using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 
-namespace AppExpedienteDHR.Core.Services
+namespace AppExpedienteDHR.Core.Services.WorkFlow
 {
     public class GroupWfService : IGroupWfService
     {
@@ -187,21 +187,21 @@ namespace AppExpedienteDHR.Core.Services
                 throw;
             }
         }
-    public async Task<IEnumerable<GroupWfViewModel>> SearchGroup(string search)
-    {
-        try
+        public async Task<IEnumerable<GroupWfViewModel>> SearchGroup(string search)
         {
-            // buscar grupos por nombre, correo, etc
-            IEnumerable<GroupWf> group = await _containerWork.GroupWf.GetAll(g => g.Name.Contains(search));
-            IEnumerable<GroupWfViewModel> groupViewModels = _mapper.Map<IEnumerable<GroupWfViewModel>>(group);
-            return groupViewModels;
+            try
+            {
+                // buscar grupos por nombre, correo, etc
+                IEnumerable<GroupWf> group = await _containerWork.GroupWf.GetAll(g => g.Name.Contains(search));
+                IEnumerable<GroupWfViewModel> groupViewModels = _mapper.Map<IEnumerable<GroupWfViewModel>>(group);
+                return groupViewModels;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener el usuario por nombre de usuario");
+                throw;
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.Error(ex, "Error al obtener el usuario por nombre de usuario");
-            throw;
-        }
-    }
     }
 
 }

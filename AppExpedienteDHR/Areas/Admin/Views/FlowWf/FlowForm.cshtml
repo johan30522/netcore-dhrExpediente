@@ -109,8 +109,13 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        console.log('flujo');
+        // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
+        if (performance.navigation.type === 2) {
+            location.reload(true); // Forzar recarga de la página desde el servidor
+        }
     </script>
+
+
     <script src="~/js/datatable/datatable.js"></script>
     <script src="~/js/flow/flowForm.js"></script>
     <script src="~/js/flow/stateAction.js"></script>

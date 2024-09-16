@@ -1,6 +1,6 @@
 ﻿using AppExpedienteDHR.Core.ViewModels.Workflow;
 
-namespace AppExpedienteDHR.Core.ServiceContracts
+namespace AppExpedienteDHR.Core.ServiceContracts.Workflow
 {
     public interface IFlowWfService
     {
@@ -9,6 +9,6 @@ namespace AppExpedienteDHR.Core.ServiceContracts
         Task<FlowWfViewModel> CreateFlow(FlowWfViewModel flowViewModel);
         Task<FlowWfViewModel> UpdateFlow(FlowWfViewModel flowViewModel);
         Task DeleteFlow(int id);
- 
+
     }
 }

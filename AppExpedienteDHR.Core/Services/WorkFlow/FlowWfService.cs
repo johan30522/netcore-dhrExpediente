@@ -1,11 +1,11 @@
 ﻿using AppExpedienteDHR.Core.Domain.RepositoryContracts;
-using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using AutoMapper;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using Serilog;
+using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 
-namespace AppExpedienteDHR.Core.Services
+namespace AppExpedienteDHR.Core.Services.WorkFlow
 {
     public class FlowWfService : IFlowWfService
     {
@@ -86,7 +86,7 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                
+
                 IEnumerable<FlowWf> flows = await _containerWork.FlowWf.GetAll(
                     flow => flow.IsDeleted == false
                 );

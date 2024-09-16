@@ -17,7 +17,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.General
         public async Task Update(Canton canton)
         {
             var currentCanton = await _context.Cantones.FindAsync(canton.CodigoCanton);
-            currentCanton.NombreCanton = canton.NombreCanton;
+            currentCanton.Nombre = canton.Nombre;
             await _context.SaveChangesAsync();
         }
     }

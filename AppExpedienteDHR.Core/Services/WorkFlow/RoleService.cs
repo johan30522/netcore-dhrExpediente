@@ -1,10 +1,10 @@
-﻿using AppExpedienteDHR.Core.ServiceContracts;
+﻿using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.ViewModels.Role;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 
-namespace AppExpedienteDHR.Core.Services
+namespace AppExpedienteDHR.Core.Services.WorkFlow
 {
     public class RoleService : IRoleService
     {

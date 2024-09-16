@@ -8,6 +8,7 @@ using AppExpedienteDHR.Utils.Constants;
 using Microsoft.Extensions.Configuration;
 using AppExpedienteDHR.Core.ViewModels.User;
 using Serilog;
+using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 
 namespace AppExpedienteDHR.Core.Services
 {

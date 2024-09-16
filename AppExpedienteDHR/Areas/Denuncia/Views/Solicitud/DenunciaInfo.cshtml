@@ -1,0 +1,101 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Dhr
+@model DenunciaViewModel
+
+
+<link rel="stylesheet" href="~/css/denunciaForm.css">
+<link rel="stylesheet" href="~/css/file-upload.css">
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 border border-light rounded p-2">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Denunciante.Id" />
+                <input type="hidden" asp-for="PersonaAfectada.Id" />
+                
+                <div class="row">
+                    <!-- Columna 1: Datos del Denunciante -->
+                    <div class="col-md-6">
+
+                        <div class="border border-light rounded p-3 mb-3">
+                            <h4 class="text-center">Datos del Denunciante</h4>
+                            <!-- Aquí van los campos del denunciante -->
+                            @* partial de denunciante *@
+                            <partial name="_DenunciantePartial" model="Model" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Datos de la Persona Afectada -->
+                        <div class="border border-light rounded p-3 mb-3">
+                            <h4 class="text-center">Datos de la Persona Afectada</h4>
+                            @* partial de persona afectada *@
+                            <partial name="_PersonaAfectadaPartial" model="Model" />
+
+                        </div>
+
+
+                        <!-- Datos de la Denuncia -->
+                        <div class="border border-light rounded p-3 mb-3">
+                            <h4 class="text-center">Datos de la Denuncia</h4>
+                            @* partial de datos de la denuncia *@
+                            <partial name="_DatosDenunciaPartial" model="Model" />
+
+                        </div>
+
+                        <!-- Anexos -->
+                        <div class="border border-light rounded p-3 mb-3">
+                            <h4 class="text-center">Archivos Adjuntos</h4>
+
+                            <div class="mb-3">
+                                <div class="file-drop-area">
+                                    <span class="fake-btn">Arrastrar archivos o hacer clic</span>
+                                    <span class="file-msg">Ningún archivo seleccionado</span>
+                                    <input type="file" name="Files" id="fileInput" class="file-input" multiple />
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input asp-for="AceptaTerminos" class="form-check-input @(ViewData.ModelState["AceptaTerminos"]?.Errors.Count > 0 ? "is-invalid" : "")" id="aceptaTerminosCheckbox" />
+                                <label class="form-check-label" for="AceptaTerminos">
+                                    <strong>Acepto los Términos</strong>. El almacenamiento y tratamiento de datos personales solicitados tiene como fin único el tramitar su solicitud.
+                                </label>
+                                <div class="invalid-feedback">Debe aceptar los términos para continuar.</div>
+                            </div>
+                            <!-- Aquí van los campos de los anexos -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+     <script src="~/js/dhr/denuncia.js"></script> 
+    <script>
+        // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
+        if (performance.navigation.type === 2) {
+            location.reload(true); // Forzar recarga de la página desde el servidor
+        }
+    </script>
+    <script src="~/js/file-upload.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // Por defecto: si la denuncia es nueva, los campos están deshabilitados
+            limpiarCamposPersonaAfectada();
+
+            var provinciaSeleccionada = "@(Model.Denunciante?.ProvinciaCodigo)";
+            var cantonSeleccionado = "@(Model.Denunciante?.CantonCodigo)";
+            var distritoSeleccionado = "@(Model.Denunciante?.DistritoCodigo)";
+
+            if (provinciaSeleccionada) {
+                cargarCantonesYDistritos(provinciaSeleccionada, cantonSeleccionado, distritoSeleccionado);
+            }
+
+        });
+    </script>
+}

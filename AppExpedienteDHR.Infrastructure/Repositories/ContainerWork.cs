@@ -5,6 +5,9 @@ using AppExpedienteDHR.Infrastructure.Data;
 using AppExpedienteDHR.Infrastructure.Repositories;
 using AppExpedienteDHR.Infrastructure.Repositories.Workflow;
 using AppExpedienteDHR.Infrastructure.Repositories.General;
+using AppExpedienteDHR.Core.Domain.Entities.Dhr;
+using AppExpedienteDHR.Infrastructure.Repositories.Dhr;
+using AppExpedienteDHR.Core.Domain.RepositoryContracts.Dhr;
 
 
 
@@ -48,6 +51,14 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             // Catalog repositories
             Padron = new PadronRepository(_catalogContext);
 
+            // Dhr repositories
+            Denuncia = new DenunciaRepository(_context);
+            Denunciante = new DenuncianteRepository(_context);
+            DenunciaAdjunto = new DenunciaAdjuntoRepository(_context);
+            Expediente = new ExpedienteRepository(_context);
+            PersonaAfectada = new PersonaAfectadaRepository(_context);
+            Adjunto = new AdjuntoRepository(_context);
+
 
 
 
@@ -59,46 +70,38 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
 
 
         #region Workflow repositories
-
         public IActionWfRepository ActionWf { get; private set; }
-
         public IStateWfRepository StateWf { get; private set; }
-
         public IActionGroupWfRepository ActionGroupWf { get; private set; }
-
         public IGroupWfRepository GroupWf { get; private set; }
-
         public IActionRuleWfRespository ActionRuleWf { get; private set; }
-
-
         public IFlowHistoryWfRepository FlowHistoryWf { get; private set; }
-
-    
         public IFlowWfRepository FlowWf { get; private set; }
-
         public IGroupUserWfRepository GroupUserWf { get; private set; }
-
         public IRequestFlowHistoryWfRepository RequestFlowHistoryWf { get; private set; }
 
+        #endregion
+
+        #region General repositories
+
         public IDistritoRepository Distrito { get; private set; }
-
         public IEstadoCivilRepository EstadoCivil { get; private set; }
-
         public IPaisRepository Pais { get; private set; }
-
         public IProvinciaRepository Provincia { get; private set; }
-
         public ICantonRepository Canton { get; private set; }
-
         public ITipoIdentificacionRepository TipoIdentificacion { get; private set; }
-
         public IEscolaridadRepository Escolaridad { get; private set; }
-
         public ISexoRepository Sexo { get; private set; }
-
         public IPadronRepository Padron { get; private set; }
+        #endregion
 
-
+        #region Dhr repositories
+        public IDenunciaRepository Denuncia { get; private set; }
+        public IDenuncianteRepository Denunciante { get; private set; }
+        public IDenunciaAdjuntoRepository DenunciaAdjunto { get; private set; }
+        public IExpedienteRepository Expediente { get; private set; }
+        public IPersonaAfectadaRepository PersonaAfectada { get; private set; }
+        public IAdjuntoRepository Adjunto { get; private set; }
         #endregion
 
         public void Dispose()

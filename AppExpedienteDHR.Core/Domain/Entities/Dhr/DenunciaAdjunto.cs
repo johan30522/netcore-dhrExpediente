@@ -5,19 +5,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
 {
+    [Table("DenunciaAdjuntos", Schema = "dhr")]
     public class DenunciaAdjunto
     {
         [Key]
-        public int AdjuntoId { get; set; }
+        public int Id { get; set; }
         public int DenunciaId { get; set; }
-        [StringLength(150)]
-        public string RutaArchivo { get; set; }
-        [StringLength(200)]
-        public string NombreArchivo { get; set; }
-        public DateTime FechaSubida { get; set; } = DateTime.Now;
-
         // Navegaciones
         [ForeignKey("DenunciaId")]
         public Denuncia Denuncia { get; set; }
+        public int AdjuntoId { get; set; }
+        [ForeignKey("AdjuntoId")]
+        public Adjunto Adjunto { get; set; }
     }
 }

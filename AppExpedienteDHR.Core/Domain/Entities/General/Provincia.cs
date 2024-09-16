@@ -15,8 +15,9 @@ namespace AppExpedienteDHR.Core.Domain.Entities.General
         public int Codigo { get; set; }
 
         [MaxLength(50)]
-        public string NombreProvincia { get; set; }
+        public string Nombre { get; set; }
 
+        [Column("Area_Km2")]
         public decimal? AreaKm2 { get; set; }
 
         public ICollection<Canton> Cantones { get; set; }

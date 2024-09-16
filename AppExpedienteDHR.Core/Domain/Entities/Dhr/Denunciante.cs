@@ -5,27 +5,33 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
 {
-    [Table("Denunciante", Schema = "dhr")]
+    [Table("Denunciantes", Schema = "dhr")]
     public class Denunciante
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public int TipoIdentificacionId { get; set; }
         [StringLength(50)]
+        [Required]
         public string NumeroIdentificacion { get; set; }
         [MaxLength(100)]
+        [Required]
         public string Nombre { get; set; }
         [MaxLength(100)]
+        [Required]
         public string PrimerApellido { get; set; }
         [MaxLength(100)]
+        [Required]
         public string? SegundoApellido { get; set; }
         public int SexoId { get; set; }
         public int EstadoCivilId { get; set; }
-        public string PaisOrigenCodigo { get; set; }
+        public int PaisOrigenCodigo { get; set; }
         public int EscolaridadId { get; set; }
         [MaxLength(20)]
         public string TelefonoCelular { get; set; }
         [MaxLength(50)]
+        [Required]
         public string CorreoElectronico { get; set; }
         public bool EsMenorEdad { get; set; }
         public bool TieneRequerimientoEspecial { get; set; }
@@ -54,5 +60,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
 
         // Relación con Denuncia
         public ICollection<Denuncia> Denuncias { get; set; }
+        public ICollection<Expediente> Expedientes { get; set; }
+
     }
 }
