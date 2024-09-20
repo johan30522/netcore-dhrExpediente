@@ -1,18 +1,48 @@
 ﻿@using AppExpedienteDHR.Core.ViewModels.Dhr
 @model DenunciaViewModel
 
+@* Pasar el valor de readonly al partial *@
+@{
+    var errorMessage = TempData["ErrorMessage"] as string;  // Si no es editable, se pone en modo solo lectura
+    var denunciaId = Model.Id;
+    var lockRecordId = Model.LockedRecordId;
+    var isEditMode = Model.IsEdit;
+}
+
 
 <link rel="stylesheet" href="~/css/denunciaForm.css">
 <link rel="stylesheet" href="~/css/file-upload.css">
 
+
 <div class="container">
+    <h3 class="text-center">Denuncia</h3>
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @errorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <div class="row">
         <div class="col-12 border border-light rounded p-2">
-            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <form asp-area="Denuncia" asp-controller="Solicitud" asp-action="Save" id="formDenuncia" method="post">
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="Denunciante.Id" />
                 <input type="hidden" asp-for="PersonaAfectada.Id" />
-                
+                <div class="row d-flex  justify-content-end mb-2">
+                    <div class="col-6 mt-4 d-flex  justify-content-end">
+                        @if (Model.IsEdit)
+                        {
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        }
+                        else
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+                        }
+                        <a asp-action="Index" class="btn btn-secondary ms-1">Regresar</a>
+                    </div>
+                </div>
+
                 <div class="row">
                     <!-- Columna 1: Datos del Denunciante -->
                     <div class="col-md-6">
@@ -23,9 +53,6 @@
                             @* partial de denunciante *@
                             <partial name="_DenunciantePartial" model="Model" />
                         </div>
-
-                    </div>
-                    <div class="col-md-6">
                         <!-- Datos de la Persona Afectada -->
                         <div class="border border-light rounded p-3 mb-3">
                             <h4 class="text-center">Datos de la Persona Afectada</h4>
@@ -34,34 +61,77 @@
 
                         </div>
 
-
+                    </div>
+                    <div class="col-md-6">
                         <!-- Datos de la Denuncia -->
                         <div class="border border-light rounded p-3 mb-3">
                             <h4 class="text-center">Datos de la Denuncia</h4>
                             @* partial de datos de la denuncia *@
                             <partial name="_DatosDenunciaPartial" model="Model" />
-
                         </div>
 
                         <!-- Anexos -->
                         <div class="border border-light rounded p-3 mb-3">
-                            <h4 class="text-center">Archivos Adjuntos</h4>
 
-                            <div class="mb-3">
-                                <div class="file-drop-area">
-                                    <span class="fake-btn">Arrastrar archivos o hacer clic</span>
-                                    <span class="file-msg">Ningún archivo seleccionado</span>
-                                    <input type="file" name="Files" id="fileInput" class="file-input" multiple />
-                                </div>
+                            <div class="d-flex justify-content-around mb-1">
+                                <h4 class="text-center">Archivos Adjuntos</h4>
+                                <!-- Botón para agregar un nuevo anexo -->
+                                @if (Model.IsEdit)
+                                {
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarAnexo">
+                                        <i class="fas fa-upload"></i> &nbsp; Nuevo
+                                    </button>
+
+                                }
                             </div>
+
+                            <!-- Tabla para mostrar los anexos -->
+                            <div style="max-height: 400px; overflow-y: auto;">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre Archivo</th>
+                                            <th>Fecha Subida</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var anexo in Model.DenunciaAdjuntos)
+                                        {
+                                            <tr>
+                                                <td>@anexo.NombreArchivo</td>
+                                                <td>@anexo.FechaSubida.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                                <td>
+                                                    <a href="@Url.Action("DescargarAnexo", "Solicitud", new { anexoId = anexo.Id })" class="btn btn-info btn-sm">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+                                                    @if (Model.IsEdit)
+                                                    {
+                                                        <button class="btn btn-danger btn-sm" onclick="eliminarAnexo(@anexo.Id)">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                        <div class="border border-light rounded p-3 mb-3">
+                            <h4 class="text-center">Términos y Condiciones</h4>
+
                             <div class="mb-3 form-check">
-                                <input asp-for="AceptaTerminos" class="form-check-input @(ViewData.ModelState["AceptaTerminos"]?.Errors.Count > 0 ? "is-invalid" : "")" id="aceptaTerminosCheckbox" />
+                                <input asp-for="AceptaTerminos" class="form-check-input @(ViewData.ModelState["AceptaTerminos"]?.Errors.Count > 0 ? "is-invalid" : "")" id="aceptaTerminosCheckbox" disabled="@(!Model.IsEdit)" />
                                 <label class="form-check-label" for="AceptaTerminos">
                                     <strong>Acepto los Términos</strong>. El almacenamiento y tratamiento de datos personales solicitados tiene como fin único el tramitar su solicitud.
                                 </label>
                                 <div class="invalid-feedback">Debe aceptar los términos para continuar.</div>
                             </div>
-                            <!-- Aquí van los campos de los anexos -->
+
                         </div>
                     </div>
                 </div>
@@ -70,23 +140,62 @@
     </div>
 </div>
 
+
+
+<!-- Modal para agregar anexos -->
+<div class="modal fade" id="modalAgregarAnexo" tabindex="-1" aria-labelledby="modalAgregarAnexoLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarAnexoLabel">Agregar Anexo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAgregarAnexo" enctype="multipart/form-data">
+                    <!-- Área de arrastrar archivos -->
+                    <div class="file-drop-area">
+                        <span class="fake-btn">Arrastrar archivo o hacer clic</span>
+                        <span class="file-msg">Ningún archivo seleccionado</span>
+                        <input type="file" name="Files" id="fileInput" class="file-input" required />
+                    </div>
+                    <!-- Aquí se muestra la lista de archivos seleccionados -->
+                    <ul id="fileList" class="file-list"></ul>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarAnexo()">Guardar Anexo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/js/dhr/denuncia.js"></script>
+        <script src="~/js/file-upload.js"></script>
+        <script src="~/js/lockRecord.js"></script>
     }
-     <script src="~/js/dhr/denuncia.js"></script> 
     <script>
         // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
         if (performance.navigation.type === 2) {
             location.reload(true); // Forzar recarga de la página desde el servidor
         }
     </script>
-    <script src="~/js/file-upload.js"></script>
     <script>
+        const denunciaId = '@denunciaId';
+        const lockRecordId = '@lockRecordId';
+        const isEditMode = @isEditMode.ToString().ToLower();
         $(document).ready(function () {
 
             // Por defecto: si la denuncia es nueva, los campos están deshabilitados
             limpiarCamposPersonaAfectada();
+
+            //Inicializa el manejo de bloqueos de registro
+            if (isEditMode) {
+                initLockRecord(lockRecordId);
+            }
 
             var provinciaSeleccionada = "@(Model.Denunciante?.ProvinciaCodigo)";
             var cantonSeleccionado = "@(Model.Denunciante?.CantonCodigo)";
@@ -97,5 +206,81 @@
             }
 
         });
+
+        // Limpiar archivos al cerrar el modal o realizar alguna acción específica
+        $('#modalAgregarAnexo').on('hidden.bs.modal', function () {
+            limpiarInputArchivos('fileInput', 'fileList', '.file-msg'); // Llamada a la función para limpiar
+        });
+
+        function limpiarInputArchivos(fileInputId, fileListId, fileMsgClass) {
+            var fileInput = document.getElementById(fileInputId);
+            var fileList = document.getElementById(fileListId);
+            var fileMsg = document.querySelector(fileMsgClass);
+
+            // Crear una nueva instancia de DataTransfer y asignarla al input
+            var dt = new DataTransfer();
+            fileInput.files = dt.files; // Asignar los archivos vacíos al input
+
+            // Limpiar el input de archivo
+            fileInput.value = '';
+
+            // Limpiar la lista de archivos y el mensaje
+            fileList.innerHTML = '';
+            fileMsg.textContent = 'Ningún archivo seleccionado';
+        }
+
+        function guardarAnexo() {
+            console.log('Guardando anexo...')
+
+
+            var fileInput = document.getElementById("fileInput");
+
+            // Verificar si se ha seleccionado un archivo
+            if (fileInput.files.length === 0) {
+                // Mostrar alerta con SweetAlert si no hay archivos seleccionados
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No hay archivos',
+                    text: 'Debe seleccionar al menos un archivo antes de guardar.',
+                    confirmButtonText: 'Aceptar'
+                });
+                return; // Detener la función si no hay archivo seleccionado
+            }
+
+            var formData = new FormData();
+            formData.append('file', fileInput.files[0]); // Asegúrate de que 'file' coincide con el nombre en el controlador
+            formData.append('id', "@(Model.Id)"); // Añadir el ID de la denuncia
+
+            $.ajax({
+                url: '/Denuncia/Solicitud/AgregarAnexo', // Ruta del controlador para agregar anexos
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    location.reload(); // Recargar la página después de guardar el anexo
+                },
+                error: function (error) {
+                    alert('Error al agregar el anexo');
+                }
+            });
+        }
+
+        function eliminarAnexo(id) {
+            if (confirm("¿Está seguro de que desea eliminar este anexo?")) {
+                $.ajax({
+                    url: '/Denuncia/Solicitud/EliminarAnexo', // Ruta del controlador para eliminar anexos
+                    type: 'POST',
+                    data: { anexoId: id },
+                    success: function (response) {
+                        location.reload(); // Recargar la página después de eliminar el anexo
+                    },
+                    error: function (error) {
+                        alert('Error al eliminar el anexo');
+                    }
+                });
+            }
+        }
+
     </script>
 }

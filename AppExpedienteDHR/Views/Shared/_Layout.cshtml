@@ -1,4 +1,6 @@
 ﻿@using AppExpedienteDHR.Utils.Constants
+@using AppExpedienteDHR.Core.Models
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,6 +61,32 @@
     </header>
     <div class="container-fluid">
         <main role="main" class="pb-3">
+            <div class="container-fluid">
+                <!-- Breadcrumbs -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                        @if (ViewData["Breadcrumbs"] != null)
+                        {
+                            foreach (var breadcrumb in (List<Breadcrumb>)ViewData["Breadcrumbs"])
+                            {
+                                if (breadcrumb.IsActive)
+                                {
+                                    <li class="breadcrumb-item active" aria-current="page">@breadcrumb.Title</li>
+                                }
+                                else
+                                {
+                                    <li class="breadcrumb-item"><a href="@breadcrumb.Url">@breadcrumb.Title</a></li>
+                                }
+                            }
+                        }
+                    </ol>
+                </nav>
+
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
             @RenderBody()
         </main>
     </div>

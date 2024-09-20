@@ -24,6 +24,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
         public int? PersonaAfectadaId { get; set; }
         [Required]
         public bool AceptaTerminos { get; set; }
+        public bool IncluyePersonaAfectada { get; set; } = false;
 
         // Navegaciones
         [ForeignKey("DenuncianteId")]

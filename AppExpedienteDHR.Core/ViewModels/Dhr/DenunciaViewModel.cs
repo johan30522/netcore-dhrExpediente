@@ -20,6 +20,10 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
         public int? PersonaAfectadaId { get; set; }
         public bool AceptaTerminos { get; set; }= false;
         public bool IncluyePersonaAfectada { get; set; } = false;
+        public bool IsEdit { get; set; } = false;
+        public int? LockedRecordId { get; set; }
+
+
 
         // Archivos adjuntos (Subidos por el usuario)
         public IFormFile[]? Files { get; set; } // Aquí se capturan los archivos adjuntos

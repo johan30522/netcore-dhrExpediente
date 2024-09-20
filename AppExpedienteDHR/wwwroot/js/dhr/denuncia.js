@@ -100,34 +100,34 @@
     });
 
 
-    // Validar el campo de Aceptar Términos y SweetAlert para confirmar el envío del formulario
-    $('form').on('submit', function (e) {
-        e.preventDefault(); // Detener el envío del formulario
+    //// Validar el campo de Aceptar Términos y SweetAlert para confirmar el envío del formulario
+    //$('#formDenuncia').on('submit', function (e) {
+    //    e.preventDefault(); // Detener el envío del formulario
 
-        // Validar el checkbox de Acepta los Términos
-        var aceptaTerminos = $('#aceptaTerminosCheckbox').is(':checked');
-        if (!aceptaTerminos) {
-            $('#aceptaTerminosCheckbox').addClass('is-invalid');
-            return;
-        } else {
-            $('#aceptaTerminosCheckbox').removeClass('is-invalid').addClass('is-valid');
-        }
+    //    // Validar el checkbox de Acepta los Términos
+    //    var aceptaTerminos = $('#aceptaTerminosCheckbox').is(':checked');
+    //    if (!aceptaTerminos) {
+    //        $('#aceptaTerminosCheckbox').addClass('is-invalid');
+    //        return;
+    //    } else {
+    //        $('#aceptaTerminosCheckbox').removeClass('is-invalid').addClass('is-valid');
+    //    }
 
-        // Mostrar el SweetAlert de confirmación
-        Swal.fire({
-            title: '¿Está seguro de que desea guardar?',
-            text: "No podrá deshacer esta acción.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, guardar',
-            cancelButtonText: 'No, cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Enviar el formulario si el usuario confirma
-                $('form').off('submit').submit();
-            }
-        });
-    });
+    //    // Mostrar el SweetAlert de confirmación
+    //    Swal.fire({
+    //        title: '¿Está seguro de que desea guardar?',
+    //        text: "No podrá deshacer esta acción.",
+    //        icon: 'warning',
+    //        showCancelButton: true,
+    //        confirmButtonText: 'Sí, guardar',
+    //        cancelButtonText: 'No, cancelar'
+    //    }).then((result) => {
+    //        if (result.isConfirmed) {
+    //            // Enviar el formulario si el usuario confirma
+    //            $('form').off('submit').submit();
+    //        }
+    //    });
+    //});
 
 });
 

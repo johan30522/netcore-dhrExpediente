@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using AppExpedienteDHR.Core.ViewModels.User;
 using Serilog;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
+using Microsoft.AspNetCore.Http;
 
 namespace AppExpedienteDHR.Core.Services
 {
@@ -21,9 +22,10 @@ namespace AppExpedienteDHR.Core.Services
         private readonly IConfiguration _configuration;
         private readonly IRoleService _roleService;
         private readonly ILogger _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IContainerWork containerWork, IMapper mapper, IConfiguration configuration, IRoleService roleService, ILogger logger)
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IContainerWork containerWork, IMapper mapper, IConfiguration configuration, IRoleService roleService, ILogger logger, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -32,6 +34,7 @@ namespace AppExpedienteDHR.Core.Services
             _configuration = configuration;
             _roleService = roleService;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -309,6 +312,20 @@ namespace AppExpedienteDHR.Core.Services
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error al obtener el usuario por nombre de usuario");
+                throw;
+            }
+        }
+
+        public async Task<UserViewModel> GetCurrentUser()
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+                return _mapper.Map<UserViewModel>(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener el usuario actual");
                 throw;
             }
         }

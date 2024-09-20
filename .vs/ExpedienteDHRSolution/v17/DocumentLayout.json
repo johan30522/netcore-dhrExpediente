@@ -3,30 +3,51 @@
   "WorkspaceRootPath": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|c:\\users\\jjoha\\source\\repos\\expedientedhrsolution\\appexpedientedhr\\areas\\denuncia\\views\\solicitud\\denunciaform.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|solutionrelative:appexpedientedhr\\areas\\denuncia\\views\\solicitud\\denunciaform.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|c:\\users\\jjoha\\source\\repos\\expedientedhrsolution\\appexpedientedhr\\areas\\denuncia\\controllers\\solicitudcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|solutionrelative:appexpedientedhr\\areas\\denuncia\\controllers\\solicitudcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|c:\\users\\jjoha\\source\\repos\\expedientedhrsolution\\appexpedientedhr\\areas\\denuncia\\views\\solicitud\\denunciainfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|solutionrelative:appexpedientedhr\\areas\\denuncia\\views\\solicitud\\denunciainfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9872653-A7AB-4E16-B97F-856CC0A26677}|AppExpedienteDHR.Core\\AppExpedienteDHR.Core.csproj|c:\\users\\jjoha\\source\\repos\\expedientedhrsolution\\appexpedientedhr.core\\services\\lockrecordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9872653-A7AB-4E16-B97F-856CC0A26677}|AppExpedienteDHR.Core\\AppExpedienteDHR.Core.csproj|solutionrelative:appexpedientedhr.core\\services\\lockrecordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85705E8C-B58B-4557-A2BD-562A006280A6}|AppExpedienteDHR.Infrastructure\\AppExpedienteDHR.Infrastructure.csproj|c:\\users\\jjoha\\source\\repos\\expedientedhrsolution\\appexpedientedhr.infrastructure\\repositories\\lockrecordrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85705E8C-B58B-4557-A2BD-562A006280A6}|AppExpedienteDHR.Infrastructure\\AppExpedienteDHR.Infrastructure.csproj|solutionrelative:appexpedientedhr.infrastructure\\repositories\\lockrecordrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9872653-A7AB-4E16-B97F-856CC0A26677}|AppExpedienteDHR.Core\\AppExpedienteDHR.Core.csproj|c:\\users\\jjoha\\source\\repos\\expedientedhrsolution\\appexpedientedhr.core\\servicecontracts\\ilockrecordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9872653-A7AB-4E16-B97F-856CC0A26677}|AppExpedienteDHR.Core\\AppExpedienteDHR.Core.csproj|solutionrelative:appexpedientedhr.core\\servicecontracts\\ilockrecordservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|c:\\users\\jjoha\\source\\repos\\expedientedhrsolution\\appexpedientedhr\\wwwroot\\js\\dhr\\denuncia.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{09E8C5D8-DF80-4FE2-B609-01D8A73AA755}|AppExpedienteDHR\\AppExpedienteDHR.csproj|solutionrelative:appexpedientedhr\\wwwroot\\js\\dhr\\denuncia.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
     {
-      "Orientation": 1,
+      "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 261,
-          "SelectedChildIndex": 5,
+          "DockedWidth": 238,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{fbcae063-e2c0-4ab1-a516-996ea3dafb72}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SolicitudController.cs",
+              "DocumentMoniker": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\Areas\\Denuncia\\Controllers\\SolicitudController.cs",
+              "RelativeDocumentMoniker": "AppExpedienteDHR\\Areas\\Denuncia\\Controllers\\SolicitudController.cs",
+              "ToolTip": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\Areas\\Denuncia\\Controllers\\SolicitudController.cs",
+              "RelativeToolTip": "AppExpedienteDHR\\Areas\\Denuncia\\Controllers\\SolicitudController.cs",
+              "ViewState": "AQIAAIcAAAAAAAAAAAAmwKsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T17:50:44.175Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -36,41 +57,83 @@
               "RelativeDocumentMoniker": "AppExpedienteDHR\\Areas\\Denuncia\\Views\\Solicitud\\DenunciaInfo.cshtml",
               "ToolTip": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\Areas\\Denuncia\\Views\\Solicitud\\DenunciaInfo.cshtml",
               "RelativeToolTip": "AppExpedienteDHR\\Areas\\Denuncia\\Views\\Solicitud\\DenunciaInfo.cshtml",
-              "ViewState": "AQIAADMAAAAAAAAAAAAAAA8AAAAhAAAA",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAAAF4AAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-09-16T02:30:52.824Z",
+              "WhenOpened": "2024-09-19T17:29:28.326Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DenunciaForm.cshtml",
-              "DocumentMoniker": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\Areas\\Denuncia\\Views\\Solicitud\\DenunciaForm.cshtml",
-              "RelativeDocumentMoniker": "AppExpedienteDHR\\Areas\\Denuncia\\Views\\Solicitud\\DenunciaForm.cshtml",
-              "ToolTip": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\Areas\\Denuncia\\Views\\Solicitud\\DenunciaForm.cshtml",
-              "RelativeToolTip": "AppExpedienteDHR\\Areas\\Denuncia\\Views\\Solicitud\\DenunciaForm.cshtml",
-              "ViewState": "AQIAAGAAAAAAAAAAAAAAACcAAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-09-16T02:30:32.333Z",
+              "DocumentIndex": 3,
+              "Title": "LockRecordRepository.cs",
+              "DocumentMoniker": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR.Infrastructure\\Repositories\\LockRecordRepository.cs",
+              "RelativeDocumentMoniker": "AppExpedienteDHR.Infrastructure\\Repositories\\LockRecordRepository.cs",
+              "ToolTip": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR.Infrastructure\\Repositories\\LockRecordRepository.cs",
+              "RelativeToolTip": "AppExpedienteDHR.Infrastructure\\Repositories\\LockRecordRepository.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAAowCAAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T18:21:15.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LockRecordService.cs",
+              "DocumentMoniker": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR.Core\\Services\\LockRecordService.cs",
+              "RelativeDocumentMoniker": "AppExpedienteDHR.Core\\Services\\LockRecordService.cs",
+              "ToolTip": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR.Core\\Services\\LockRecordService.cs",
+              "RelativeToolTip": "AppExpedienteDHR.Core\\Services\\LockRecordService.cs",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAewGsAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T17:51:14.005Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ILockRecordService.cs",
+              "DocumentMoniker": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR.Core\\ServiceContracts\\ILockRecordService.cs",
+              "RelativeDocumentMoniker": "AppExpedienteDHR.Core\\ServiceContracts\\ILockRecordService.cs",
+              "ToolTip": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR.Core\\ServiceContracts\\ILockRecordService.cs",
+              "RelativeToolTip": "AppExpedienteDHR.Core\\ServiceContracts\\ILockRecordService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T19:50:12.89Z",
               "EditorCaption": ""
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "0052f6b7-c2c5-481d-9cb0-56be8abdc0a8",
+        "Display": 0,
+        "X": -5,
+        "Y": 184,
+        "Width": 833,
+        "Height": 973,
+        "WindowState": 2
+      },
+      "DocumentGroups": [
         {
-          "DockedHeight": 139,
-          "SelectedChildIndex": -1,
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "denuncia.js",
+              "DocumentMoniker": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\dhr\\denuncia.js",
+              "RelativeDocumentMoniker": "AppExpedienteDHR\\wwwroot\\js\\dhr\\denuncia.js",
+              "ToolTip": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\dhr\\denuncia.js",
+              "RelativeToolTip": "AppExpedienteDHR\\wwwroot\\js\\dhr\\denuncia.js",
+              "ViewState": "AQIAAHMAAAAAAAAAAAAUwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-09-19T17:39:24.373Z",
+              "EditorCaption": ""
             }
           ]
         }

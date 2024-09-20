@@ -3,6 +3,7 @@ using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 using AppExpedienteDHR.Core.ServiceContracts.Dhr;
 using AppExpedienteDHR.Core.ViewModels.Dhr;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Serilog;
 using System.Collections.Generic;
 
@@ -44,6 +45,7 @@ namespace AppExpedienteDHR.Core.Services.Dhr
                 else
                 {
                     await _containerWork.Denunciante.Add(denunciante);
+                    denunciante = await _containerWork.Denunciante.GetFirstOrDefault(x => x.NumeroIdentificacion == denunciante.NumeroIdentificacion);
                 }
                 //Quita el denuncante de la denuncia
                 denuncia.Denunciante = null;
@@ -90,7 +92,76 @@ namespace AppExpedienteDHR.Core.Services.Dhr
 
         public async Task UpdateDenuncia(DenunciaViewModel viewModel)
         {
-            var denuncia = _mapper.Map<Denuncia>(viewModel);
+            //obtiene la denuncia para verificar que exista
+            var denunciaExistente = await _containerWork.Denuncia.GetFirstOrDefault(x => x.Id == viewModel.Id);
+            if (denunciaExistente == null)
+            {
+                throw new Exception("La denuncia no existe");
+            }
+            Denuncia denuncia = _mapper.Map<Denuncia>(viewModel);
+            Denunciante denunciante = _mapper.Map<Denunciante>(viewModel.Denunciante);
+            var personaAfectada = _mapper.Map<PersonaAfectada>(viewModel.PersonaAfectada);
+
+
+            // verifica si el denunciante ya existe por la cedula
+            var denuncianteExistente = await _containerWork.Denunciante.GetFirstOrDefault(x => x.NumeroIdentificacion == denunciante.NumeroIdentificacion);
+            // si existe, se actualiza, sino se crea
+            if (denuncianteExistente != null)
+            {
+                denunciante.Id = denuncianteExistente.Id;
+                denunciante = await _containerWork.Denunciante.Update(denunciante);
+            }
+            else
+            {
+                await _containerWork.Denunciante.Add(denunciante);
+                denunciante = await _containerWork.Denunciante.GetFirstOrDefault(x => x.NumeroIdentificacion == denunciante.NumeroIdentificacion);
+            }
+
+            //Actualiza Persona Afectada
+            if (denunciaExistente.IncluyePersonaAfectada && viewModel.IncluyePersonaAfectada)
+            // si ya tenia persona afectada y se incluye persona afectada
+            {
+                if (denunciaExistente.PersonaAfectadaId != viewModel.PersonaAfectadaId)
+                {
+                    if (denunciaExistente.PersonaAfectadaId != null)
+                    {
+                        personaAfectada.Id = denunciaExistente.PersonaAfectadaId.Value;
+                        await _containerWork.PersonaAfectada.Update(personaAfectada);
+                    }
+                    else
+                    {
+                        await _containerWork.PersonaAfectada.Add(personaAfectada);
+                        personaAfectada = await _containerWork.PersonaAfectada.GetFirstOrDefault(x => x.Id == personaAfectada.Id);
+                    }
+                }
+            }
+            else if (denunciaExistente.IncluyePersonaAfectada && !viewModel.IncluyePersonaAfectada)
+            // si ya tenia persona afectada y ya no se incluye persona afectada
+            {
+                if (denunciaExistente.PersonaAfectadaId != null)
+                {
+                    await _containerWork.PersonaAfectada.Remove(denunciaExistente.PersonaAfectada);
+                }
+            }
+            else if (!denunciaExistente.IncluyePersonaAfectada && viewModel.IncluyePersonaAfectada)
+            // si no tenia persona afectada y ahora si se incluye persona afectada
+            {
+                await _containerWork.PersonaAfectada.Add(personaAfectada);
+                personaAfectada = await _containerWork.PersonaAfectada.GetFirstOrDefault(x => x.Id == personaAfectada.Id);
+            }
+
+
+            denuncia.DenuncianteId = denunciante.Id;
+            if (denuncia.IncluyePersonaAfectada && personaAfectada != null)
+            {
+                denuncia.PersonaAfectadaId = personaAfectada?.Id;
+            } else
+            {
+                denuncia.PersonaAfectadaId = null;
+            }
+
+
+
             await _containerWork.Denuncia.Update(denuncia);
             await _containerWork.Save();
         }
@@ -107,15 +178,40 @@ namespace AppExpedienteDHR.Core.Services.Dhr
 
         public async Task<DenunciaViewModel> GetDenuncia(int id)
         {
-            var denuncia = await _containerWork.Denuncia.GetFirstOrDefault(x => x.Id == id, includeProperties: "Denunciante,PersonaAfectada");
+            var denuncia = await _containerWork.Denuncia.GetFirstOrDefault(x => x.Id == id, includeProperties: "Denunciante,PersonaAfectada,DenunciaAdjuntos.Adjunto");
             return _mapper.Map<DenunciaViewModel>(denuncia);
         }
 
+        public async Task AgregarAnexoDenuncia(int id, IFormFile file)
+        {
+            try
+            {
+                if (file != null && file.Length > 0)
+                {
+                    // Crear el anexo usando el servicio
+                    var idAnexo = await _adjuntoService.CrearAnexoAsync(file);
+
+                    // Relacionar el anexo con la denuncia
+                    var denunciaAdjunto = new DenunciaAdjunto
+                    {
+                        DenunciaId = id,
+                        AdjuntoId = idAnexo
+                    };
+                    await _containerWork.DenunciaAdjunto.Add(denunciaAdjunto);
+                    await _containerWork.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error agregando anexo a la denuncia");
+                throw;
+            }
+        }
         public async Task<(List<DenunciaListadoViewModel> items, int totalItems)> GetDenunciasPaginadas(
             int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection)
         {
 
-            (IEnumerable <Denuncia> denuncias,int total)= await _containerWork.Denuncia.GetAllPaginated(
+            (IEnumerable<Denuncia> denuncias, int total) = await _containerWork.Denuncia.GetAllPaginated(
                 filter: null, // No se necesita un filtro inicial en este caso
                 includeProperties: "Denunciante", // Incluir la propiedad relacionada "Denunciante"
                 pageIndex: pageIndex,

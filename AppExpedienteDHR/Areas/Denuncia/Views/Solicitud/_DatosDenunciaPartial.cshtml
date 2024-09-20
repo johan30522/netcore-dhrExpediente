@@ -1,14 +1,14 @@
-﻿@using AppExpedienteDHR.Core.ViewModels.Workflow
+﻿@using AppExpedienteDHR.Core.ViewModels.Dhr
 @model DenunciaViewModel
 
 <div class="mb-3">
     <label for="Petitoria" class="form-label"><strong>Petitoria</strong></label>
-    <textarea asp-for="Petitoria" class="form-control" style="height: 100px;"></textarea>
+    <textarea asp-for="Petitoria" class="form-control" style="height: 100px;" disabled="@(!Model.IsEdit)"></textarea>
     <span asp-validation-for="Petitoria" class="text-danger text-center"></span>
 </div>
 
 <div class="mb-3">
     <label for="DetalleDenuncia" class="form-label"><strong>Detalle de la Denuncia</strong></label>
-    <textarea asp-for="DetalleDenuncia" class="form-control" style="height: 100px;"></textarea>
+    <textarea asp-for="DetalleDenuncia" class="form-control" style="height: 100px;" disabled="@(!Model.IsEdit)"></textarea>
     <span asp-validation-for="DetalleDenuncia" class="text-danger text-center"></span>
 </div>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using AppExpedienteDHR.Utils.Validation;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using NuGet.Protocol;
+using AppExpedienteDHR.Core.Models;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
@@ -17,7 +18,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         private readonly IFlowWfService _flowWfService;
         private readonly IGroupWfService _groupWfService;
         private readonly IStateWfService _stateWfService;
-        
+
 
         public FlowWfController(IFlowWfService flowWfService, IGroupWfService groupWfService, IStateWfService stateWfService)
         {
@@ -28,13 +29,21 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                {
+                    new Breadcrumb { Title = "Flujos", Url = Url.Action("Index", "FlowWf"), IsActive = true }
+                };
             return View();
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                {
+                    new Breadcrumb { Title = "Flujos", Url = Url.Action("Index", "FlowWf"), IsActive = false },
+                    new Breadcrumb { Title = "Crear Flujo", Url = Url.Action("Create", "FlowWf"), IsActive = true }
+                };
 
             FlowFormViewModel viewModel = new FlowFormViewModel
             {
@@ -45,7 +54,12 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
-            {
+        {
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                {
+                    new Breadcrumb { Title = "Flujos", Url = Url.Action("Index", "FlowWf"), IsActive = false },
+                    new Breadcrumb { Title = "Editar Flujo", Url = Url.Action("Edit", "FlowWf"), IsActive = true }
+                };
             FlowWfViewModel flowViewModel = await _flowWfService.GetFlow(id);
             if (flowViewModel == null)
             {
@@ -63,12 +77,11 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         public async Task<IActionResult> Save(FlowFormViewModel flowFormViewModel)
         {
 
-            if (flowFormViewModel.Flow.Id == 0)
-            {
-                
+
+
                 ModelStateHelper.RemoveModelStateForObject(ModelState, "Group");
                 ModelStateHelper.RemoveModelStateForObject(ModelState, "State");
-            }
+       
 
 
             if (ModelState.IsValid)
@@ -80,7 +93,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 }
                 else
                 {
-                    flowViewModel=await _flowWfService.UpdateFlow(flowFormViewModel.Flow);
+                    flowViewModel = await _flowWfService.UpdateFlow(flowFormViewModel.Flow);
                 }
                 flowFormViewModel.Flow = flowViewModel;
 
@@ -117,13 +130,13 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return Json(new { data = allObj });
         }
 
- 
+
 
 
 
 
         #endregion
 
-        
+
     }
 }

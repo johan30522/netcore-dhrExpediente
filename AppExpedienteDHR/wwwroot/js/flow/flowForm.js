@@ -15,11 +15,11 @@ function initializeGroupDataTable(flowId, tableGroupId) {
             "render": function (data) {
                 return `
                     <div class="text-center">
-                       <a href="#" class="btn btn-success text-white m-1" style="cursor:pointer" onclick="editGroup(${flowId},${data});return false;">
+                       <a href="#" class="btn btn-success btn-sm text-white" style="cursor:pointer" onclick="editGroup(${flowId},${data});return false;">
                             <i class="fas fa-edit"></i>
                         </a>
                         &nbsp;
-                        <a href="#" class="btn btn-danger text-white m-1" style="cursor:pointer" onclick="deleteGroup(${data});return false;">
+                        <a href="#" class="btn btn-danger btn-sm text-white " style="cursor:pointer" onclick="deleteGroup(${data});return false;">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>
@@ -253,10 +253,10 @@ function initializeStateDataTable(flowId, tableStateId) {
             "render": function (data) {
                 return `
                     <div class="text-center">
-                       <a href="#" class="btn btn-success text-white m-1" style="cursor:pointer" onclick="editState(${flowId},${data});return false;">
+                       <a href="#" class="btn btn-success btn-sm text-white" style="cursor:pointer" onclick="editState(${flowId},${data});return false;">
                             <i class="fas fa-edit"></i>
                         </a> &nbsp;
-                        <a href="#" class="btn btn-danger text-white m-1" style="cursor:pointer" onclick="deleteState(${data});return false;">
+                        <a href="#" class="btn btn-danger btn-sm text-white" style="cursor:pointer" onclick="deleteState(${data});return false;">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>

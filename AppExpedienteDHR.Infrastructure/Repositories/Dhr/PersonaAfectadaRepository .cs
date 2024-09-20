@@ -22,6 +22,9 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Dhr
             {
                 personaToUpdate.Nombre = personaAfectada.Nombre;
                 personaToUpdate.PrimerApellido = personaAfectada.PrimerApellido;
+                personaToUpdate.SegundoApellido = personaAfectada.SegundoApellido;
+                personaToUpdate.NumeroIdentificacion = personaAfectada.NumeroIdentificacion;
+                personaToUpdate.TipoIdentificacionId = personaAfectada.TipoIdentificacionId;
                 await _context.SaveChangesAsync();
             }
         }

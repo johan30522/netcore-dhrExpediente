@@ -19,7 +19,7 @@ namespace AppExpedienteDHR.Core.Services.Dhr
         private readonly IContainerWork _unitOfWork;
         private readonly string _rutaBaseArchivos;
         private readonly ILogger _logger;
-        
+
 
         public AdjuntoService(IContainerWork unitOfWork, ILogger logger, IOptions<FileStorageOptions> fileStorageOptions)
         {
@@ -90,6 +90,8 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             }
         }
 
+
+
         public async Task EliminarArchivoAsync(int anexoId)
         {
             var anexo = await _unitOfWork.Adjunto.Get(anexoId);
@@ -110,6 +112,17 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             // Eliminar la referencia en la base de datos
             await _unitOfWork.Adjunto.Remove(anexo.Id);
             await _unitOfWork.Save();
+        }
+
+        public Task<Adjunto> GetAnexo(int id)
+        {
+            var anexo = _unitOfWork.Adjunto.Get(id);
+            if (anexo == null)
+            {
+                return null;
+            }
+            return anexo;
+
         }
     }
 }

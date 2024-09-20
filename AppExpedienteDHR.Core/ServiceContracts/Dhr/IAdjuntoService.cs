@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AppExpedienteDHR.Core.Domain.Entities.Dhr;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace AppExpedienteDHR.Core.ServiceContracts.Dhr
         Task<int> CrearAnexoAsync(IFormFile archivo);
         Task<IEnumerable<int>> CrearAnexosAsync(IEnumerable<IFormFile> archivos);
         Task<byte[]> DescargarArchivoAsync(string ruta);
+        Task<Adjunto> GetAnexo(int id);
         Task EliminarArchivoAsync(int anexoId);
     }
 }

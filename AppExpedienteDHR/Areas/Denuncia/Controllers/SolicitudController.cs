@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using AppExpedienteDHR.Utils.Validation;
 using AppExpedienteDHR.Core.ServiceContracts.Dhr;
 
+using Serilog;
+using AppExpedienteDHR.Core.Models;
+using AppExpedienteDHR.Core.ServiceContracts;
+using AppExpedienteDHR.Core.ViewModels.User;
+
 namespace AppExpedienteDHR.Areas.Denuncia.Controllers
 {
     [Area("Denuncia")]
@@ -21,10 +26,27 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
         private readonly IPaisService _paisService;
         private readonly IEscolaridadService _escolaridadService;
         private readonly IDenunciaService _denunciaService;
+        private readonly IAdjuntoService _adjuntoService;
+        private readonly ILockRecordService _lockRecordService;
+        private readonly IUserService _userService;
 
 
 
-        public SolicitudController(IPadronService padronService, IProvinciaService provinciaService, ICantonService cantonService, IDistritoService distritoService, ITipoIdentificacionService tipoIdentificacionService, ISexoService sexoService, IEstadoCivilService estadoCivilService, IPaisService paisService, IEscolaridadService escolaridadService, IDenunciaService denunciaService)
+        public SolicitudController(
+            IPadronService padronService,
+            IProvinciaService provinciaService,
+            ICantonService cantonService,
+            IDistritoService distritoService,
+            ITipoIdentificacionService tipoIdentificacionService,
+            ISexoService sexoService,
+            IEstadoCivilService estadoCivilService,
+            IPaisService paisService,
+            IEscolaridadService escolaridadService,
+            IDenunciaService denunciaService,
+            IAdjuntoService adjuntoService,
+            ILockRecordService lockRecordService,
+            IUserService userService
+            )
         {
             _padronService = padronService;
             _provinciaService = provinciaService;
@@ -36,17 +58,29 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
             _paisService = paisService;
             _escolaridadService = escolaridadService;
             _denunciaService = denunciaService;
+            _adjuntoService = adjuntoService;
+            _lockRecordService = lockRecordService;
+            _userService = userService;
         }
 
 
         public IActionResult Index()
         {
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                {
+                    new Breadcrumb { Title = "Denuncias", Url = Url.Action("Index", "Solicitud"), IsActive = true }
+                };
             return View();
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+            {
+                new Breadcrumb { Title = "Denuncias", Url = Url.Action("Index", "Solicitud"), IsActive = false },
+                new Breadcrumb { Title = "Creación", Url = Url.Action("Create", "Solicitud"), IsActive = true }
+            };
             var model = new DenunciaViewModel();
             await LoadCatalogs(model);
             return View("DenunciaForm", model);
@@ -76,9 +110,57 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Info(int id)
         {
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+            {
+                new Breadcrumb { Title = "Denuncias", Url = Url.Action("Index", "Solicitud"), IsActive = false },
+                new Breadcrumb { Title = "Información Denuncia", Url = Url.Action("Info", "Solicitud", new { id }), IsActive = true }
+            };
             var model = await _denunciaService.GetDenuncia(id);
             await LoadCatalogs(model);
+            model.IsEdit = false;
             return View("DenunciaInfo", model);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            // Bloquear el registro antes de permitir la edición
+            var model = await _denunciaService.GetDenuncia(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            UserViewModel curUser=await _userService.GetCurrentUser();
+            if (curUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            // verificar si el registro esta bloqueado
+
+
+            var (isLocked, lockedByUserName) = await _lockRecordService.IsRecordLocked(id, "Denuncia");
+            if (isLocked)
+            {
+                TempData["ErrorMessage"] = "El registro está siendo editado por: " + lockedByUserName ;
+                return RedirectToAction("Info", new { id });
+            }
+
+            int lockid = await _lockRecordService.LockRecord(model.Id, "Denuncia",curUser.Id);
+
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                    {
+                        new Breadcrumb { Title = "Denuncias", Url = Url.Action("Index", "Solicitud"), IsActive = false },
+                        new Breadcrumb { Title = "Editar Denuncia", Url = Url.Action("Edit", "Solicitud", new { id }), IsActive = true }
+                    };
+
+            await LoadCatalogs(model);
+
+            // Permitir la edición del modelo
+            model.IsEdit = true;
+            model.LockedRecordId = lockid;
+
+            return View("DenunciaInfo", model); // Usamos la misma vista del formulario, pero en modo editable
         }
 
         [HttpPost]
@@ -93,8 +175,62 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
             {
                 await _denunciaService.UpdateDenuncia(model);
             }
-            await LoadCatalogs(model);
-            return View("DenunciaFormEdit", model);
+
+            //redirect to info with the same id
+            return RedirectToAction("Edit", new { id = model.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AgregarAnexo(int id, IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+
+                await _denunciaService.AgregarAnexoDenuncia(id, file);
+
+                return Ok();
+            }
+            return BadRequest("El archivo es requerido.");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EliminarAnexo(int anexoId)
+        {
+            try
+            {
+                await _adjuntoService.EliminarArchivoAsync(anexoId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                //_logger.Error(ex, "Error eliminando el anexo");
+                return BadRequest("Error eliminando el anexo.");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DescargarAnexo(int anexoId)
+        {
+            try
+            {
+                // Buscar el archivo adjunto por su ID
+                var anexo = await _adjuntoService.GetAnexo(anexoId);
+                if (anexo == null)
+                {
+                    return NotFound();
+                }
+
+                // Obtener el archivo como un array de bytes
+                var archivoBytes = await _adjuntoService.DescargarArchivoAsync(anexo.Ruta);
+
+                // Devolver el archivo como una descarga
+                return File(archivoBytes, "application/octet-stream", anexo.NombreOriginal);
+            }
+            catch (Exception ex)
+            {
+                //_logger.Error(ex, "Error al descargar el anexo con ID: {AnexoId}", anexoId);
+                return BadRequest("Error al descargar el archivo.");
+            }
         }
 
 
@@ -118,21 +254,27 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
 
 
         #region api calls
+        /**
+         * Método que se encarga de obtener todas las denuncias paginadas
+         * Permitiendo la búsqueda y ordenamiento de las mismas
+         * 
+         * @return IActionResult
+         */
 
         [HttpPost]
         public async Task<IActionResult> GetAllDenuncias()
         {
-            var draw = Request.Form["draw"].FirstOrDefault();
-            var start = Request.Form["start"].FirstOrDefault();
-            var length = Request.Form["length"].FirstOrDefault();
+            var draw = Request.Form["draw"].FirstOrDefault(); // Obtiene el número de la petición, para enviarlo de vuelta
+            var start = Request.Form["start"].FirstOrDefault(); // Obtiene el inicio de la paginación
+            var length = Request.Form["length"].FirstOrDefault(); // Obtiene la cantidad de registros a mostrar
 
-            var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault();
-            if(sortColumn == "denuncianteNombre")
+            var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault();// Obtiene la columna a ordenar
+            if (sortColumn == "denuncianteNombre")
             {
                 sortColumn = "denunciante.Nombre";
             }
-            var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-            var searchValue = Request.Form["search[value]"].FirstOrDefault();
+            var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();// Obtiene la dirección de ordenamiento
+            var searchValue = Request.Form["search[value]"].FirstOrDefault(); // Obtiene el valor de búsqueda
 
             int pageSize = length != null ? Convert.ToInt32(length) : 10;
             int skip = start != null ? Convert.ToInt32(start) : 0;

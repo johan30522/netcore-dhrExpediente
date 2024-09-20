@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 border border-light rounded p-2">
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <form asp-action="Create" id="formDenuncia" method="post" enctype="multipart/form-data">
                 <!-- Barra de Progreso -->
                 <div class="progress mb-4">
                     <div id="progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Paso 1 de 4</div>
@@ -139,6 +139,35 @@
                     currentStep--;
                     showStep(currentStep);
                 }
+            });
+
+            // Validar el campo de Aceptar Términos y SweetAlert para confirmar el envío del formulario
+            $('#formDenuncia').on('submit', function (e) {
+                e.preventDefault(); // Detener el envío del formulario
+
+                // Validar el checkbox de Acepta los Términos
+                var aceptaTerminos = $('#aceptaTerminosCheckbox').is(':checked');
+                if (!aceptaTerminos) {
+                    $('#aceptaTerminosCheckbox').addClass('is-invalid');
+                    return;
+                } else {
+                    $('#aceptaTerminosCheckbox').removeClass('is-invalid').addClass('is-valid');
+                }
+
+                // Mostrar el SweetAlert de confirmación
+                Swal.fire({
+                    title: '¿Está seguro de que desea guardar?',
+                    text: "No podrá deshacer esta acción.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, guardar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Enviar el formulario si el usuario confirma
+                        $('form').off('submit').submit();
+                    }
+                });
             });
 
             // Permite cambiar el mensaje de validación de email

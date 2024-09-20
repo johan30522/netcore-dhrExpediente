@@ -56,6 +56,8 @@ namespace AppExpedienteDHR.Infrastructure.Data
 
         #endregion
 
+        public DbSet<LockRecord> LockRecords { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -225,6 +227,16 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             #endregion
+
+            #region Other entities Fluent API configuration
+            // Configuración de LockRecord -> ApplicationUser (uno a muchos)
+            modelBuilder.Entity<LockRecord>()
+                .HasOne(lr => lr.LockedByUser)
+                .WithMany()
+                .HasForeignKey(lr => lr.LockedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            #endregion
+
 
             #region Workflow entities Fluent API configuration
 

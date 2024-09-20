@@ -91,6 +91,9 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.Property<DateTime>("FechaDenuncia")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IncluyePersonaAfectada")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("PersonaAfectadaId")
                         .HasColumnType("int");
 
@@ -494,6 +497,43 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         {
                             t.ExcludeFromMigrations();
                         });
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.LockRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("IdLocked")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<TimeSpan>("LockDuration")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("LockedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LockedByUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LockedByUserId");
+
+                    b.ToTable("LockRecords");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.ActionGroupWf", b =>
@@ -1180,6 +1220,17 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Canton");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.LockRecord", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.IdentityEntities.ApplicationUser", "LockedByUser")
+                        .WithMany()
+                        .HasForeignKey("LockedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("LockedByUser");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.ActionGroupWf", b =>

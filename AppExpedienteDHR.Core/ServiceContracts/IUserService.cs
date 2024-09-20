@@ -11,6 +11,7 @@ namespace AppExpedienteDHR.Core.ServiceContracts
         Task<UserViewModel> GetUserByEmail(string email);
         Task<UserViewModel> GetUserByUserName(string userName);
         Task<List<string>> GetUserRoles(string id);
+        Task<UserViewModel> GetCurrentUser();
         Task CreateUser(UserViewModel userViewModel, List<string> SelectedRoles);
         Task<IEnumerable<SelectListItem>> GetListUserRoles();
         Task UpdateUser(UserViewModel userViewModel, List<string> SelectedRoles);

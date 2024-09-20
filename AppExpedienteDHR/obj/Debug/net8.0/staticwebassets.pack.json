@@ -45,6 +45,10 @@
       "PackagePath": "staticwebassets\\images\\logo.jpg"
     },
     {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\workflow.jpg",
+      "PackagePath": "staticwebassets\\images\\workflow.jpg"
+    },
+    {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\datatable\\user.js",
       "PackagePath": "staticwebassets\\js\\datatable\\user.js"
     },
@@ -67,6 +71,10 @@
     {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\flow\\stateAction.js",
       "PackagePath": "staticwebassets\\js\\flow\\stateAction.js"
+    },
+    {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\lockRecord.js",
+      "PackagePath": "staticwebassets\\js\\lockRecord.js"
     },
     {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\site.js",

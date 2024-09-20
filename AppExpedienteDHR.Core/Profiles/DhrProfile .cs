@@ -7,18 +7,32 @@ namespace AppExpedienteDHR.Core.Profiles
     public class DhrProfile : Profile
     {
         public DhrProfile() {
-            CreateMap<Denuncia, DenunciaViewModel>().ReverseMap();
+
+            // convierte de Denuncia a DenunciaViewModel
+            CreateMap<Denuncia, DenunciaViewModel>()
+                .ForMember(dest => dest.Denunciante, opt => opt.MapFrom(src => src.Denunciante))
+                .ForMember(dest => dest.PersonaAfectada, opt => opt.MapFrom(src => src.PersonaAfectada))
+                .ForMember(dest => dest.DenunciaAdjuntos, opt => opt.MapFrom(src => src.DenunciaAdjuntos))
+                .ReverseMap();
             CreateMap<Denunciante, DenuncianteViewModel>().ReverseMap();
-            CreateMap<DenunciaAdjunto, DenunciaAdjuntoViewModel>().ReverseMap();
+            CreateMap<DenunciaAdjunto, DenunciaAdjuntoViewModel>()
+            .ForMember(dest => dest.RutaArchivo, opt => opt.MapFrom(src => src.Adjunto.Ruta))
+            .ForMember(dest => dest.NombreArchivo, opt => opt.MapFrom(src => src.Adjunto.NombreOriginal))
+            .ForMember(dest => dest.FechaSubida, opt => opt.MapFrom(src => src.Adjunto.FechaSubida))
+            .ReverseMap();
+
+
             CreateMap<Expediente, ExpedienteViewModel>().ReverseMap();
             CreateMap<PersonaAfectada, PersonaAfectadaViewModel>().ReverseMap();
 
             // reverse map
             CreateMap<DenunciaViewModel, Denuncia>().ReverseMap();
             CreateMap<DenuncianteViewModel, Denunciante>().ReverseMap();
-            CreateMap<DenunciaAdjuntoViewModel, DenunciaAdjunto>().ReverseMap();
+            //CreateMap<DenunciaAdjuntoViewModel, DenunciaAdjunto>().ReverseMap();
             CreateMap<ExpedienteViewModel, Expediente>().ReverseMap();
             CreateMap<PersonaAfectadaViewModel, PersonaAfectada>().ReverseMap();
+
+
 
             CreateMap<Denuncia, DenunciaListadoViewModel>()
                 //concatena el nombre y PrimerApellido y SegundoApellido

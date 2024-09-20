@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "cgCRlC4evGVpecfeHbhj7AKmTzGd3YeJpRdaKujuU6w=",
+  "Hash": "KWiSgVdELE7zxrIW5QtBZohkFImuy/nBwKfrRjiGTy0=",
   "Source": "AppExpedienteDHR",
   "BasePath": "_content/AppExpedienteDHR",
   "Mode": "Default",
@@ -1385,6 +1385,25 @@
       "OriginalItemSpec": "wwwroot\\images\\logo.jpg"
     },
     {
+      "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\workflow.jpg",
+      "SourceId": "AppExpedienteDHR",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\",
+      "BasePath": "_content/AppExpedienteDHR",
+      "RelativePath": "images/workflow.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\workflow.jpg"
+    },
+    {
       "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\datatable\\user.js",
       "SourceId": "AppExpedienteDHR",
       "SourceType": "Discovered",
@@ -1497,6 +1516,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\flow\\stateAction.js"
+    },
+    {
+      "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\lockRecord.js",
+      "SourceId": "AppExpedienteDHR",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\",
+      "BasePath": "_content/AppExpedienteDHR",
+      "RelativePath": "js/lockRecord.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\lockRecord.js"
     },
     {
       "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\js\\site.js",

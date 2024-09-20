@@ -60,6 +60,9 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             Adjunto = new AdjuntoRepository(_context);
 
 
+            LockRecord = new LockRecordRepository(_context);
+
+
 
 
 
@@ -102,7 +105,10 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         public IExpedienteRepository Expediente { get; private set; }
         public IPersonaAfectadaRepository PersonaAfectada { get; private set; }
         public IAdjuntoRepository Adjunto { get; private set; }
+
         #endregion
+
+        public ILockRecordRepository LockRecord { get; private set; }
 
         public void Dispose()
         {

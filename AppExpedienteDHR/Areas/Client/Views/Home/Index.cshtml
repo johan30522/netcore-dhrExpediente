@@ -1,4 +1,6 @@
-﻿@{
+﻿@using AppExpedienteDHR.Utils.Constants
+
+@{
     ViewData["Title"] = "Inicio";
 }
 
@@ -38,7 +40,7 @@
                     <a href="@Url.Action("Index", "Modulo2")" class="btn btn-primary">Ir al Módulo</a>
                 </div>
             </div>
-        </div> 
+        </div>
         <!-- Tarjeta de Módulo 3 -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card shadow-sm">
@@ -52,6 +54,25 @@
                 </div>
             </div>
         </div>
-   
+
+        <!-- Tarjeta de Módulo 4 -->
+        @if (User.IsInRole(Roles.Admin))
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <img src="~/images/workflow.jpg" class="card-img-top" alt="Módulo 2">
+                    <div class="card-body text-center">
+                        <h5 class="card-title mt-3">Flujos de Trabajo</h5>
+                        <p class="card-text">Administración de flujos de trabajo del Sistema.</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a class="btn btn-primary" asp-area="Admin" asp-controller="FlowWf" asp-action="Index">Ir al Módulo</a>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
     </div>
 </div>

@@ -77,6 +77,7 @@ builder.Services.AddScoped<IContainerWork, ContainerWork>();
 // add services to container
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ILockRecordService, LockRecordService>();
 
 //services workflow
 builder.Services.AddScoped<IStateWfService, StateWfService>();
