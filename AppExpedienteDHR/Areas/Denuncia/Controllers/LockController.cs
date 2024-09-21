@@ -1,9 +1,11 @@
 ﻿using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppExpedienteDHR.Areas.Denuncia.Controllers
 {
+    [Authorize]
     [Area("Denuncia")]
     [Route("Denuncia/[controller]/[action]")]
     public class LockController : Controller

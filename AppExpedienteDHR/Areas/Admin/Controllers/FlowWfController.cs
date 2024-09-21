@@ -12,7 +12,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class FlowWfController : Controller
     {
         private readonly IFlowWfService _flowWfService;

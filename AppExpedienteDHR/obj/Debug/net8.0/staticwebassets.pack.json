@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\DefensoriaBanner.jpg",
+      "PackagePath": "staticwebassets\\images\\DefensoriaBanner.jpg"
+    },
+    {
       "Id": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\Denuncia.jpg",
       "PackagePath": "staticwebassets\\images\\Denuncia.jpg"
     },

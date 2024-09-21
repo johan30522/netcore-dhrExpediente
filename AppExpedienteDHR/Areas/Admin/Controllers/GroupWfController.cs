@@ -1,13 +1,14 @@
 ﻿using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.Services;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class GroupWfController : Controller
     {
         private readonly IGroupWfService _groupWfService;

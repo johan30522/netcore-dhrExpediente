@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]/[action]")]
+    [Authorize(Roles = "Admin")]
     public class ActionWfController : Controller
     {
         private readonly IActionWfService _actionWfService;

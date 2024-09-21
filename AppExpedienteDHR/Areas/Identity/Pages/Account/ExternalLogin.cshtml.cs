@@ -102,40 +102,59 @@ namespace AppExpedienteDHR.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
             {
-                ErrorMessage = $"Error from external provider: {remoteError}";
+                ErrorMessage = $"Error desde el proveedor externo: {remoteError}";
+                _logger.LogError("Error desde el proveedor externo: {Error}", remoteError);
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                ErrorMessage = "Error loading external login information.";
+                ErrorMessage = "Error cargando la información de inicio de sesión externo.";
+                _logger.LogError("Error cargando la información de inicio de sesión externo.");
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
-            // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-            if (result.Succeeded)
+            // Buscar al usuario existente por correo
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var existingUser = await _userManager.FindByEmailAsync(email);
+
+            if (existingUser != null)
             {
-                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
-                return LocalRedirect(returnUrl);
-            }
-            if (result.IsLockedOut)
-            {
-                return RedirectToPage("./Lockout");
+                // Verificar si el inicio de sesión externo ya está asociado al usuario
+                var userLogins = await _userManager.GetLoginsAsync(existingUser);
+                var alreadyLinked = userLogins.Any(ul => ul.LoginProvider == info.LoginProvider && ul.ProviderKey == info.ProviderKey);
+
+                if (alreadyLinked)
+                {
+                    // El login externo ya está asociado, iniciar sesión directamente
+                    await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                    _logger.LogInformation("El usuario {Name} ha iniciado sesión con el proveedor {LoginProvider}.", info.Principal.Identity.Name, info.LoginProvider);
+                    return LocalRedirect(returnUrl);
+                }
+
+                // Si el login externo no está asociado, agregarlo y luego iniciar sesión
+                var addLoginResult = await _userManager.AddLoginAsync(existingUser, info);
+                if (addLoginResult.Succeeded)
+                {
+                    await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                    _logger.LogInformation("El usuario {Name} ha iniciado sesión con el proveedor {LoginProvider}.", info.Principal.Identity.Name, info.LoginProvider);
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    // Si hay algún error al asociar la cuenta externa, redirigir al login
+                    ErrorMessage = "Error al asociar el inicio de sesión externo con la cuenta existente.";
+                    _logger.LogError("Error al asociar el inicio de sesión externo con la cuenta del usuario {Email}.", email);
+                    return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                }
             }
             else
             {
-                // If the user does not have an account, then ask the user to create an account.
-                ReturnUrl = returnUrl;
-                ProviderDisplayName = info.ProviderDisplayName;
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
-                {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
-                }
-                return Page();
+                // Si el usuario no existe, redirigir al login con un mensaje de error
+                ErrorMessage = "No existe una cuenta asociada a este correo electrónico. Contacte al administrador.";
+                TempData["ErrorMessage"] = "No existe una cuenta asociada a este correo electrónico. Contacte al administrador.";
+                _logger.LogWarning("No existe una cuenta asociada al correo {Email}.", email);
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
         }
 

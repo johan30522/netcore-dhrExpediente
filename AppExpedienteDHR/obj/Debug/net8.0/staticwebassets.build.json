@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "KWiSgVdELE7zxrIW5QtBZohkFImuy/nBwKfrRjiGTy0=",
+  "Hash": "e0vVHtwR5zASpt/s0PGyoww+sq23Qj+ZMx7ULUlMous=",
   "Source": "AppExpedienteDHR",
   "BasePath": "_content/AppExpedienteDHR",
   "Mode": "Default",
@@ -1307,6 +1307,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\DefensoriaBanner.jpg",
+      "SourceId": "AppExpedienteDHR",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\",
+      "BasePath": "_content/AppExpedienteDHR",
+      "RelativePath": "images/DefensoriaBanner.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\DefensoriaBanner.jpg"
     },
     {
       "Identity": "C:\\Users\\jjoha\\source\\repos\\ExpedienteDHRSolution\\AppExpedienteDHR\\wwwroot\\images\\Denuncia.jpg",

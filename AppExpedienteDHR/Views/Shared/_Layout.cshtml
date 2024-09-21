@@ -1,5 +1,9 @@
 ﻿@using AppExpedienteDHR.Utils.Constants
 @using AppExpedienteDHR.Core.Models
+@using Microsoft.AspNetCore.Identity
+@using AppExpedienteDHR.Core.Domain.IdentityEntities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +13,7 @@
     <title>@ViewData["Title"] - AppExpedienteDHR</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap5.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" /> 
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" />
@@ -48,12 +52,15 @@
                                     <div class="dropdown-divider"></div>
                                 </div>
                             </li>
-                        } 
+                        }
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Busca lo que quieras">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
-                    </form>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <form class="d-flex">
+                            <input class="form-control me-sm-2" type="search" placeholder="Busca lo que quieras">
+                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
+                        </form>
+                    }
                     <partial name="_LoginPartial" />
                 </div>
             </div>
@@ -63,25 +70,28 @@
         <main role="main" class="pb-3">
             <div class="container-fluid">
                 <!-- Breadcrumbs -->
+
+
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Inicio</a></li>
                         @if (ViewData["Breadcrumbs"] != null)
                         {
+                            <li class="breadcrumb-item"><a href="/"><strong>Inicio</strong></a></li>
                             foreach (var breadcrumb in (List<Breadcrumb>)ViewData["Breadcrumbs"])
                             {
                                 if (breadcrumb.IsActive)
                                 {
-                                    <li class="breadcrumb-item active" aria-current="page">@breadcrumb.Title</li>
+                                    <li class="breadcrumb-item active" aria-current="page"><strong>@breadcrumb.Title</strong></li>
                                 }
                                 else
                                 {
-                                    <li class="breadcrumb-item"><a href="@breadcrumb.Url">@breadcrumb.Title</a></li>
+                                    <li class="breadcrumb-item"><a href="@breadcrumb.Url"><strong>@breadcrumb.Title</strong></a></li>
                                 }
                             }
                         }
                     </ol>
                 </nav>
+
 
                 <main role="main" class="pb-3">
                     @RenderBody()

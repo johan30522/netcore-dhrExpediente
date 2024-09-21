@@ -1,0 +1,71 @@
+﻿﻿@using AppExpedienteDHR.Utils.Constants
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Tarjeta de Módulo 1 -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <img src="~/images/Denuncia.jpg" class="card-img-top" alt="Módulo 1">
+                <div class="card-body text-center">
+                    <h5 class="card-title mt-3">Denuncias</h5>
+                    <p class="card-text">Módulo de mantenimiento de denuncias.</p>
+                </div>
+                <div class="card-footer text-muted">
+                    <a class="btn btn-primary" asp-area="Denuncia" asp-controller="Solicitud" asp-action="Index">Ir al Módulo</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta de Módulo 2 -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <img src="~/images/Expediente.jpg" class="card-img-top" alt="Módulo 2">
+                <div class="card-body text-center">
+                    <h5 class="card-title mt-3">Expediente</h5>
+                    <p class="card-text">Flujo de Expediente DHR.</p>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="@Url.Action("Index", "Modulo2")" class="btn btn-primary">Ir al Módulo</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta de Módulo 3 -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <img src="~/images/Documentacion.jpg" class="card-img-top" alt="Módulo 2">
+                <div class="card-body text-center">
+                    <h5 class="card-title mt-3">Documentación</h5>
+                    <p class="card-text">Módulo de Administración de Documentos.</p>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="@Url.Action("Index", "Modulo2")" class="btn btn-primary">Ir al Módulo</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta de Módulo 4 -->
+        @if (User.IsInRole(Roles.Admin))
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <img src="~/images/workflow.jpg" class="card-img-top" alt="Módulo 2">
+                    <div class="card-body text-center">
+                        <h5 class="card-title mt-3">Flujos de Trabajo</h5>
+                        <p class="card-text">Administración de flujos de trabajo del Sistema.</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a class="btn btn-primary" asp-area="Admin" asp-controller="FlowWf" asp-action="Index">Ir al Módulo</a>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
+    </div>
+</div>

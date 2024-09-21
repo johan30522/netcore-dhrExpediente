@@ -9,9 +9,11 @@ using Serilog;
 using AppExpedienteDHR.Core.Models;
 using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppExpedienteDHR.Areas.Denuncia.Controllers
 {
+    [Authorize]
     [Area("Denuncia")]
     [Route("Denuncia/[controller]/[action]")]
     public class SolicitudController : Controller
