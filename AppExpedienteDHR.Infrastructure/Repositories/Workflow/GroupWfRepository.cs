@@ -24,6 +24,13 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Workflow
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<GroupWf>> GetGroupsByUserId(string userId)
+        {
+            return await _context.GroupWfs
+                .Where(g => g.GroupUsers.Any(gu => gu.UserId == userId))
+                .ToListAsync();
+        }
     }
 
 }

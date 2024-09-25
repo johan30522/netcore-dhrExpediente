@@ -17,7 +17,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         [Required]
         public int ResultStateId { get; set; }
 
-        public string? RuleJson { get; set; } // JSON string to store complex rules
+        public string? RuleJson { get; set; } //  Para definir reglas en json
 
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }

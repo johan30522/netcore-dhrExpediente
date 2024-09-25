@@ -8,6 +8,7 @@ using AppExpedienteDHR.Infrastructure.Repositories.General;
 using AppExpedienteDHR.Core.Domain.Entities.Dhr;
 using AppExpedienteDHR.Infrastructure.Repositories.Dhr;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.Dhr;
+using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 
 
 
@@ -36,7 +37,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             FlowHistoryWf = new FlowHistoryWfRepository(_context);
             FlowWf = new FlowWfRepository(_context);
             GroupUserWf = new GroupUserWfRepository(_context);
-            RequestFlowHistoryWf = new RequestFlowHistoryWfRepository(_context);
+            RequestFlowHeaderWf = new FlowRequestHeaderWfRepository(_context);
 
             // General repositories
             Distrito = new DistritoRepository(_context);
@@ -81,7 +82,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         public IFlowHistoryWfRepository FlowHistoryWf { get; private set; }
         public IFlowWfRepository FlowWf { get; private set; }
         public IGroupUserWfRepository GroupUserWf { get; private set; }
-        public IRequestFlowHistoryWfRepository RequestFlowHistoryWf { get; private set; }
+        public IFlowRequestHeaderWfRepository RequestFlowHeaderWf { get; private set; }
 
         #endregion
 
@@ -119,5 +120,10 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         {
             await _context.SaveChangesAsync();
         }
+        public IRepository<T> GetRepository<T>() where T : class
+        {
+            return new Repository<T>(_context); // Devuelve un repositorio genérico
+        }
+
     }
 }

@@ -94,6 +94,7 @@ builder.Services.AddScoped<IActionWfService, ActionWfService>();
 builder.Services.AddScoped<IFlowWfService, FlowWfService>();
 builder.Services.AddScoped<IGroupWfService, GroupWfService>();
 builder.Services.AddScoped<IActionRuleWfService, ActionRuleWfService>();
+builder.Services.AddScoped<IFlowHandlerService, FlowHandlerService>();
 
 //services general
 builder.Services.AddScoped<IDistritoService, DistritoService>();

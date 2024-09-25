@@ -13,12 +13,13 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
     public class FlowHistoryWf
     {
         public int Id { get; set; }
-        public int FlowId { get; set; }
-        public int PreviousStateId { get; set; }
-        public int NewStateId { get; set; }
-        public int ActionPerformedId { get; set; }
+        public int RequestFlowHeaderId { get; set; } // Relación con la tabla RequestFlowWf
+        public int PreviousStateId { get; set; } // Id del estado anterior
+        public int NewStateId { get; set; } // Id del nuevo estado
+        public int ActionPerformedId { get; set; } // Id de la acción realizada
         [Required]
-        public string PerformedByUserId { get; set; } // Assuming Identity uses string for UserId
+        [StringLength(450)]
+        public string PerformedByUserId { get; set; } // Id del usuario que realizó la acción
         public DateTime ActionDate { get; set; } = DateTime.UtcNow;
         [Required]
         [StringLength(500)]
@@ -27,8 +28,8 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation properties
-        [ForeignKey("FlowId")]
-        public FlowWf? Flow { get; set; }
+        [ForeignKey("RequestFlowId")]
+        public FlowRequestHeaderWf RequestFlowHeader { get; set; }
         [ForeignKey("PreviousStateId")]
         public StateWf? PreviousState { get; set; }
         [ForeignKey("NewStateId")]
@@ -38,7 +39,6 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         [ForeignKey("PerformedByUserId")]
         public ApplicationUser? PerformedByUser { get; set; } // Reference to Identity User
 
-        public ICollection<RequestFlowHistoryWf> RequestFlowHistories { get; set; } = new List<RequestFlowHistoryWf>();
 
     }
 }

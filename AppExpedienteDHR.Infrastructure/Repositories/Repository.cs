@@ -24,9 +24,10 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
 
 
 
-        public async Task Add(T entity)
+        public async Task<T> Add(T entity)
         {
             await dbSet.AddAsync(entity);
+            return entity;
         }
 
         public async Task<T> Get(int id)

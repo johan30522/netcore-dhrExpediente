@@ -28,6 +28,13 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Workflow
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<ActionWf>> GetActionForStateAnGroups(int stateId, List<int> groupIds)
+        {
+            return await _context.ActionWfs
+                .Where(a => a.StateId == stateId && a.ActionGroups.Any(ga => groupIds.Contains(ga.GroupId)))
+                .ToListAsync();
+        }
     }
   
 }

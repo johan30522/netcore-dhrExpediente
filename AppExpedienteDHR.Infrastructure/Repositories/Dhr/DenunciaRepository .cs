@@ -22,6 +22,8 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Dhr
                 denunciaToUpdate.DetalleDenuncia = denuncia.DetalleDenuncia;
                 denunciaToUpdate.Petitoria = denuncia.Petitoria;
                 denunciaToUpdate.AceptaTerminos = denuncia.AceptaTerminos;
+                denunciaToUpdate.PersonaAfectadaId = denuncia.PersonaAfectadaId;
+                denunciaToUpdate.IncluyePersonaAfectada = denuncia.IncluyePersonaAfectada;
                 await _context.SaveChangesAsync();
             }
         }

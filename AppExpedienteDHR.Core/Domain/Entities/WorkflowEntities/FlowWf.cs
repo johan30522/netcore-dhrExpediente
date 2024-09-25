@@ -20,5 +20,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         // Relación uno a muchos con GroupWf
         public ICollection<GroupWf> Groups { get; set; } = new List<GroupWf>();
 
+        public ICollection<FlowRequestHeaderWf> RequestFlowHeaders { get; set; } = new List<FlowRequestHeaderWf>();
+
     }
 }

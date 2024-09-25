@@ -7,7 +7,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
 {
     public class PersonaAfectadaViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Tipo de Identificación")]
         public int TipoIdentificacionId { get; set; }
@@ -28,7 +28,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
         public int SexoId { get; set; }
 
         // Relacionados
-        public TipoIdentificacion TipoIdentificacion { get; set; }
-        public Sexo Sexo { get; set; }
+        public TipoIdentificacion? TipoIdentificacion { get; set; }
+        public Sexo? Sexo { get; set; }
     }
 }

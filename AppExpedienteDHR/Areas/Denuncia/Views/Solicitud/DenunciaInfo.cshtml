@@ -189,12 +189,23 @@
         const isEditMode = @isEditMode.ToString().ToLower();
         $(document).ready(function () {
 
-            // Por defecto: si la denuncia es nueva, los campos están deshabilitados
-            limpiarCamposPersonaAfectada();
+            // Por defecto: si la denuncia es nueva si tiene un id, los campos están deshabilitados
+            if (!denunciaId) {
+                // Deshabilitar los campos de la denuncia si no está en modo edición
+                limpiarCamposPersonaAfectada();
+               
+            }
+            
 
             //Inicializa el manejo de bloqueos de registro
             if (isEditMode) {
                 initLockRecord(lockRecordId);
+                // Por defecto: si la denuncia es nueva si tiene un id, los campos están deshabilitados
+                if (!denunciaId) {
+                    // Deshabilitar los campos de la denuncia si no está en modo edición
+                    limpiarCamposPersonaAfectada();
+
+                }
             }
 
             var provinciaSeleccionada = "@(Model.Denunciante?.ProvinciaCodigo)";

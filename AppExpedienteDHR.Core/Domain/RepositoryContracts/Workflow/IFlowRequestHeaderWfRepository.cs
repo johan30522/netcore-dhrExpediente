@@ -2,8 +2,8 @@
 
 namespace AppExpedienteDHR.Core.Domain.RepositoryContracts.Workflow
 {
-    public interface IRequestFlowHistoryWfRepository: IRepository<RequestFlowHistoryWf>
+    public interface IFlowRequestHeaderWfRepository: IRepository<FlowRequestHeaderWf>
     {
-        Task Update(RequestFlowHistoryWf requestFlowHistory);
+        Task Update(FlowRequestHeaderWf requestFlowHistory);
     }
 }

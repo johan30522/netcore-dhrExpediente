@@ -32,7 +32,7 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
             string includeProperties = ""
         );
 
-        Task Add(T entity);
+        Task<T> Add(T entity);
 
         Task Remove(int id);
         Task Remove(T entity);

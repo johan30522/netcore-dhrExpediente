@@ -45,7 +45,8 @@ namespace AppExpedienteDHR.Core.Services.Dhr
                 else
                 {
                     await _containerWork.Denunciante.Add(denunciante);
-                    denunciante = await _containerWork.Denunciante.GetFirstOrDefault(x => x.NumeroIdentificacion == denunciante.NumeroIdentificacion);
+                    await _containerWork.Save();
+                    //denunciante = await _containerWork.Denunciante.GetFirstOrDefault(x => x.NumeroIdentificacion == denunciante.NumeroIdentificacion);
                 }
                 //Quita el denuncante de la denuncia
                 denuncia.Denunciante = null;
@@ -130,8 +131,8 @@ namespace AppExpedienteDHR.Core.Services.Dhr
                     }
                     else
                     {
-                        await _containerWork.PersonaAfectada.Add(personaAfectada);
-                        personaAfectada = await _containerWork.PersonaAfectada.GetFirstOrDefault(x => x.Id == personaAfectada.Id);
+                        personaAfectada = await _containerWork.PersonaAfectada.Add(personaAfectada);
+                        await _containerWork.Save();
                     }
                 }
             }
@@ -140,14 +141,26 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             {
                 if (denunciaExistente.PersonaAfectadaId != null)
                 {
-                    await _containerWork.PersonaAfectada.Remove(denunciaExistente.PersonaAfectada);
+                    denuncia.IncluyePersonaAfectada = false;
+                    denuncia.PersonaAfectadaId = null;
                 }
             }
             else if (!denunciaExistente.IncluyePersonaAfectada && viewModel.IncluyePersonaAfectada)
             // si no tenia persona afectada y ahora si se incluye persona afectada
             {
-                await _containerWork.PersonaAfectada.Add(personaAfectada);
-                personaAfectada = await _containerWork.PersonaAfectada.GetFirstOrDefault(x => x.Id == personaAfectada.Id);
+                // busca si la persona afectada si existe por la cedula
+                var personaAfectadaExistente = await _containerWork.PersonaAfectada.GetFirstOrDefault(x => x.NumeroIdentificacion == personaAfectada.NumeroIdentificacion);
+                // si existe, se actualiza, sino se crea
+                if (personaAfectadaExistente != null)
+                {
+                    personaAfectada.Id = personaAfectadaExistente.Id;
+                    await _containerWork.PersonaAfectada.Update(personaAfectada);
+                }
+                else
+                {
+                    personaAfectada = await _containerWork.PersonaAfectada.Add(personaAfectada);
+                    await _containerWork.Save();
+                }
             }
 
 
@@ -159,9 +172,6 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             {
                 denuncia.PersonaAfectadaId = null;
             }
-
-
-
             await _containerWork.Denuncia.Update(denuncia);
             await _containerWork.Save();
         }

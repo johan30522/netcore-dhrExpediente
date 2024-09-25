@@ -39,7 +39,7 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
         IFlowHistoryWfRepository FlowHistoryWf { get; }
         IFlowWfRepository FlowWf { get; }
         IGroupUserWfRepository GroupUserWf { get; }
-        IRequestFlowHistoryWfRepository RequestFlowHistoryWf { get; }
+        IFlowRequestHeaderWfRepository RequestFlowHeaderWf { get; }
 
 
         //DHr
@@ -54,6 +54,7 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
 
 
          Task Save();
+        IRepository<T> GetRepository<T>() where T : class;
 
     }
 }

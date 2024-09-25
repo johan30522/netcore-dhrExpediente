@@ -43,7 +43,7 @@ namespace AppExpedienteDHR.Infrastructure.Data
         public DbSet<ActionGroupWf> ActionGroupWfs { get; set; }
         public DbSet<ActionRuleWf> ActionRuleWfs { get; set; }
         public DbSet<FlowHistoryWf> FlowHistoryWfs { get; set; }
-        public DbSet<RequestFlowHistoryWf> RequestFlowHistoryWfs { get; set; }
+        public DbSet<FlowRequestHeaderWf> FlowRequestHeaderWfs { get; set; }
         #endregion
 
         #region Dhr Entities
@@ -254,6 +254,13 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .HasForeignKey(g => g.FlowId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Configuración de FlowWf -> FlowRequestHeaderWf (uno a muchos)
+            modelBuilder.Entity<FlowWf>()
+                .HasMany(f => f.RequestFlowHeaders)
+                .WithOne(frh => frh.Flow)
+                .HasForeignKey(frh => frh.FlowId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Configuración de StateWf -> ActionWf (uno a muchos)
             modelBuilder.Entity<StateWf>()
                 .HasMany(s => s.Actions)
@@ -289,11 +296,34 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .HasForeignKey(gu => gu.GroupId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configuración de FlowHistoryWf -> RequestFlowHistoryWf (uno a muchos)
+            // Configuración de FlowRequestHeaderWf -> FlowHistoryWf (uno a muchos)
+            modelBuilder.Entity<FlowRequestHeaderWf>()
+                .HasMany(frh => frh.FlowHistories)
+                .WithOne(fh => fh.RequestFlowHeader)
+                .HasForeignKey(fh => fh.RequestFlowHeaderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de FlowRequestHeaderWf -> ApplicationUser (muchos a uno)
+            // Usuario que inició el flujo
+            modelBuilder.Entity<FlowRequestHeaderWf>()
+                .HasOne(frh => frh.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(frh => frh.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de FlowRequestHeaderWf -> StateWf (uno a muchos)
+            modelBuilder.Entity<FlowRequestHeaderWf>()
+                .HasOne(frh => frh.CurrentState)
+                .WithMany()
+                .HasForeignKey(frh => frh.CurrentStateId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de FlowHistoryWf -> ApplicationUser (muchos a uno)
+            // Usuario que realizó la acción
             modelBuilder.Entity<FlowHistoryWf>()
-                .HasMany(fh => fh.RequestFlowHistories)
-                .WithOne(rfh => rfh.FlowHistory)
-                .HasForeignKey(rfh => rfh.FlowHistoryId)
+                .HasOne(fh => fh.PerformedByUser)
+                .WithMany()
+                .HasForeignKey(fh => fh.PerformedByUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Configuración de FlowHistoryWf para evitar múltiples rutas de cascada
@@ -309,23 +339,11 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .HasForeignKey(fh => fh.NewStateId)
                 .OnDelete(DeleteBehavior.NoAction);  // Evitar múltiples cascadas
 
-            // Configuración adicional de FlowHistoryWf
+            // Configuración de FlowHistoryWf -> ActionWf (uno a muchos)
             modelBuilder.Entity<FlowHistoryWf>()
                 .HasOne(fh => fh.ActionPerformed)
                 .WithMany()
                 .HasForeignKey(fh => fh.ActionPerformedId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<FlowHistoryWf>()
-                .HasOne(fh => fh.PerformedByUser)
-                .WithMany()
-                .HasForeignKey(fh => fh.PerformedByUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<FlowHistoryWf>()
-                .HasOne(fh => fh.Flow)
-                .WithMany()
-                .HasForeignKey(fh => fh.FlowId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Configuración de GroupUserWf -> ApplicationUser (muchos a uno)

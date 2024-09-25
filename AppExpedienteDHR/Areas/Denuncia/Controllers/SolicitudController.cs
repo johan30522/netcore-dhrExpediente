@@ -85,6 +85,7 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
             };
             var model = new DenunciaViewModel();
             await LoadCatalogs(model);
+            model.IsEdit = true;
             return View("DenunciaForm", model);
         }
 

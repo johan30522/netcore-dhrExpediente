@@ -18,7 +18,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Workflow
             FlowHistoryWf flowHistoryToUpdate = await _context.FlowHistoryWfs.FirstOrDefaultAsync(c => c.Id == flowHistory.Id);
             if (flowHistoryToUpdate != null)
             {
-                flowHistoryToUpdate.FlowId = flowHistory.FlowId;
+               
                 flowHistoryToUpdate.PreviousStateId = flowHistory.PreviousStateId;
                 flowHistoryToUpdate.NewStateId = flowHistory.NewStateId;
                 flowHistoryToUpdate.ActionPerformedId = flowHistory.ActionPerformedId;

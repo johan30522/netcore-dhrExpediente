@@ -4,7 +4,7 @@
 <!-- Campos de la persona afectada -->
 <!-- Check para incluir Persona Afectada -->
 <div class="mb-3 form-check">
-    <input asp-for="IncluyePersonaAfectada" class="form-check-input" id="incluyePersonaAfectada" />
+    <input asp-for="IncluyePersonaAfectada" class="form-check-input" id="incluyePersonaAfectada" disabled="@(!Model.IsEdit)" />
     <label class="form-check-label" for="incluyePersonaAfectada">
         Incluir datos de Persona Afectada
     </label>
@@ -14,7 +14,7 @@
     <div class="col-md-6">
         <div class="mb-3">
             <label for="AfectadoTipoIdentificacionId" class="form-label"><strong>Tipo de Identificación</strong></label>
-            <select asp-for="PersonaAfectada.TipoIdentificacionId" class="form-select persona-afectada-field" asp-items="@(new SelectList(Model.ListTiposIdentificacion, "TipoIdentificacionId", "Descripcion"))">
+            <select asp-for="PersonaAfectada.TipoIdentificacionId" class="form-select persona-afectada-field" asp-items="@(new SelectList(Model.ListTiposIdentificacion, "TipoIdentificacionId", "Descripcion"))" disabled="@(!Model.IsEdit)">
                 <option value="">Seleccione una opción</option>
             </select>
             <span asp-validation-for="PersonaAfectada.TipoIdentificacionId" class="text-danger text-center"></span>
@@ -23,7 +23,7 @@
     <div class="col-md-6">
         <div class="mb-3">
             <label for="AfectadoNumeroIdentificacion" class="form-label"><strong>Número de Identificación</strong></label>
-            <input asp-for="PersonaAfectada.NumeroIdentificacion" class="form-control persona-afectada-field" />
+            <input asp-for="PersonaAfectada.NumeroIdentificacion" class="form-control persona-afectada-field" disabled="@(!Model.IsEdit)" />
             <span asp-validation-for="PersonaAfectada.NumeroIdentificacion" class="text-danger text-center"></span>
         </div>
     </div>
@@ -33,14 +33,14 @@
     <div class="col-md-6">
         <div class="mb-3">
             <label for="AfectadoNombre" class="form-label"><strong>Nombre</strong></label>
-            <input asp-for="PersonaAfectada.Nombre" class="form-control persona-afectada-field" />
+            <input asp-for="PersonaAfectada.Nombre" class="form-control persona-afectada-field" disabled="@(!Model.IsEdit)" />
             <span asp-validation-for="PersonaAfectada.Nombre" class="text-danger text-center"></span>
         </div>
     </div>
     <div class="col-md-6">
         <div class="mb-3">
             <label for="AfectadoPrimerApellido" class="form-label"><strong>Primer Apellido</strong></label>
-            <input asp-for="PersonaAfectada.PrimerApellido" class="form-control persona-afectada-field" />
+            <input asp-for="PersonaAfectada.PrimerApellido" class="form-control persona-afectada-field" disabled="@(!Model.IsEdit)" />
             <span asp-validation-for="PersonaAfectada.PrimerApellido" class="text-danger text-center"></span>
         </div>
     </div>
@@ -50,14 +50,14 @@
     <div class="col-md-6">
         <div class="mb-3">
             <label for="AfectadoSegundoApellido" class="form-label"><strong>Segundo Apellido</strong></label>
-            <input asp-for="PersonaAfectada.SegundoApellido" class="form-control persona-afectada-field" />
+            <input asp-for="PersonaAfectada.SegundoApellido" class="form-control persona-afectada-field" disabled="@(!Model.IsEdit)" />
             <span asp-validation-for="PersonaAfectada.SegundoApellido" class="text-danger text-center"></span>
         </div>
     </div>
     <div class="col-md-6">
         <div class="mb-3">
             <label for="AfectadoSexoId" class="form-label"><strong>Sexo</strong></label>
-            <select asp-for="PersonaAfectada.SexoId" class="form-select persona-afectada-field" asp-items="@(new SelectList(Model.ListSexos, "SexoId", "Descripcion"))">
+            <select asp-for="PersonaAfectada.SexoId" class="form-select persona-afectada-field" asp-items="@(new SelectList(Model.ListSexos, "SexoId", "Descripcion"))" disabled="@(!Model.IsEdit)">
                 <option value="">Seleccione una opción</option>
             </select>
             <span asp-validation-for="PersonaAfectada.SexoId" class="text-danger text-center"></span>
