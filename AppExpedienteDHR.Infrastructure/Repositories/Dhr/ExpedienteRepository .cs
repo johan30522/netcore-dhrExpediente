@@ -20,7 +20,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Dhr
             Expediente expedienteToUpdate = await _context.Expedientes.FirstOrDefaultAsync(e => e.Id == expediente.Id);
             if (expedienteToUpdate != null)
             {
-                expedienteToUpdate.EstadoActual = expediente.EstadoActual;
+                expedienteToUpdate.Detalle = expediente.Detalle;
                 await _context.SaveChangesAsync();
             }
         }

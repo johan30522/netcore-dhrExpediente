@@ -6,20 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
 {
     [Table("Expedientes", Schema = "dhr")]
-    public class Expediente
+    public class Expediente:CommonProps
     {
-        [Key]
-        public int Id { get; set; }
-        public int DenunciaId { get; set; }
-        public int DenuncianteId { get; set; }
+        //public int Id { get; set; }
+        public int? DenunciaId { get; set; }
+        public int? DenuncianteId { get; set; }
         [StringLength(100)]
-        public string EstadoActual { get; set; }
+        public string Detalle { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
         // Navegaciones
         [ForeignKey("DenunciaId")]
-        public Denuncia Denuncia { get; set; }
+        public Denuncia? Denuncia { get; set; }
         [ForeignKey("DenuncianteId")]
-        public Denunciante Denunciante { get; set; }
+        public Denunciante? Denunciante { get; set; }
     }
 }

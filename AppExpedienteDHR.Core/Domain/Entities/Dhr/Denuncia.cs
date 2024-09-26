@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
 {
     [Table("Denuncias", Schema = "dhr")]
-    public class Denuncia
+    public class Denuncia:CommonProps
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
+        //[Key]
+        //[Required]
+        //public int Id { get; set; }
         [Required]
         public int DenuncianteId { get; set; }
         [StringLength(2000)]

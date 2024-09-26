@@ -1,0 +1,59 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Dhr
+@model ExpedienteViewModel
+
+@{
+    var errorMessage = TempData["ErrorMessage"] as string;
+    var expedienteId = Model.Id;
+    var lockRecordId = Model.LockedRecordId;
+    var isEditMode = Model.IsEdit;
+}
+
+<div class="container">
+    <h3 class="text-center">Expediente</h3>
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @errorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <div class="row">
+        <div class="col-12 border border-light rounded p-2">
+            <form asp-area="Expediente" asp-controller="Solicitud" asp-action="Save" method="post" id="formExpediente">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="LockedRecordId" />
+                <div class="row d-flex  justify-content-end mb-2">
+                    <div class="col-6 mt-4 d-flex  justify-content-end">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a asp-action="Index" class="btn btn-secondary ms-1">Regresar</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3">
+                        <label for="Detalle" class="form-label"><strong>Detalle</strong></label>
+                        <textarea asp-for="Detalle" class="form-control" style="height: 100px;" disabled="@(!Model.IsEdit)"></textarea>
+                        <span asp-validation-for="Detalle" class="text-danger text-center"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            <script src="~/js/lockRecord.js"></script>
+        }
+        <script>
+            // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
+            if (performance.navigation.type === 2) {
+                location.reload(true); // Forzar recarga de la página desde el servidor
+            }
+        </script>
+        <script>
+            const expedienteId = '@expedienteId';
+            const lockRecordId = '@lockRecordId';
+            const isEditMode = @isEditMode.ToString().ToLower();
+        </script>
+
+    }

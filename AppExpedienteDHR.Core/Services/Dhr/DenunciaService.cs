@@ -168,7 +168,8 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             if (denuncia.IncluyePersonaAfectada && personaAfectada != null)
             {
                 denuncia.PersonaAfectadaId = personaAfectada?.Id;
-            } else
+            }
+            else
             {
                 denuncia.PersonaAfectadaId = null;
             }
@@ -220,20 +221,28 @@ namespace AppExpedienteDHR.Core.Services.Dhr
         public async Task<(List<DenunciaListadoViewModel> items, int totalItems)> GetDenunciasPaginadas(
             int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection)
         {
+            try
+            {
 
-            (IEnumerable<Denuncia> denuncias, int total) = await _containerWork.Denuncia.GetAllPaginated(
-                filter: null, // No se necesita un filtro inicial en este caso
-                includeProperties: "Denunciante", // Incluir la propiedad relacionada "Denunciante"
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                searchValue: searchValue,
-                searchColumns: "Denunciante.Nombre,DetalleDenuncia,Petitoria", // Columnas donde se aplicará la búsqueda
-                sortColumn: sortColumn,
-                sortDirection: sortDirection);
+                (IEnumerable<Denuncia> denuncias, int total) = await _containerWork.Denuncia.GetAllPaginated(
+                    filter: null, // No se necesita un filtro inicial en este caso
+                    includeProperties: "Denunciante", // Incluir la propiedad relacionada "Denunciante"
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                    searchValue: searchValue,
+                    searchColumns: "Denunciante.Nombre,DetalleDenuncia,Petitoria", // Columnas donde se aplicará la búsqueda
+                    sortColumn: sortColumn,
+                    sortDirection: sortDirection);
 
-            var denunciasListado = _mapper.Map<List<DenunciaListadoViewModel>>(denuncias);
+                var denunciasListado = _mapper.Map<List<DenunciaListadoViewModel>>(denuncias);
 
-            return (denunciasListado, total);
+                return (denunciasListado, total);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting flow");
+                throw;
+            }
 
 
         }

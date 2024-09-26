@@ -94,7 +94,7 @@ builder.Services.AddScoped<IActionWfService, ActionWfService>();
 builder.Services.AddScoped<IFlowWfService, FlowWfService>();
 builder.Services.AddScoped<IGroupWfService, GroupWfService>();
 builder.Services.AddScoped<IActionRuleWfService, ActionRuleWfService>();
-builder.Services.AddScoped<IFlowHandlerService, FlowHandlerService>();
+builder.Services.AddScoped<IWorkflowService, WorkflowService>();
 
 //services general
 builder.Services.AddScoped<IDistritoService, DistritoService>();
@@ -127,7 +127,6 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 // Configurar la opción de almacenamiento de archivos
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorage"));
-
 
 var app = builder.Build();
 

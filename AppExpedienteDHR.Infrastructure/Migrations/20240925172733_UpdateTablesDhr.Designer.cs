@@ -4,16 +4,19 @@ using AppExpedienteDHR.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AppExpedienteDHR.Infrastructure.Migrations
+namespace AppExpedienteDHR.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240925172733_UpdateTablesDhr")]
+    partial class UpdateTablesDhr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,13 +246,13 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DenunciaId")
+                    b.Property<int>("DenunciaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DenuncianteId")
+                    b.Property<int>("DenuncianteId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Detalle")
+                    b.Property<string>("EstadoActual")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -263,8 +266,7 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DenunciaId")
-                        .IsUnique()
-                        .HasFilter("[DenunciaId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("DenuncianteId");
 
@@ -1217,12 +1219,14 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", "Denuncia")
                         .WithOne("Expediente")
                         .HasForeignKey("AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente", "DenunciaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denunciante", "Denunciante")
                         .WithMany("Expedientes")
                         .HasForeignKey("DenuncianteId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Denuncia");
 

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppExpedienteDHR.Core.ViewModels.Dhr
 {
-    public class DenunciaViewModel
+    public class DenunciaViewModel: ControlFieldsViewModel
     {
         public int Id { get; set; }
         public int DenuncianteId { get; set; }
@@ -20,8 +20,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
         public int? PersonaAfectadaId { get; set; }
         public bool AceptaTerminos { get; set; }= false;
         public bool IncluyePersonaAfectada { get; set; } = false;
-        public bool IsEdit { get; set; } = false;
-        public int? LockedRecordId { get; set; }
+
 
 
 

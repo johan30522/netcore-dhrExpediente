@@ -10,7 +10,7 @@ function initLockRecord(recordId) {
 function setKeepAliveLockRecord(recordId) {
     // Enviar "heartbeat" cada 2 minutos para mantener el bloqueo activo
     setInterval(function () {
-        fetch(`/Denuncia/Lock/KeepAlive?lockId=${recordId}`, {
+        fetch(`/General/Lock/KeepAlive?lockId=${recordId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -18,7 +18,9 @@ function setKeepAliveLockRecord(recordId) {
         })
             .then(response => response.json())
             .then(data => {
+                //console.log("heartbeat enviado");
                 if (!data.success) {
+                    console.log(`No se puede mantener el bloqueo. Error: ${data.error}`);
                     alert("No se pudo mantener el bloqueo. Posiblemente la solicitud ha sido desbloqueada.");
                     // redireccionar a la página de inicio
                     //window.location.href = "/Home/Index";
@@ -27,7 +29,7 @@ function setKeepAliveLockRecord(recordId) {
             .catch((error) => {
                 console.error('Error al actualizar el bloqueo:', error);
             });
-    }, 120000);  // 120000 ms = 2 minutos
+    }, 30000);  // 120000 ms = 2 minutos
 
 }
 
@@ -41,7 +43,7 @@ function setBeforeUnloadLockRecord(recordId) {
         //    console.log("beforeunload: No hacemos nada si se está recargando");
         //    return;
         //}
-        fetch(`/Denuncia/Lock/Unlock?lockId=${recordId}`, {
+        fetch(`/General/Lock/Unlock?lockId=${recordId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,7 +62,7 @@ function setBeforeUnloadLockRecord(recordId) {
 }
 
 function unlockRecord(recordId) {
-    fetch(`/Denuncia/Lock/Unlock?lockId=${recordId}`, {
+    fetch(`/General/Lock/Unlock?lockId=${recordId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
