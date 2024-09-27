@@ -40,7 +40,7 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             try
             {
                 IEnumerable<GroupWf> groups = await _unitOfWork.GroupWf.GetGroupsByUserId(userId);
-                if (groups.Any()) {
+                if (!groups.Any()) {
                     _logger.Information("El usuario {userId} no tiene grupos asignados", userId);
                     return new List<ActionWf>();
                 }
@@ -89,6 +89,34 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
                 throw;
             }
         }
+        /// <summary>
+        /// Permite verificar si un usuario tiene acciones disponibles en un estado de flujo
+        /// </summary>
+        /// <param name="flowId"></param>
+        /// <param name="currentStateId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public  async Task<bool> HasActions(int flowId, int currentStateId)
+        {
+            var actions = await GetAvailableActions(flowId, currentStateId);
+            return actions.Any(); // si tiene acciones retorna true
+        }
+
+        /// <summary>
+        /// Permite retornar el encabezado de un flujo de solicitud
+        /// </summary>
+        /// <param name="requestId"></param>
+        /// <param name="requestType"></param>
+        /// <returns></returns>
+        public async Task<FlowRequestHeaderWf> GetFlowRequestHeader(int requestId, string requestType)
+        {
+            // include the flow and the current state
+            return await _unitOfWork.RequestFlowHeaderWf.GetFirstOrDefault(r => r.RequestId == requestId && r.RequestType == requestType,includeProperties: "Flow,CurrentState");
+        }
+
+
+
+
 
         /// <summary>
         /// Permitir que un usuario realice una acción en una solicitud
@@ -102,20 +130,8 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
         /// <param name="comments"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<StateWf> ProcessAction<TRequest>(int flowId, int requestId, int actionId, string userId, string comments) where TRequest : class
+        public async Task<FlowRequestHeaderWf> ProcessAction<TRequest>(int flowId, int requestId, int actionId, string userId, string comments) where TRequest : class
         {
-            var action = await _unitOfWork.ActionWf.GetFirstOrDefault(a => a.Id == actionId);
-            if (action == null)
-            {
-                throw new Exception($"No se encontró la acción con ID {actionId}");
-            }
-
-            // Obtener la solicitud genérica
-            var requestRepository = _unitOfWork.GetRepository<TRequest>(); // Obtener el repositorio genérico
-            var request = await requestRepository.Get(requestId); // Obtener la solicitud usando el repositorio genérico
-            if(request == null) {
-                throw new Exception("Solicitud no encontrada");
-            }
             //Obtiene el Flujo de la solicitud
             var flow = await _unitOfWork.FlowWf.Get(flowId);
             if (flow == null)
@@ -124,13 +140,25 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             }
 
             //Obtiene el encabezado del flujo de la solicitud
-            var flowRequestHeader = await _unitOfWork.RequestFlowHeaderWf.GetFirstOrDefault(r => r.RequestId == requestId && r.RequestType == flow.Name);
+            var flowRequestHeader = await _unitOfWork.RequestFlowHeaderWf.GetFirstOrDefault(r => r.Id == requestId);
             if (flowRequestHeader == null)
             {
                 throw new Exception($"No se encontró el encabezado del flujo para la solicitud de tipo {flow.Name} con ID {requestId}");
             }
 
+            var action = await _unitOfWork.ActionWf.GetFirstOrDefault(a => a.Id == actionId,includeProperties: "ActionRules,NextState");
+            if (action == null)
+            {
+                throw new Exception($"No se encontró la acción con ID {actionId}");
+            }
 
+            // Obtener la solicitud genérica
+            var requestRepository = _unitOfWork.GetRepository<TRequest>(); // Obtener el repositorio genérico
+            var request = await requestRepository.Get(flowRequestHeader.RequestId); // Obtener la solicitud usando el repositorio genérico
+            if(request == null) {
+                throw new Exception("Solicitud no encontrada");
+            }
+           
             // Verificar si la acción tiene reglas
             StateWf nextState;
             if (action.EvaluationType == "Rule")
@@ -156,9 +184,9 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
 
 
             // Guardar el historial del flujo
-            await SaveFlowHistory(flowId, requestId, action, nextState, userId, comments);
+            await SaveFlowHistory(requestId,flowId,action, nextState, userId, comments);
 
-            return nextState;
+            return flowRequestHeader;
         }
         /// <summary>
         /// Permitir que un usuario actual realice una acción en una solicitud
@@ -170,14 +198,14 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
         /// <param name="comments"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<StateWf> ProcessAction<TRequest>(int requestId, int actionId, string comments) where TRequest : class
+        public async Task<FlowRequestHeaderWf> ProcessAction<TRequest>(int requestId, int actionId, string comments) where TRequest : class
         {
             var currentUser = await _userService.GetCurrentUser();
             if (currentUser == null)
             {
                 throw new Exception("No se encontró el usuario actual");
             }
-            var flowRequestHeader = await _unitOfWork.RequestFlowHeaderWf.GetFirstOrDefault(r => r.RequestId == requestId);
+            var flowRequestHeader = await _unitOfWork.RequestFlowHeaderWf.GetFirstOrDefault(r => r.Id == requestId);
             if (flowRequestHeader == null)
             {
                 throw new Exception($"No se encontró el encabezado del flujo para la solicitud con ID {requestId}");
@@ -199,11 +227,12 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             }
             throw new Exception("No se pudo evaluar ninguna regla válida.");
         }
-        private async Task SaveFlowHistory(int requestFlowId, int requestId, ActionWf action, StateWf nextState, string userId, string comments)
+        private async Task SaveFlowHistory(int requestHeaderFlowId, int requestId, ActionWf action, StateWf nextState, string userId, string comments)
         {
             var history = new FlowHistoryWf
             {
-                RequestFlowHeaderId = requestFlowId,
+                RequestFlowHeaderId = requestHeaderFlowId,
+                ActionDate = DateTime.UtcNow,
                 PreviousStateId = action.StateId,
                 NewStateId = nextState.Id,
                 ActionPerformedId = action.Id,
@@ -266,6 +295,7 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             }
             return await CreateFlowRequestHeader<TRequest>(requestId, requestType, flowId, currentUser.Id);
         }
-        
+
+       
     }
 }

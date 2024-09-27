@@ -1,0 +1,16 @@
+﻿.header-container {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.header-title {
+    margin: 0;
+    font-size: 2rem;
+    color: #343a40;
+}
+
+.header-subtitle {
+    margin: 0;
+    font-size: 1rem;
+    color: #6c757d;
+}

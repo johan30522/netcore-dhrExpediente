@@ -5,6 +5,7 @@ using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.ViewModels.Dhr;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 
 namespace AppExpedienteDHR.Core.Services.Dhr
@@ -15,14 +16,16 @@ namespace AppExpedienteDHR.Core.Services.Dhr
         private readonly IWorkflowService _workflowService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
 
-        public ExpedienteService(IContainerWork containerWork, IMapper mapper, IWorkflowService workflowService, IConfiguration configuration)
+        public ExpedienteService(IContainerWork containerWork, IMapper mapper, IWorkflowService workflowService, IConfiguration configuration, ILogger logger)
         {
             _containerWork = containerWork;
             _mapper = mapper;
             _workflowService = workflowService;
             _configuration = configuration;
+            _logger = logger;
         }
 
 
@@ -59,5 +62,35 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             var expediente = await _containerWork.Expediente.Get(id);
             return _mapper.Map<ExpedienteViewModel>(expediente);
         }
+
+        public async Task<(List<ExpedienteListadoViewModel> items, int totalItems)> GetExpedientesPaginadas(
+            int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection)
+        {
+            try
+            {
+
+                (IEnumerable<Expediente> expedientes, int total) = await _containerWork.Expediente.GetAllPaginated(
+                    filter: null, // No se necesita un filtro inicial en este caso
+                    includeProperties: "Denunciante", // Incluir la propiedad relacionada "Denunciante"
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                    searchValue: searchValue,
+                    searchColumns: "Denunciante.Nombre,Detalle", // Columnas donde se aplicará la búsqueda
+                    sortColumn: sortColumn,
+                    sortDirection: sortDirection);
+
+                var expedientesListado = _mapper.Map<List<ExpedienteListadoViewModel>>(expedientes);
+
+                return (expedientesListado, total);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting GetDenunciasPaginadas");
+                throw;
+            }
+
+
+        }
+
     }
 }

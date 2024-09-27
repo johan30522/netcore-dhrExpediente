@@ -1,0 +1,37 @@
+﻿@* @using AppExpedienteDHR.Areas.General.Models
+@model CurrentHeaderViewModel *@
+@model int
+
+
+<!-- Modal para seleccionar la acción -->
+<div class="modal fade" id="modalSeleccionarAccion" tabindex="-1" aria-labelledby="modalSeleccionarAccionLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalSeleccionarAccionLabel">Seleccionar Acción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formSeleccionarAccion">
+                    <!-- Lista de acciones disponibles -->
+                    <div class="form-group">
+                        <label for="actionSelect">Acción</label>
+                        <select class="form-control" id="actionSelect" required>
+                            <option value="">Cargando acciones...</option>
+                        </select>
+                    </div>
+
+                    <!-- Comentarios -->
+                    <div class="form-group mt-3">
+                        <label for="actionComments">Comentarios</label>
+                        <textarea class="form-control" id="actionComments" rows="3" placeholder="Comentarios" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarYProcesarAccion(@Model)">Procesar Acción</button>
+            </div>
+        </div>
+    </div>
+</div>

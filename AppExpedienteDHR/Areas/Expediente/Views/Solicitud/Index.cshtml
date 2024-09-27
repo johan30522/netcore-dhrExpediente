@@ -23,7 +23,67 @@
             <tr>
                 <th>Detalle</th>
                 <th>Fecha</th>
+                <th>Acciones</th>
             </tr>
         </thead>
     </table>
 </div>
+
+@section Scripts {
+    <script src="~/js/datatable/datatableServerSide.js"></script>
+    <script>
+        $(document).ready(function () {
+            const tableId = '@tableId'; // Usamos la variable tableId aquí
+            const ajaxUrl = '/Expediente/Solicitud/GetAllExpedientes';
+            const columns = [
+                {
+                    "data": "detalle",
+                    "width": "50%",
+                    "render": function (data) {
+                        if (data.length > 60) {
+                            return data.substring(0, 60) + "...";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "data": "FechaCreacion",
+                    "width": "15%",
+                    "render": function (data) {
+                        if (data) {
+                            var date = new Date(data);
+                            return date.toLocaleDateString("es-ES") + " " + date.toLocaleTimeString("es-ES", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true // Especifica formato de 12 horas con AM/PM
+                            });
+                        }
+                        return "";
+                    }
+                },
+                {
+                    "data": "id",
+                    "render": function (data) {
+                        return `
+                                                    <div class="text-center">
+                                                        <a href="/Expediente/Solicitud/Info/${data}" class="btn btn-success text-white btn-edit-${tableId}" style="cursor:pointer">
+                                                                            <i class="fas fa-folder-open"></i>
+                                                        </a>
+                                                        <a onclick="Delete('/Expediente/Solicitud/Delete/${data}')" class="btn btn-danger text-white" style="cursor:pointer">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                `;
+                    }, "width": "15%"
+                }
+            ];
+
+            const dataTable = loadDataTable(tableId, ajaxUrl, columns);
+
+            // Asociar la función de guardado de estado al botón de edición
+            $(document).on('click', `.btn-edit-${tableId}`, function () {
+                saveTableState(tableId);
+            });
+        });
+    </script>
+}

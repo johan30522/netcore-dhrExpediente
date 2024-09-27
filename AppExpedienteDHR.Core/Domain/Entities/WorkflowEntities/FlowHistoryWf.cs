@@ -28,7 +28,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation properties
-        [ForeignKey("RequestFlowId")]
+        [ForeignKey("RequestFlowHeaderId")]
         public FlowRequestHeaderWf RequestFlowHeader { get; set; }
         [ForeignKey("PreviousStateId")]
         public StateWf? PreviousState { get; set; }

@@ -40,6 +40,12 @@ namespace AppExpedienteDHR.Core.Profiles
                 .ForMember(dest => dest.DetalleDenuncia, opt => opt.MapFrom(src => src.DetalleDenuncia))
                 .ForMember(dest => dest.Petitoria, opt => opt.MapFrom(src => src.Petitoria))
                 .ForMember(dest => dest.FechaDenuncia, opt => opt.MapFrom(src => src.FechaDenuncia));
+
+            CreateMap<Expediente, ExpedienteListadoViewModel>()
+                //concatena el nombre y PrimerApellido y SegundoApellido
+                //.ForMember(dest => dest.DenuncianteNombre, opt => opt.MapFrom(src => src.Denunciante.Nombre + " " + src.Denunciante.PrimerApellido + " " + src.Denunciante.SegundoApellido))
+                .ForMember(dest => dest.Detalle, opt => opt.MapFrom(src => src.Detalle))
+                .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom(src => src.FechaCreacion));
         }
     }
 }

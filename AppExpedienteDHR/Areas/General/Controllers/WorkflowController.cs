@@ -26,8 +26,10 @@ namespace AppExpedienteDHR.Areas.General.Controllers
             try
             {
                 // Procesar la acción en el flujo
-                await _workflowService.ProcessAction<AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente>(requestId, actionId, comments);  // Puedes pasar otros tipos de solicitudes como Expediente
-                return Ok();
+                var flowHeader= await _workflowService.ProcessAction<AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente>(requestId, actionId, comments);  // Puedes pasar otros tipos de solicitudes como Expediente
+                // si todo sale bien, debuelvo ok y el id de la solicitud y el tipo de solicitud
+                return Ok(new { flowHeader.RequestId, flowHeader.RequestType });
+
             }
             catch (Exception ex)
             {
@@ -39,7 +41,7 @@ namespace AppExpedienteDHR.Areas.General.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAvailableActions(int flowId, int currentStateId)
+        public async Task<IActionResult> GetAvailableActions([FromQuery] int flowId, [FromQuery] int currentStateId)
         {
 
             try
@@ -50,6 +52,9 @@ namespace AppExpedienteDHR.Areas.General.Controllers
                 {
                     return NotFound("No hay acciones disponibles para este flujo y estado.");
                 }
+
+                //var actionsList = actions.Select(a => new { a.Id, a.Name });
+                var actionsList = actions.Select(a => new { a.Id, a.Name }).ToList();
 
                 // Devolver las acciones en formato JSON
                 return Json(actions.Select(a => new { a.Id, a.Name }));

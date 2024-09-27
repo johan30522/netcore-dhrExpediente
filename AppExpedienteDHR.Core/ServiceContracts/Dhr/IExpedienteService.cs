@@ -12,5 +12,7 @@ namespace AppExpedienteDHR.Core.ServiceContracts.Dhr
         Task<ExpedienteViewModel> CreateExpediente(ExpedienteViewModel viewModel);
         Task UpdateExpediente(ExpedienteViewModel viewModel);
         Task<ExpedienteViewModel> GetExpediente(int id);
+        Task<(List<ExpedienteListadoViewModel> items, int totalItems)> GetExpedientesPaginadas(
+            int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection);
     }
 }
