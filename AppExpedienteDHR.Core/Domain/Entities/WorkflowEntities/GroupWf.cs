@@ -5,16 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 {
-    public class GroupWf
+    public class GroupWf:CommonProps
     {
-        public int Id { get; set; }
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
         [Required]
         public int? Order { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
+
         public int FlowId { get; set; }
 
         [ForeignKey("FlowId")]

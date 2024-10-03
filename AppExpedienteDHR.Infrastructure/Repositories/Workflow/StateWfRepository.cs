@@ -20,6 +20,8 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Workflow
             {
                 stateToUpdate.Name = state.Name;
                 stateToUpdate.Order = state.Order;
+                stateToUpdate.IsInitialState = state.IsInitialState;
+                stateToUpdate.IsFinalState = state.IsFinalState;
                 await _context.SaveChangesAsync();
             }
         }

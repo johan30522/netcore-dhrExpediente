@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 {
-    public class ActionRuleWf
+    public class ActionRuleWf:CommonProps
     {
-        public int Id { get; set; }
         public int ActionId { get; set; }
         [Required]
         [StringLength(100)]
@@ -19,8 +18,6 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 
         public string? RuleJson { get; set; } //  Para definir reglas en json
 
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
 
         // Navigation properties
         [ForeignKey("ActionId")]

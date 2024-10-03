@@ -1,0 +1,16 @@
+﻿.comment-details {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.details-control {
+    cursor: pointer;
+    text-align: center;
+}
+
+.details-control i {
+    font-size: 1.5rem;
+    color: #007bff; /* Color del ícono */
+}

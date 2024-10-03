@@ -1,0 +1,96 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Heredamos del layout base
+}
+
+<link rel="stylesheet" href="~/css/sidebar.css">
+<div class="d-flex no-transition" id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading d-flex justify-content-between align-items-center">
+            <span>Expediente Menu1</span>
+            <button class="btn btn-link text-dark" id="close-sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action bg-light" asp-area="Expediente" asp-controller="Solicitud" asp-action="Index">Todos</a>
+            <a class="list-group-item list-group-item-action bg-light" asp-area="Expediente" asp-controller="Solicitud" asp-action="Index">Por Estado</a>
+            <a class="list-group-item list-group-item-action bg-light" asp-area="Expediente" asp-controller="Solicitud" asp-action="Index">Mis Expedientes</a>
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Botón flotante para abrir el sidebar -->
+    <button class="btn btn-primary btn-float" id="open-sidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
+
+<!-- Renderizamos la sección Scripts si está definida -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@RenderSection("Scripts", required: false)
+
+<!-- Scripts -->
+@section Scripts {
+    <script>
+        // Aplicar el estado del sidebar ANTES de que se muestre la página
+        (function () {
+            const sidebarState = localStorage.getItem("sidebarState");
+            if (sidebarState === "closed") {
+                document.getElementById("wrapper").classList.add("toggled");
+            }
+        })();
+
+        // Función para guardar el estado del sidebar en localStorage
+        function saveSidebarState(isToggled) {
+            localStorage.setItem("sidebarState", isToggled ? "closed" : "open");
+        }
+
+        // Restaurar el estado del sidebar cuando se carga la página
+        $(document).ready(function () {
+            const sidebarState = localStorage.getItem("sidebarState");
+
+            if (sidebarState === "closed") {
+                $("#wrapper").addClass("toggled");
+                $("#open-sidebar").show();
+            } else {
+                $("#wrapper").removeClass("toggled");
+                $("#open-sidebar").hide();
+            }
+
+            // Alternar el sidebar cuando el botón de cerrar es clicado
+            $("#close-sidebar").click(function (e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+                saveSidebarState($("#wrapper").hasClass("toggled"));
+            });
+
+            // Alternar el sidebar cuando el botón flotante es clicado
+            $("#open-sidebar").click(function (e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+                saveSidebarState($("#wrapper").hasClass("toggled"));
+            });
+
+            // Mostrar el botón flotante solo cuando el sidebar está cerrado
+            $("#wrapper").on("transitionend", function () {
+                if ($("#wrapper").hasClass("toggled")) {
+                    $("#open-sidebar").show();
+                } else {
+                    $("#open-sidebar").hide();
+                }
+            });
+            // Eliminar la clase 'no-transition' después de un pequeño retraso
+            setTimeout(function () {
+                $("#wrapper").removeClass("no-transition");
+            }, 50); // Pequeño retraso para asegurarse de que todo se ha cargado
+        });
+    </script>
+}

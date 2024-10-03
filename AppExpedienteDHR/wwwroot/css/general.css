@@ -1,0 +1,5 @@
+﻿.scrollable-container {
+    max-height: 70vh; /* Ajusta la altura máxima según tus necesidades */
+    overflow-y: auto;
+    overflow-x: hidden; /* Asegúrate de que el scroll horizontal esté deshabilitado */
+}

@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 {
-    public class FlowHistoryWf
+    public class FlowHistoryWf:CommonProps
     {
-        public int Id { get; set; }
+
         public int RequestFlowHeaderId { get; set; } // Relación con la tabla RequestFlowWf
         public int PreviousStateId { get; set; } // Id del estado anterior
         public int NewStateId { get; set; } // Id del nuevo estado
@@ -24,8 +24,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         [Required]
         [StringLength(500)]
         public string Comments { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
+
 
         // Navigation properties
         [ForeignKey("RequestFlowHeaderId")]

@@ -1,0 +1,126 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Heredamos del layout base
+}
+
+<link rel="stylesheet" href="~/css/sidebar.css">
+
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    @* <div id="wrapper-container" style="display:block"> *@
+    <div class="bg-light border-right" id="sidebar-wrapper" style="display:none">
+        <div class="sidebar-heading d-flex justify-content-between align-items-center">
+            <span>Expediente Menu</span>
+            <button class="btn btn-link text-dark" id="close-sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="list-group list-group-flush">
+
+            <a asp-action="Create" asp-area="Expediente" class="btn btn-outline-primary m-1">
+                <i class="fas fa-plus"></i> &nbsp;
+                Nuevo Expediente
+            </a>
+            <a class="list-group-item list-group-item-action bg-light @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "selected" : "")"
+               asp-area="Expediente" asp-controller="Solicitud" asp-action="Index">Todos</a>
+            <a class="list-group-item list-group-item-action bg-light @(ViewContext.RouteData.Values["action"]?.ToString() == "ByState" ? "selected" : "")"
+               asp-area="Expediente" asp-controller="Solicitud" asp-action="ByState">Por Estado</a>
+            <a class="list-group-item list-group-item-action bg-light @(ViewContext.RouteData.Values["action"]?.ToString() == "MyExpedientes" ? "selected" : "")"
+               asp-area="Expediente" asp-controller="Solicitud" asp-action="MyExpedientes">Mis Expedientes</a>
+        </div>
+    </div>
+
+    <!-- /#sidebar-wrapper -->
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Botón flotante para abrir el sidebar -->
+    <button class="btn btn-primary btn-float" id="open-sidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
+
+
+<!-- Renderizamos la sección Scripts si está definida -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@RenderSection("Scripts", required: false)
+
+<!-- Scripts -->
+@section Scripts {
+    <script>
+        // Añade las transiciones una vez que la página ha cargado completamente
+        function addTransitions() {
+            document.getElementById('sidebar-wrapper').style.transition = 'margin-left 0.3s ease';
+            document.getElementById('sidebar-wrapper').style.display = 'block';
+            document.getElementById('page-content-wrapper').style.transition = 'margin-left 0.3s ease';
+        }
+
+        // Aplica el estado del sidebar antes de que la página esté completamente cargada
+        (function () {
+            const sidebarState = localStorage.getItem("sidebarState");
+            if (sidebarState === "closed") {
+                document.getElementById("wrapper").classList.add("toggled");
+            }
+        })();
+
+        // Función para guardar el estado del sidebar en localStorage
+        function saveSidebarState(isToggled) {
+            localStorage.setItem("sidebarState", isToggled ? "closed" : "open");
+        }
+
+        // Función para restaurar el estado del sidebar desde localStorage
+        function restoreSidebarState() {
+            const sidebarState = localStorage.getItem("sidebarState");
+            const wrapper = document.getElementById("wrapper");
+            const openSidebarButton = document.getElementById("open-sidebar");
+
+            if (sidebarState === "closed") {
+                wrapper.classList.add("toggled");
+                openSidebarButton.style.display = 'block';
+            } else {
+                wrapper.classList.remove("toggled");
+                openSidebarButton.style.display = 'none';
+            }
+        }
+
+        // Restaurar el estado del sidebar cuando se carga la página
+        $(document).ready(function () {
+            restoreSidebarState();
+
+            // Habilitar las transiciones después de que el DOM esté listo
+            setTimeout(addTransitions, 100);
+
+            // Mostrar el botón flotante solo cuando el sidebar está cerrado
+            if (!$("#wrapper").hasClass("toggled")) {
+                $("#open-sidebar").hide();
+            }
+        });
+
+        // Alternar el sidebar cuando el botón de cerrar es clicado
+        $("#close-sidebar").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+            saveSidebarState($("#wrapper").hasClass("toggled"));
+        });
+
+        // Alternar el sidebar cuando el botón flotante es clicado
+        $("#open-sidebar").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+            saveSidebarState($("#wrapper").hasClass("toggled"));
+        });
+
+        // Mostrar el botón flotante solo cuando el sidebar está cerrado
+        $("#wrapper").on("transitionend", function () {
+            if ($("#wrapper").hasClass("toggled")) {
+                $("#open-sidebar").show();
+            } else {
+                $("#open-sidebar").hide();
+            }
+        });
+    </script>
+}

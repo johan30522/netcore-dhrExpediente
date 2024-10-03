@@ -296,6 +296,24 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             return await CreateFlowRequestHeader<TRequest>(requestId, requestType, flowId, currentUser.Id);
         }
 
-       
+
+
+        public async Task<List<FlowHistoryWf>> GetFlowHistoryByRequestHeaderId(int requestFlowHeaderId)
+        {
+            try
+            {
+                return await _unitOfWork.FlowHistoryWf.GetAll(
+                    filter: h => h.RequestFlowHeaderId == requestFlowHeaderId,
+                    includeProperties: "PreviousState,NewState,ActionPerformed,PerformedByUser"
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener el historial del flujo para el encabezado {RequestFlowHeaderId}", requestFlowHeaderId);
+                throw;
+            }
+        }
+
+
     }
 }

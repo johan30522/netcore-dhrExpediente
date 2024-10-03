@@ -4,14 +4,23 @@
         $('#actionFormContainer').html(data);
         $.validator.unobtrusive.parse('#actionForm'); // Reinicializar validaciones
         $('#actionModal').modal('show');
-        console.log('llamar a InitActionForm');
+        InitActionForm(); // Inicializar eventos del formulario
+        // Habilitar scroll en el contenedor del formulario
+        console.log('Habilitando scroll en el contenedor del formulario ambos');
+        // Habilitar scroll vertical en el contenedor del formulario
+        $('#actionFormContainer').css({
+            'max-height': '70vh',
+            'overflow-y': 'auto',
+            'overflow-x': 'hidden' // Asegurarse de que el scroll horizontal esté deshabilitado
+        });
 
-        // Inicializar eventos cuando el modal esté completamente mostrado
-        //$('#actionModal').on('shown.bs.modal', function () {
-            console.log('llamar a InitActionForm');
-            InitActionForm(); // Inicializar eventos del formulario
-        //});
-
+        // Habilitar scroll vertical en el contenedor del modal
+        $('#actionModal .modal-body').css({
+            'max-height': '70vh',
+            'overflow-y': 'auto',
+            'overflow-x': 'hidden' // Asegurarse de que el scroll horizontal esté deshabilitado
+        });
+ 
     });
 }
 
@@ -85,7 +94,7 @@ function deleteAction(stateId, actionId) {
 }
 
 function InitActionForm() {
-    console.log('Inicializando formulario de acción...');
+ 
     // se obtiene el id del flujo del campo oculto FlowId  <input type="hidden" asp-for="FlowId" />
     const flowId = $('#FlowId').val();
     const selectedStateId = $('#NextState').data('selected'); // Obtener el estado seleccionado si existe

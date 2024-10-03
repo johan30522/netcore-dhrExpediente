@@ -11,7 +11,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
         //public int Id { get; set; }
         public int? DenunciaId { get; set; }
         public int? DenuncianteId { get; set; }
-        [StringLength(100)]
+        [StringLength(1000)]
         public string Detalle { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 

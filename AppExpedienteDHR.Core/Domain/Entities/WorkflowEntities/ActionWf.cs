@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 {
-    public class ActionWf
+    public class ActionWf:CommonProps
     {
-        public int Id { get; set; }
+
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
@@ -17,9 +17,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         [Required]
         [StringLength(50)]
         public string EvaluationType { get; set; } // Static or Rule
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
-
+   
         // Navigation properties
         [ForeignKey("NextStateId")]
         public StateWf? NextState { get; set; }

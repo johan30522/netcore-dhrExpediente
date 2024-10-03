@@ -128,6 +128,17 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 // Configurar la opción de almacenamiento de archivos
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorage"));
 
+
+// Agrega soporte para la sesión
+builder.Services.AddDistributedMemoryCache(); // Usar memoria para almacenar la sesión (en lugar de una base de datos)
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo de inactividad para expirar la sesión
+    options.Cookie.HttpOnly = true; // Asegura que la cookie de la sesión solo sea accesible vía HTTP
+    options.Cookie.IsEssential = true; // Hace que la cookie de sesión sea esencial para el funcionamiento de la app
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -144,6 +155,10 @@ else
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Habilitar la sesión en el pipeline
+app.UseSession(); 
+
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,4 +1,5 @@
 ﻿using AppExpedienteDHR.Core.Domain.Entities.Dhr;
+using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 using AppExpedienteDHR.Core.ServiceContracts.Dhr;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
@@ -63,25 +64,31 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             return _mapper.Map<ExpedienteViewModel>(expediente);
         }
 
-        public async Task<(List<ExpedienteListadoViewModel> items, int totalItems)> GetExpedientesPaginadas(
+        public async Task<(List<ExpedienteItemListViewModel> items, int totalItems)> GetExpedientesPaginadas(
             int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection)
         {
             try
             {
 
-                (IEnumerable<Expediente> expedientes, int total) = await _containerWork.Expediente.GetAllPaginated(
-                    filter: null, // No se necesita un filtro inicial en este caso
-                    includeProperties: "Denunciante", // Incluir la propiedad relacionada "Denunciante"
+                //(IEnumerable<Expediente> expedientes, int total) = await _containerWork.Expediente.GetAllPaginated(
+                //    filter: null, // No se necesita un filtro inicial en este caso
+                //    includeProperties: "Denunciante", // Incluir la propiedad relacionada "Denunciante"
+                //    pageIndex: pageIndex,
+                //    pageSize: pageSize,
+                //    searchValue: searchValue,
+                //    searchColumns: "Denunciante.Nombre,Detalle", // Columnas donde se aplicará la búsqueda
+                //    sortColumn: sortColumn,
+                //    sortDirection: sortDirection); 
+                (IEnumerable<ExpedienteItemListViewModel> expedientes, int total) = await _containerWork.Expediente.GetExpedientesWithFlowPaginated(
                     pageIndex: pageIndex,
                     pageSize: pageSize,
                     searchValue: searchValue,
-                    searchColumns: "Denunciante.Nombre,Detalle", // Columnas donde se aplicará la búsqueda
                     sortColumn: sortColumn,
                     sortDirection: sortDirection);
 
-                var expedientesListado = _mapper.Map<List<ExpedienteListadoViewModel>>(expedientes);
+                //var expedientesListado = _mapper.Map<List<ExpedienteItemListViewModel>>(expedientes);
 
-                return (expedientesListado, total);
+                return (expedientes.ToList(), total);
             }
             catch (Exception ex)
             {
@@ -91,6 +98,9 @@ namespace AppExpedienteDHR.Core.Services.Dhr
 
 
         }
+
+
+
 
     }
 }

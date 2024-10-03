@@ -1,6 +1,9 @@
-﻿@* @using AppExpedienteDHR.Areas.General.Models
-@model CurrentHeaderViewModel *@
+﻿
 @model int
+
+@{
+    var requestType = ViewData["requestType"] as string;
+}
 
 
 <!-- Modal para seleccionar la acción -->
@@ -29,8 +32,12 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarYProcesarAccion(@Model)">Procesar Acción</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="guardarYProcesarAccion(@Model,'@requestType')">
+                    <i class="fas fa-cogs"></i> Continuar
+                </button>
             </div>
         </div>
     </div>

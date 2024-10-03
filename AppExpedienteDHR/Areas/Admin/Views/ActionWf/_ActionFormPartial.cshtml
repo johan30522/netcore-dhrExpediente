@@ -11,7 +11,7 @@
 
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6" style="max-height: 70vh!important; overflow-y: auto!important; overflow-x: hidden;">
         <form id="actionForm" method="post" asp-action="SaveAction">
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="StateId" />
@@ -82,7 +82,11 @@
                 @* <button type="button" class="btn btn-primary" onclick="addRule(@Model.Id)">Agregar Regla</button> *@
             </div>
 
-
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
         </form>
     </div>
 

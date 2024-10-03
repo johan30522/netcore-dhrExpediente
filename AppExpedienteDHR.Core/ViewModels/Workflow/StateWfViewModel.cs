@@ -17,6 +17,9 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
 
         public int FlowWfId { get; set; }
 
+        public bool IsInitialState { get; set; }
+        public bool IsFinalState { get; set; }
+
         public List<ActionWfViewModel>? Actions { get; set; } = new List<ActionWfViewModel>();
     }
 }

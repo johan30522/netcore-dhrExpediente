@@ -14,6 +14,7 @@ namespace AppExpedienteDHR.Core.ServiceContracts.Workflow
         Task<FlowRequestHeaderWf> CreateFlowRequestHeader<TRequest>(int requestId, string requestType, int flowId, string userId) where TRequest : class;
         Task<bool> HasActions(int flowId, int currentStateId);
         Task<FlowRequestHeaderWf> GetFlowRequestHeader(int requestId, string requestType);
+        Task<List<FlowHistoryWf>> GetFlowHistoryByRequestHeaderId(int requestFlowHeaderId);
 
 
     }

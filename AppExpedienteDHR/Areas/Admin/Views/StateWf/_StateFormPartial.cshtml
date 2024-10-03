@@ -30,20 +30,40 @@
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-
-    @if (Model.Id > 0)
-    {
-        <hr />
-        <div class="form-group">
-            <div class="text-center">
-                <label for="Actions">Acciones</label>
-            </div>
-            <button type="button" class="btn btn-primary" onclick="loadActionForm(@Model.Id)"> <i class="fas fa-plus"></i> Crear</button>
-            <div id="actionsTableContainer">
-                @await Html.PartialAsync("_ActionsTablePartial", Model.Actions)
-            </div>
+    <div class="form-group">
+        <label asp-for="IsInitialState" class="control-label">Es estado inicial?</label>
+        <div class="mb-3 form-check">
+            <input asp-for="IsInitialState" class="form-check-input" id="isInitialStateCheckbox" />
+            <label class="form-check-label" asp-for="IsInitialState">Si</label>
         </div>
-    }
+    </div>
+    <div class="form-group">
+        <label asp-for="IsFinalState" class="control-label">Es estado final??</label>
+        <div class="mb-3 form-check">
+            <input asp-for="IsFinalState" class="form-check-input" id="isFinalStateCheckbox" />
+            <label class="form-check-label" asp-for="IsFinalState">Si</label>
+        </div>
+    </div>
+
+
+    @* no se pueden crear acciones si es estado final, si esta selccionado  *@
+    <div id="actionSections">
+
+            @if (Model.Id > 0)
+            {
+                <hr />
+                <div class="form-group">
+                    <div class="text-center">
+                        <label for="Actions">Acciones</label>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="loadActionForm(@Model.Id)"> <i class="fas fa-plus"></i> Crear</button>
+                    <div id="actionsTableContainer">
+                        @await Html.PartialAsync("_ActionsTablePartial", Model.Actions)
+                    </div>
+                </div>
+            }
+        
+    </div>
 
 
 </form>
@@ -51,7 +71,7 @@
 
 <!-- Modal para crear/editar acciones -->
 <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

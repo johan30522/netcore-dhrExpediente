@@ -218,7 +218,7 @@ namespace AppExpedienteDHR.Core.Services.Dhr
                 throw;
             }
         }
-        public async Task<(List<DenunciaListadoViewModel> items, int totalItems)> GetDenunciasPaginadas(
+        public async Task<(List<DenunciaItemListViewModel> items, int totalItems)> GetDenunciasPaginadas(
             int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection)
         {
             try
@@ -234,7 +234,7 @@ namespace AppExpedienteDHR.Core.Services.Dhr
                     sortColumn: sortColumn,
                     sortDirection: sortDirection);
 
-                var denunciasListado = _mapper.Map<List<DenunciaListadoViewModel>>(denuncias);
+                var denunciasListado = _mapper.Map<List<DenunciaItemListViewModel>>(denuncias);
 
                 return (denunciasListado, total);
             }

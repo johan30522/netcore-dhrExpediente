@@ -4,16 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 {
-    public class StateWf
+    public class StateWf:CommonProps
     {
-        public int Id { get; set; }
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
         [Required]
         public int? Order { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
 
         public bool IsInitialState { get; set; } // indica si es el estado inicial
         public bool IsFinalState { get; set; } // Indica si es el estado final

@@ -67,5 +67,31 @@ namespace AppExpedienteDHR.Areas.General.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetFlowHistory(int requestFlowHeaderId)
+        {
+            try
+            {
+                var history = await _workflowService.GetFlowHistoryByRequestHeaderId(requestFlowHeaderId);
+                var historyList = history.Select(h => new
+                {
+                    ActionDate = h.ActionDate.ToString("dd/MM/yyyy HH:mm"),
+                    PerformedByUser = h.PerformedByUser.FullName,
+                    PreviousState = h.PreviousState.Name,
+                    NewState = h.NewState.Name,
+                    ActionPerformed = h.ActionPerformed.Name,
+                    Comments = h.Comments
+                }).ToList();
+
+                //return Json(historyList);
+                return Json(new { data = historyList });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener el historial del flujo para el encabezado {RequestFlowHeaderId}", requestFlowHeaderId);
+                return StatusCode(500, "Error al obtener el historial del flujo.");
+            }
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 @model ExpedienteViewModel
 
 @{
+    Layout = "~/Areas/Expediente/Views/Shared/_LayoutExpediente.cshtml";
     var errorMessage = TempData["ErrorMessage"] as string;
     var expedienteId = Model.Id;
     var lockRecordId = Model.LockedRecordId;
@@ -10,12 +11,12 @@
     var CurrentStateId = Model.StateWfId;
     var flowHeaderId = Model.FlowHeaderWfId;
 
-    ViewData["flowHeaderId"] = flowHeaderId;
-    ViewData["expedienteId"] = expedienteId;
+    ViewData["requestType"] = "Expediente";
 
 }
 
 <link rel="stylesheet" href="~/css/expedienteForm.css">
+<link rel="stylesheet" href="~/css/workflow.css">
 
 <div class="container">
     <div class="header-container mb-4 p-3 rounded shadow-sm">
@@ -46,19 +47,33 @@
                 <input type="hidden" asp-for="LockedRecordId" />
                 <div class="row d-flex  justify-content-end mb-2">
                     <div class="col-6 mt-4 d-flex  justify-content-end">
-                         @if (Model.IsEdit)
+                        @if (Model.IsEdit)
                         {
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                            <!-- Botón para abrir el modal de acciones disponibles -->
-                            <button type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modalSeleccionarAccion">
-                                Procesar Acción
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar
                             </button>
+                            <!-- Botón para abrir el modal de acciones disponibles -->
+                            @if (Model.Id != 0)
+                            {
+                                <button type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modalSeleccionarAccion">
+                                    <i class="fas fa-tasks"></i> Acciones
+                                </button>
+                            }
                         }
                         else
                         {
-                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
                         }
-                        <a asp-action="Index" class="btn btn-secondary ms-1">Regresar</a>
+                        @if (Model.Id != 0)
+                        {
+                            <button type="button" class="btn btn-info ms-1" data-bs-toggle="modal" data-bs-target="#flowHistoryModal" onclick="loadFlowHistory(@flowHeaderId)">
+                                <i class="fas fa-history"></i> Historial
+                            </button>
+                        }
+                        <button type="button" id="btnBack" class="btn btn-secondary ms-1"><i class="fas fa-arrow-left"></i>Volver</button>
+
                     </div>
                 </div>
                 <div class="row">
@@ -72,11 +87,9 @@
         </div>
     </div>
 
-    <!-- Partial  de Modal para seleccionar la acción -->
-    @* <partial name="_WorkFlowActionsPartial" /> *@
-    @* <partial name="~/Areas/General/Views/Shared/_WorkFlowActionsPartial.cshtml" /> *@
+
     <partial name="~/Areas/General/Views/Shared/_WorkFlowActionsPartial.cshtml" for="@flowHeaderId" />
-    @* <partial name="~/Areas/General/Views/Shared/_WorkFlowActionsPartial.cshtml" /> *@
+    <partial name="~/Areas/General/Views/Shared/_WorkFlowHistory.cshtml" />
 
 
 
@@ -87,24 +100,39 @@
             <script src="~/js/flow/workflowSolictud.js"></script>
         }
         <script>
+            const expedienteId = '@expedienteId';
+            const lockRecordId = '@lockRecordId';
+            const isEditMode = @isEditMode.ToString().ToLower();
+
+
             // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
             if (performance.navigation.type === 2) {
                 location.reload(true); // Forzar recarga de la página desde el servidor
             }
-        </script>
-        <script>
-            const expedienteId = '@expedienteId';
-            const lockRecordId = '@lockRecordId';
-            const isEditMode = @isEditMode.ToString().ToLower();
-        </script>
-        <script>
-            // Llamar a la función de carga de acciones dinámicamente cuando se abra el modal
-            $('#modalSeleccionarAccion').on('show.bs.modal', function (event) {
-                // Asumimos que estos valores (flowId y currentStateId) se obtienen de tu vista actual
-                const flowId = '@FlowId';
-                const currentStateId = '@CurrentStateId';
-                cargarAccionesDisponibles(flowId, currentStateId);
+
+
+            $(document).ready(function () {
+                $('#modalSeleccionarAccion').on('show.bs.modal', function (event) {
+
+                    // Asumimos que estos valores (flowId y currentStateId) se obtienen de tu vista actual
+                    console.log("Cargar acciones disponibles");
+                    const flowId = '@FlowId';
+                    const currentStateId = '@CurrentStateId';
+                    // Llamar a la función de carga de acciones dinámicamente cuando se abra el modal
+                    cargarAccionesDisponibles(flowId, currentStateId);
+                });
+                console.log("Scripts de ExpedienteForm finalizado");
+
+                document.getElementById('btnBack').addEventListener('click', function () {
+                    const previousView = sessionStorage.getItem('previousView');
+                    if (previousView) {
+                        window.location.href = previousView; // Redirige a la vista anterior
+                    } else {
+                        window.history.back(); // O usa el historial si no hay vista guardada
+                    }
+                });
             });
+
         </script>
 
     }

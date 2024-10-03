@@ -162,7 +162,7 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(d => d.TipoIdentificacionId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             // Configuración de Denunciante -> Sexo (uno a muchos)
             modelBuilder.Entity<Denunciante>()
                 .HasOne(d => d.Sexo)
@@ -225,6 +225,8 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(pa => pa.SexoId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+ 
 
             #endregion
 

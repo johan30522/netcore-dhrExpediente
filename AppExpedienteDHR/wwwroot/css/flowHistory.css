@@ -1,0 +1,15 @@
+﻿#flowHistoryTable {
+    width: 100% !important;
+}
+
+.modal-xl .modal-body {
+    padding: 0; /* Eliminar el padding para que la tabla ocupe más espacio */
+}
+
+/*.modal-xl {
+    max-width: 100vw;*/ /* Esto asegurará que el modal ocupe todo el ancho de la pantalla si es necesario */
+/*}*/
+
+.modal-body {
+    overflow-x: auto; /* Asegura que la tabla no se corte y permita el desplazamiento horizontal si es necesario */
+}

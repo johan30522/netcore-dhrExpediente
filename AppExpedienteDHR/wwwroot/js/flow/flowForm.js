@@ -5,7 +5,6 @@
  * @param {any} tableGroupId , id de la tabla
  */
 function initializeGroupDataTable(flowId, tableGroupId) {
-    console.log(`Inicializando tabla de grupos para el flujo ${flowId} con el id ${tableGroupId}`);
     const ajaxUrl = `/admin/GroupWf/GetGroups/${flowId}`;
     const columns = [
         { "data": "order", "width": "10%" },
@@ -43,7 +42,6 @@ function initializeGroupDataTable(flowId, tableGroupId) {
  * @param {any} groupId, id del grupo
  */
 function loadGroupForm(flowId, groupId = 0) {
-    console.log(`testCargando formulario de grupo para el flujo ${flowId} y el grupo ${groupId}`);
 
     // Guardar la posición actual del scroll
     const scrollPosition = $(window).scrollTop();
@@ -115,12 +113,9 @@ function saveGroup() {
     // Obtener todos los usuarios seleccionados en el Select2
     const selectedUsers = $('#Users').val();
 
-    console.log(selectedUsers);
 
     // Crear un objeto que contenga todos los datos del formulario y los usuarios seleccionados
     const formData = form.serializeArray();
-
-    console.log(formData);
 
     //// Agregar los usuarios seleccionados al objeto de datos del formulario
     //selectedUsers.forEach(user => {
@@ -243,7 +238,6 @@ function initializeGroupUserSelect() {
 * @param {any} tableStateId , id de la tabla
 */
 function initializeStateDataTable(flowId, tableStateId) {
-    console.log(`Inicializando tabla de Estados para el flujo ${flowId} con el id ${tableStateId}`);
     const ajaxUrl = `/admin/StateWf/GetStates/${flowId}`;
     const columns = [
         { "data": "order", "width": "10%" },
@@ -282,7 +276,6 @@ function initializeStateDataTable(flowId, tableStateId) {
 * @param {any} stateId, id del grupo
 */
 function loadStateForm(flowId, stateId = 0) {
-    console.log(`testCargando formulario de grupo para el flujo ${flowId} y el grupo ${stateId}`);
     const url = stateId ? `/admin/StateWf/GetState/${stateId}` : `/admin/StateWf/GetStateForm?flowId=${flowId}`;
     $('#editFormContainer').hide(); // Ocultar el contenedor del formulario
 
@@ -290,7 +283,34 @@ function loadStateForm(flowId, stateId = 0) {
         $('#editFormContainer').html(data);
         $.validator.unobtrusive.parse('#stateForm'); // Reinicializar validaciones
         $('#editFormContainer').fadeIn(); // Mostrar el contenedor del formulario
+
+        // Inicializar el estado de las secciones basadas en el checkbox
+        toggleActionSections(); // Mostrar u ocultar la sección según el estado actual
+
+        // Manejar el cambio del checkbox IsFinalState
+        $('#isFinalStateCheckbox').off('change').on('change', function () {
+            if ($(this).is(':checked')) {
+                $('#isInitialStateCheckbox').prop('checked', false); // Deschequear el checkbox IsInitialState
+            }
+            toggleActionSections(); // Mostrar u ocultar la sección según el estado del checkbox
+        });
+
+        // Manejar el cambio del checkbox IsInitialState
+        $('#isInitialStateCheckbox').off('change').on('change', function () {
+            if ($(this).is(':checked')) {
+                $('#isFinalStateCheckbox').prop('checked', false); // Deschequear el checkbox IsFinalState
+            }
+            toggleActionSections(); // Asegurar que las acciones se muestren si no es un estado final
+        });
     });
+}
+
+function toggleActionSections() {
+    if ($('#isFinalStateCheckbox').is(':checked')) {
+        $('#actionSections').hide();
+    } else {
+        $('#actionSections').show();
+    }
 }
 
 
@@ -343,13 +363,6 @@ function saveState() {
 
     // Crear un objeto que contenga todos los datos del formulario y los usuarios seleccionados
     const formData = form.serializeArray();
-
-    console.log(formData);
-
-    //// Agregar los usuarios seleccionados al objeto de datos del formulario
-    //selectedUsers.forEach(user => {
-    //    formData.push({ name: 'selectedUsers', value: user });
-    //});
     //Enviar la solicitud AJAX
     $.ajax({
         url: form.attr('action'),

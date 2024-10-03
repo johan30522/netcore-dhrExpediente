@@ -27,6 +27,9 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 
         public bool IsCompleted { get; set; } = false; // Indicar si el flujo fue completado
 
+        public bool? IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
+
         // Navegación al flujo y estado actual
         [ForeignKey("FlowId")]
         public FlowWf Flow { get; set; }
