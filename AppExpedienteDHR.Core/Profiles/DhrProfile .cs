@@ -21,14 +21,20 @@ namespace AppExpedienteDHR.Core.Profiles
             .ForMember(dest => dest.FechaSubida, opt => opt.MapFrom(src => src.Adjunto.FechaSubida))
             .ReverseMap();
 
+            // Convierte de Expediente a ExpedienteViewModel
+            CreateMap<Expediente, ExpedienteViewModel>()
+                .ForMember(dest => dest.Denuncia, opt => opt.MapFrom(src => src.Denuncia))
+                .ForMember(dest => dest.PersonaAfectada, opt => opt.MapFrom(src => src.PersonaAfectada))    
+                .ForMember(dest => dest.Denunciante, opt => opt.MapFrom(src => src.Denunciante))
+                .ReverseMap();
 
+
+            // reverse map
             CreateMap<Expediente, ExpedienteViewModel>().ReverseMap();
             CreateMap<PersonaAfectada, PersonaAfectadaViewModel>().ReverseMap();
 
-            // reverse map
             CreateMap<DenunciaViewModel, Denuncia>().ReverseMap();
             CreateMap<DenuncianteViewModel, Denunciante>().ReverseMap();
-            //CreateMap<DenunciaAdjuntoViewModel, DenunciaAdjunto>().ReverseMap();
             CreateMap<ExpedienteViewModel, Expediente>().ReverseMap();
             CreateMap<PersonaAfectadaViewModel, PersonaAfectada>().ReverseMap();
 

@@ -184,6 +184,22 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> GenerateExpediente(int id)
+        {
+            var existeDenuncia = await _denunciaService.GetDenuncia(id);
+            if (existeDenuncia == null)
+            {
+                return NotFound();
+            }
+            var result = await _denunciaService.CreateExpediente(id);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AgregarAnexo(int id, IFormFile file)
         {
             if (file != null && file.Length > 0)

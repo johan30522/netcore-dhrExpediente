@@ -87,17 +87,22 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
                 TempData["ErrorMessage"] = "No tiene acciones disponibles para esta solicitud.";
                 return RedirectToAction("Info", new { id = id });
             }
+            // se obtiene el expediente
+            var model = await _expedienteService.GetExpediente(id);
             // Se agregan las migas de pan
-            //AddBreadcrumbs(id, "Edit");
             // Obtén el valor de la vista previa desde sessionStorage en el cliente
             string previousView = HttpContext.Session.GetString("PreviousView") ?? "Index";
             // Se agregan las migas de pan
-            AddBreadcrumbs(id, "Edit", previousView);
+            if (previousView == "Denuncia" && model?.DenunciaId != null)
+            {
+                int denunciaId = model.DenunciaId ?? 0;
+                AddBreadcrumbs(id, "Info", previousView, denunciaId);
+            }
+            else
+            {
+                AddBreadcrumbs(id, "Info", previousView);
+            }
 
-            // Obtener el Referer
-
-            // se obtiene el expediente
-            var model = await _expedienteService.GetExpediente(id);
             //Agregan campos de control
             model.FlowWfId = flowRequestHeader.FlowId;
             model.FlowHeaderWfId = flowRequestHeader.Id;
@@ -124,13 +129,24 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             {
                 return RedirectToAction("Index");
             }
+
+            // se obtiene el expediente
+            var model = await _expedienteService.GetExpediente(id);
+            // Obtén el valor de la vista previa desde sessionStorage en el cliente
             string previusViewFrom = HttpContext.Session.GetString("PreviousView");
             string previousView = HttpContext.Session.GetString("PreviousView") ?? "Index";
-            // Se agregan las migas de pan
-            AddBreadcrumbs(id, "Info", previousView);
+            // Se agregan las migas de pan, si viene de una denuncia se agrega la migas de pan de la denuncia
+            if (previusViewFrom == "Denuncia" && model?.DenunciaId != null)
+            {
+                int denunciaId = model.DenunciaId ?? 0;
+                AddBreadcrumbs(id, "Info", previousView, denunciaId);
+            }
+            else
+            {
+                AddBreadcrumbs(id, "Info", previousView);
+            }
 
             //AddBreadcrumbs(id, "Info");
-            var model = await _expedienteService.GetExpediente(id);
             //Agregan campos de control
             model.FlowWfId = flowRequestHeader.FlowId;
             model.FlowHeaderWfId = flowRequestHeader.Id;
@@ -202,40 +218,7 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             return Ok(jsonData);
         }
 
-        //// permite agregar las migas de pan
-        //private void AddBreadcrumbs(int? id = 0, string? fromView = "")
-        //{
-        //    var referer = Request.Headers["Referer"].ToString();
-        //    var breadcrumbs = new List<Breadcrumb>();
-
-        //    if (referer.Contains("ByState"))
-        //    {
-        //        breadcrumbs.Add(new Breadcrumb { Title = "Expedientes por Estado", Url = Url.Action("ByState", "Por Estado"), IsActive = false });
-        //    }
-        //    else if (referer.Contains("MyExpedientes"))
-        //    {
-        //        breadcrumbs.Add(new Breadcrumb { Title = "Mis Expedientes", Url = Url.Action("MyExpedientes", "Mis Expedientes"), IsActive = false });
-        //    }
-        //    else
-        //    {
-        //        breadcrumbs.Add(new Breadcrumb { Title = "Expedientes", Url = Url.Action("Index", "Expedientes"), IsActive = false });
-        //    }
-
-        //    if (fromView == "Create")
-        //        breadcrumbs.Add(new Breadcrumb { Title = "Crear", Url = Url.Action("Create", "Solicitud"), IsActive = true });
-        //    else if (fromView == "Edit")
-        //    {
-        //        breadcrumbs.Add(new Breadcrumb { Title = "Editar", Url = Url.Action("Edit", "Solicitud", new { id = id }), IsActive = false });
-        //    }
-        //    else
-        //    {
-        //        breadcrumbs.Add(new Breadcrumb { Title = "Informacion", Url = Url.Action("Info", "Solicitud", new { id = id }), IsActive = true });
-        //    }
-        //    ViewData["Breadcrumbs"] = breadcrumbs;
-
-        //}
-
-        private void AddBreadcrumbs(int? id = 0, string? fromView = "", string? previousView = "Index")
+        private void AddBreadcrumbs(int? id = 0, string? fromView = "", string? previousView = "Index", int? denunciaId=0)
         {
             var breadcrumbs = new List<Breadcrumb>();
 
@@ -247,6 +230,10 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             else if (previousView == "MyExpedientes")
             {
                 breadcrumbs.Add(new Breadcrumb { Title = "Mis Expedientes", Url = Url.Action("MyExpedientes", "Solicitud"), IsActive = false });
+            } 
+            else if (previousView == "Denuncia")
+            {
+                breadcrumbs.Add(new Breadcrumb { Title = "Denuncia", Url = Url.Action("Info", "Solicitud", new { area = "Denuncia", id = denunciaId }), IsActive = false });
             }
             else
             {

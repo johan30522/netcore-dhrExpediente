@@ -20,6 +20,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
         public int? PersonaAfectadaId { get; set; }
         public bool AceptaTerminos { get; set; }= false;
         public bool IncluyePersonaAfectada { get; set; } = false;
+        public int? ExpedienteId { get; set; }
 
 
 

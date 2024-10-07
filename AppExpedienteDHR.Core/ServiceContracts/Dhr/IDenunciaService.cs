@@ -1,10 +1,6 @@
 ﻿using AppExpedienteDHR.Core.ViewModels.Dhr;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace AppExpedienteDHR.Core.ServiceContracts.Dhr
 {
@@ -17,6 +13,7 @@ namespace AppExpedienteDHR.Core.ServiceContracts.Dhr
         Task AgregarAnexoDenuncia(int id, IFormFile file);
         Task<(List<DenunciaItemListViewModel> items, int totalItems)> GetDenunciasPaginadas(
              int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection);
+        Task<bool> CreateExpediente(int idDenuncia);
 
     }
 }

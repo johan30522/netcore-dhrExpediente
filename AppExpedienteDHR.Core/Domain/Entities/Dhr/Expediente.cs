@@ -11,8 +11,12 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
         //public int Id { get; set; }
         public int? DenunciaId { get; set; }
         public int? DenuncianteId { get; set; }
-        [StringLength(1000)]
+        public int? PersonaAfectadaId { get; set; }
+        [StringLength(2000)]
         public string Detalle { get; set; }
+
+        [StringLength(1000)]
+        public string? Petitoria { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
         // Navegaciones
@@ -20,5 +24,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
         public Denuncia? Denuncia { get; set; }
         [ForeignKey("DenuncianteId")]
         public Denunciante? Denunciante { get; set; }
+        [ForeignKey("PersonaAfectadaId")]
+        public PersonaAfectada PersonaAfectada { get; set; }
     }
 }

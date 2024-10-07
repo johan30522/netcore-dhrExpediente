@@ -1,9 +1,11 @@
 ﻿using AppExpedienteDHR.Core.Domain.Entities.Dhr;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 using AppExpedienteDHR.Core.ServiceContracts.Dhr;
+using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.ViewModels.Dhr;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System.Collections.Generic;
 
@@ -15,11 +17,15 @@ namespace AppExpedienteDHR.Core.Services.Dhr
         private readonly IMapper _mapper;
         private readonly IAdjuntoService _adjuntoService;
         private readonly ILogger _logger;
+        private readonly IWorkflowService _workflowService;
+        private readonly IConfiguration _configuration;
 
-        public DenunciaService(IContainerWork containerWork, IMapper mapper, ILogger logger, IAdjuntoService adjuntoService)
+        public DenunciaService(IContainerWork containerWork, IMapper mapper, ILogger logger, IAdjuntoService adjuntoService, IWorkflowService workflowService, IConfiguration configuration)
         {
             _containerWork = containerWork;
             _adjuntoService = adjuntoService;
+            _workflowService = workflowService;
+            _configuration = configuration;
 
             _mapper = mapper;
             _logger = logger;
@@ -190,7 +196,15 @@ namespace AppExpedienteDHR.Core.Services.Dhr
         public async Task<DenunciaViewModel> GetDenuncia(int id)
         {
             var denuncia = await _containerWork.Denuncia.GetFirstOrDefault(x => x.Id == id, includeProperties: "Denunciante,PersonaAfectada,DenunciaAdjuntos.Adjunto");
-            return _mapper.Map<DenunciaViewModel>(denuncia);
+            var denunciaViewModel = _mapper.Map<DenunciaViewModel>(denuncia);
+            // verifica si existe un expediente asociado a la denuncia
+            var expediente = await _containerWork.Expediente.GetFirstOrDefault(x => x.DenunciaId == id);
+           
+            if (expediente != null)
+            {
+                denunciaViewModel.ExpedienteId = expediente.Id;
+            }
+            return denunciaViewModel;
         }
 
         public async Task AgregarAnexoDenuncia(int id, IFormFile file)
@@ -218,6 +232,51 @@ namespace AppExpedienteDHR.Core.Services.Dhr
                 throw;
             }
         }
+
+        public async Task<bool> CreateExpediente(int idDenuncia)
+        {
+            try
+            {
+                var denuncia = await _containerWork.Denuncia.GetFirstOrDefault(x => x.Id == idDenuncia, includeProperties: "Denunciante,PersonaAfectada,DenunciaAdjuntos.Adjunto");
+                if (denuncia == null)
+                {
+                    throw new Exception("La denuncia no existe");
+                    return false;
+                }
+
+                // Crear el expediente
+                var expediente = new Expediente
+                {
+                    DenunciaId = idDenuncia,
+                    DenuncianteId = denuncia.DenuncianteId,
+                    PersonaAfectadaId = denuncia.PersonaAfectadaId,
+                    Detalle = denuncia.DetalleDenuncia,
+                    Petitoria = denuncia.Petitoria
+                };
+                await _containerWork.Expediente.Add(expediente);
+                await _containerWork.Save();
+
+                // Obtener el flujo de trabajo de Expediente
+                var flow = await _containerWork.FlowWf.Get(_configuration.GetValue<int>("FlowAppCodes:Expediente"));
+                if (flow == null)
+                {
+                    throw new Exception("No se encontró el flujo de trabajo de Expediente");
+                    return false;
+                }
+
+                //Crear el flujo de trabajo
+                var flowRequestHeader = await _workflowService.CreateFlowRequestHeader<Expediente>(expediente.Id, "Expediente", flow.Id);
+                return true;
+ 
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting flow");
+                return false;
+                throw;
+            }
+        }
+
         public async Task<(List<DenunciaItemListViewModel> items, int totalItems)> GetDenunciasPaginadas(
             int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection)
         {

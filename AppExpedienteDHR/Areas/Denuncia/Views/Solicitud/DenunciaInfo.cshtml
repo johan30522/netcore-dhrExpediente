@@ -42,7 +42,22 @@
                             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
                                 <i class="fas fa-edit"></i> Editar
                             </a>
+                        
                         }
+                        <!-- Si tiene un expediente muestra el boton de abrir sino de crear expediente -->
+                        @if (Model.ExpedienteId != 0 && Model.ExpedienteId != null)
+                        {
+                            <a href="/Expediente/Solicitud/Info/@Model.ExpedienteId" onclick="setPreviousView('Denuncia')" class="btn btn-info ms-1" style="cursor:pointer">
+                                <i class="fas fa-folder-open"></i> Ver Expediente
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="javascript:void(0);" class="btn btn-info ms-1" onclick="confirmGenerateExpediente(@denunciaId)">
+                                <i class="fas fa-folder-plus"></i> Crear Expediente
+                            </a>
+                        }
+                        
                         <a asp-action="Index" class="btn btn-secondary ms-1">
                             <i class="fas fa-arrow-left"></i> Volver
                         </a>
@@ -182,6 +197,7 @@
         <script src="~/js/dhr/denuncia.js"></script>
         <script src="~/js/file-upload.js"></script>
         <script src="~/js/lockRecord.js"></script>
+        <script src="~/js/general.js"></script>
     }
     <script>
         // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")

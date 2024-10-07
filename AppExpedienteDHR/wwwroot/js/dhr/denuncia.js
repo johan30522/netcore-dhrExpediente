@@ -167,4 +167,45 @@ function cargarCantonesYDistritos(provinciaSeleccionada, cantonSeleccionado, dis
         });
     }
 }
+
+// Permite confirmar la generación de un nuevo expediente
+// Permite confirmar la generación de un nuevo expediente
+function confirmGenerateExpediente(expedienteId) { // Asegúrate de pasar el ID del expediente aquí
+    console.log(` Generar expediente ${expedienteId}`);
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción generará un nuevo expediente.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, generar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Denuncia/Solicitud/GenerateExpediente',
+                type: 'POST',
+                data: { id: expedienteId },  // Enviamos el ID como parámetro
+                success: function (response) {
+                    Swal.fire({
+                        title: '¡Generado!',
+                        text: 'El expediente ha sido generado exitosamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Redirige a la nueva página
+                        window.location.href = `/Denuncia/Solicitud/Info/${expedienteId}`;
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Error',
+                        'Hubo un problema al generar el expediente.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
     

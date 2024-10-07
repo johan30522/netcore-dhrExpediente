@@ -3,8 +3,18 @@
 }
 
 <link rel="stylesheet" href="~/css/sidebar.css">
+<style>
+    .fade-in {
+        opacity: 0;
+        transition: opacity 1s ease-in;
+    }
 
-<div class="d-flex" id="wrapper">
+        .fade-in.show {
+            opacity: 1;
+        }
+</style>
+
+<div class="d-flex fade-in" id="wrapper">
     <!-- Sidebar -->
     @* <div id="wrapper-container" style="display:block"> *@
     <div class="bg-light border-right" id="sidebar-wrapper" style="display:none">
@@ -31,7 +41,7 @@
 
     <!-- /#sidebar-wrapper -->
     <!-- Page Content -->
-    <div id="page-content-wrapper">
+    <div id="page-content-wrapper" class="">
         <div class="container-fluid">
             @RenderBody()
         </div>
@@ -87,8 +97,14 @@
             }
         }
 
+
+
         // Restaurar el estado del sidebar cuando se carga la página
         $(document).ready(function () {
+
+            $('.fade-in').addClass('show');
+
+
             restoreSidebarState();
 
             // Habilitar las transiciones después de que el DOM esté listo
