@@ -112,6 +112,7 @@ builder.Services.AddScoped<IDenunciaService, DenunciaService>();
 builder.Services.AddScoped<IDenuncianteService, DenuncianteService>();
 builder.Services.AddScoped<IExpedienteService, ExpedienteService>();
 builder.Services.AddScoped<IAdjuntoService, AdjuntoService>();
+builder.Services.AddScoped<ILoadFormPropsService, LoadFormPropsService>();
 
 
 

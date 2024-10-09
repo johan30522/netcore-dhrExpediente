@@ -2,16 +2,19 @@
 using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 using AppExpedienteDHR.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace AppExpedienteDHR.Infrastructure.Repositories
 {
     public class LockRecordRepository : Repository<LockRecord>, ILockRecordRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger _logger;
 
-        public LockRecordRepository(ApplicationDbContext context) : base(context)
+        public LockRecordRepository(ApplicationDbContext context, ILogger logger) : base(context)
         {
             _context = context;
+            _logger = logger;
         }
         /// <summary>
         ///  permite bloquear un registro para evitar que otros usuarios lo modifiquen
@@ -23,28 +26,66 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
 
         public async Task<int> LockRecord(int IdLocked, string EntityType, string LockedByUserId)
         {
-            // Verificar si ya existe un registro de bloqueo para el registro solicitado
-            LockRecord existingLockRecord = await _context.LockRecords.FirstOrDefaultAsync(l => l.IdLocked == IdLocked && l.EntityType == EntityType && l.LockedByUserId == LockedByUserId);
-            if (existingLockRecord == null) {
-                // Si no existe, crear un nuevo registro de bloqueo
-                LockRecord lockRecord = new LockRecord
+            int intentos = 0;
+            const int maxIntentos = 3;
+
+            while (intentos < maxIntentos)
+            {
+                try
                 {
-                    IdLocked = IdLocked,
-                    IsLocked = true,
-                    EntityType = EntityType,
-                    LockedByUserId = LockedByUserId,
-                    LockedAt = DateTime.Now
-                };
-                _context.LockRecords.Add(lockRecord);
-                await _context.SaveChangesAsync();
-                return lockRecord.Id;
-            } else {
-                // Si ya existe un registro de bloqueo con el mismo ID, tipo de entidad y usuario, actualizar la fecha de bloqueo
-                existingLockRecord.LockedAt = DateTime.Now;
-                await _context.SaveChangesAsync();
-                return existingLockRecord.Id;
+                    // Verificar si ya existe un registro de bloqueo para el registro solicitado
+                    var existingLockRecord = await _context.LockRecords
+                        .FirstOrDefaultAsync(l => l.IdLocked == IdLocked && l.EntityType == EntityType);
+
+                    if (existingLockRecord == null)
+                    {
+                        // Si no existe, crear un nuevo registro de bloqueo
+                        var lockRecord = new LockRecord
+                        {
+                            IdLocked = IdLocked,
+                            IsLocked = true,
+                            EntityType = EntityType,
+                            LockedByUserId = LockedByUserId,
+                            LockedAt = DateTime.Now
+                        };
+                        _context.LockRecords.Add(lockRecord);
+                        await _context.SaveChangesAsync();
+                        return lockRecord.Id;
+                    }
+                    else
+                    {
+                        // Si ya existe un registro de bloqueo con el mismo ID y tipo de entidad, actualizar la fecha de bloqueo
+                        existingLockRecord.LockedAt = DateTime.Now;
+
+                        // Actualizar el registro, usando concurrencia optimista (RowVersion)
+                        _context.Entry(existingLockRecord).OriginalValues["RowVersion"] = existingLockRecord.RowVersion;
+
+                        await _context.SaveChangesAsync();
+                        return existingLockRecord.Id;
+                    }
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    // Loggear advertencia si hay un conflicto de concurrencia
+                    _logger.Warning(ex, "Error al bloquear el registro {IdLocked} de tipo {EntityType} por el usuario {LockedByUserId}. Intento {intentos}", IdLocked, EntityType, LockedByUserId, intentos);
+                    intentos++;
+
+                    if (intentos >= maxIntentos)
+                    {
+                        _logger.Error(ex, "Se superaron los intentos de bloqueo para el registro {IdLocked} de tipo {EntityType} por el usuario {LockedByUserId}", IdLocked, EntityType, LockedByUserId);
+                        throw; // Lanzar la excepción si se supera el número de intentos
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log any other exceptions
+                    _logger.Error(ex, "Error inesperado al bloquear el registro {IdLocked} de tipo {EntityType} por el usuario {LockedByUserId}", IdLocked, EntityType, LockedByUserId);
+                    throw;
+                }
             }
-           
+
+            return 0;
+
         }
 
         public async Task UnlockRecord(int IdLocked, string EntityType, string LockedByUserId)

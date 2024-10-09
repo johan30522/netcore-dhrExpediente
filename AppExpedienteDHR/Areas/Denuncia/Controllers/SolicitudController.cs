@@ -18,51 +18,30 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
     [Route("Denuncia/[controller]/[action]")]
     public class SolicitudController : Controller
     {
-        private readonly IPadronService _padronService;
-        private readonly IProvinciaService _provinciaService;
-        private readonly ICantonService _cantonService;
-        private readonly IDistritoService _distritoService;
-        private readonly ITipoIdentificacionService _tipoIdentificacionService;
-        private readonly ISexoService _sexoService;
-        private readonly IEstadoCivilService _estadoCivilService;
-        private readonly IPaisService _paisService;
-        private readonly IEscolaridadService _escolaridadService;
+       
         private readonly IDenunciaService _denunciaService;
         private readonly IAdjuntoService _adjuntoService;
         private readonly ILockRecordService _lockRecordService;
         private readonly IUserService _userService;
+        private readonly ILoadFormPropsService _loadFormPropsService;
 
 
 
         public SolicitudController(
-            IPadronService padronService,
-            IProvinciaService provinciaService,
-            ICantonService cantonService,
-            IDistritoService distritoService,
-            ITipoIdentificacionService tipoIdentificacionService,
-            ISexoService sexoService,
-            IEstadoCivilService estadoCivilService,
-            IPaisService paisService,
-            IEscolaridadService escolaridadService,
+           
             IDenunciaService denunciaService,
             IAdjuntoService adjuntoService,
             ILockRecordService lockRecordService,
-            IUserService userService
+            IUserService userService,
+            ILoadFormPropsService loadFormPropsService
             )
         {
-            _padronService = padronService;
-            _provinciaService = provinciaService;
-            _cantonService = cantonService;
-            _distritoService = distritoService;
-            _tipoIdentificacionService = tipoIdentificacionService;
-            _sexoService = sexoService;
-            _estadoCivilService = estadoCivilService;
-            _paisService = paisService;
-            _escolaridadService = escolaridadService;
+            
             _denunciaService = denunciaService;
             _adjuntoService = adjuntoService;
             _lockRecordService = lockRecordService;
             _userService = userService;
+            _loadFormPropsService = loadFormPropsService;
         }
 
 
@@ -84,7 +63,7 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
                 new Breadcrumb { Title = "Creación", Url = Url.Action("Create", "Solicitud"), IsActive = true }
             };
             var model = new DenunciaViewModel();
-            await LoadCatalogs(model);
+            model = await _loadFormPropsService.LoadCatalogsForDenuncia(model);
             model.IsEdit = true;
             return View("DenunciaForm", model);
         }
@@ -104,7 +83,7 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
             }
             else
             {
-                await LoadCatalogs(model);
+                model = await _loadFormPropsService.LoadCatalogsForDenuncia(model);
                 return View("DenunciaForm", model);
             }
             return RedirectToAction("Index");
@@ -119,7 +98,7 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
                 new Breadcrumb { Title = "Información Denuncia", Url = Url.Action("Info", "Solicitud", new { id }), IsActive = true }
             };
             var model = await _denunciaService.GetDenuncia(id);
-            await LoadCatalogs(model);
+            model = await _loadFormPropsService.LoadCatalogsForDenuncia(model);
             model.IsEdit = false;
             return View("DenunciaInfo", model);
         }
@@ -140,8 +119,6 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
             }
 
             // verificar si el registro esta bloqueado
-
-
             var (isLocked, lockedByUserName) = await _lockRecordService.IsRecordLocked(id, "Denuncia");
             if (isLocked)
             {
@@ -151,13 +128,19 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
 
             int lockid = await _lockRecordService.LockRecord(model.Id, "Denuncia",curUser.Id);
 
+            if (lockid == 0)
+            {
+                TempData["ErrorMessage"] = "El registro está siendo editado por otro usuario";
+                return RedirectToAction("Info", new { id });
+            }
+
             ViewData["Breadcrumbs"] = new List<Breadcrumb>
                     {
                         new Breadcrumb { Title = "Denuncias", Url = Url.Action("Index", "Solicitud"), IsActive = false },
                         new Breadcrumb { Title = "Editar Denuncia", Url = Url.Action("Edit", "Solicitud", new { id }), IsActive = true }
                     };
 
-            await LoadCatalogs(model);
+            model = await _loadFormPropsService.LoadCatalogsForDenuncia(model);
 
             // Permitir la edición del modelo
             model.IsEdit = true;
@@ -254,22 +237,7 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
 
 
 
-        private async Task LoadCatalogs(DenunciaViewModel model)
-        {
-            var provincias = await _provinciaService.GetAllProvincias();
-            var sexos = await _sexoService.GetAllSexos();
-            var estadosCiviles = await _estadoCivilService.GetAllEstadoCivil();
-            var tiposIdentificacion = await _tipoIdentificacionService.GetAllTipoIdentificaciones();
-            var paises = await _paisService.GetAllPaises();
-            var escolaridades = await _escolaridadService.GetAllEscolaridades();
 
-            model.ListTiposIdentificacion = tiposIdentificacion;
-            model.ListSexos = sexos;
-            model.ListEstadosCiviles = estadosCiviles;
-            model.ListPaises = paises;
-            model.ListEscolaridades = escolaridades;
-            model.ListProvincias = provincias;
-        }
 
 
         #region api calls
@@ -321,58 +289,7 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
         }
 
 
-        //Obtener el ciudadano por cedula
-        [HttpGet]
-        public async Task<IActionResult> GetCiudadano([FromQuery] string cedula)
-        {
-            var ciudadano = await _padronService.GetCiudadano(cedula);
-
-            if (ciudadano == null)
-            {
-                // Retorna un mensaje de error personalizado con estado 404
-                return NotFound(new { error = "Ciudadano no encontrado" });
-            }
-            return Json(ciudadano);
-        }
-
-        //Obtener los cantones por provincia
-        [HttpGet]
-        public async Task<IActionResult> GetCantones([FromQuery] int provinciaId)
-        {
-            var cantones = await _cantonService.GetAllCantones(provinciaId);
-
-            if (cantones == null)
-            {
-                // return empty list
-                return Json(new List<Canton>());
-            }
-
-            return Json(cantones);
-        }
-
-        //Obtener los distritos por canton
-
-        [HttpGet]
-        public async Task<IActionResult> GetDistritos([FromQuery] int cantonId)
-        {
-            var distritos = await _distritoService.GetAllDistritos(cantonId);
-
-            if (distritos == null)
-            {
-                // return empty list
-                return Json(new List<Distrito>());
-            }
-
-            return Json(distritos);
-        }
-
-
-
-
-
-
-
-
+       
         #endregion
 
 

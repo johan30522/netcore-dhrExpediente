@@ -2,6 +2,7 @@
 
 using AppExpedienteDHR.Core.Domain.Entities.General;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppExpedienteDHR.Core.ViewModels.Dhr
 {
@@ -10,12 +11,16 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
         public int Id { get; set; }
         public int? DenunciaId { get; set; }
         public int? DenuncianteId { get; set; }
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Display(Name = "Detalle")]
         public string Detalle { get; set; }
         public DateTime? FechaCreacion { get; set; }
-        public string? Petitoria { get; set; }
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Display(Name = "Petitoria")]
+        public string Petitoria { get; set; }
         public DateTime? FechaDenuncia { get; set; } = DateTime.Now;
         public int? PersonaAfectadaId { get; set; }
-        public bool? IncluyePersonaAfectada { get; set; } = false;
+        public bool IncluyePersonaAfectada { get; set; } = false;
 
 
         // Archivos adjuntos (Subidos por el usuario)
@@ -25,7 +30,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
 
         // Relacionados
         public DenunciaViewModel? Denuncia { get; set; }
-        public DenuncianteViewModel? Denunciante { get; set; }
+        public DenuncianteViewModel Denunciante { get; set; }
         public PersonaAfectadaViewModel? PersonaAfectada { get; set; }
         public IEnumerable<DenunciaAdjuntoViewModel>? DenunciaAdjuntos { get; set; }
 

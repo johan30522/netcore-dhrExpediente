@@ -9,6 +9,7 @@ using AppExpedienteDHR.Core.Domain.Entities.Dhr;
 using AppExpedienteDHR.Infrastructure.Repositories.Dhr;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.Dhr;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
+using Serilog;
 
 
 
@@ -18,12 +19,15 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly CatalogDbContext _catalogContext;
+        private readonly ILogger _logger;
 
 
-        public ContainerWork(ApplicationDbContext context, CatalogDbContext catalogContext)
+
+        public ContainerWork(ApplicationDbContext context, CatalogDbContext catalogContext, ILogger logger)
         {
             _context = context;
             _catalogContext = catalogContext;
+            _logger = logger;
 
             Category = new CategoryRepository(_context);
             User = new UserRepository(_context);
@@ -61,7 +65,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             Adjunto = new AdjuntoRepository(_context);
 
 
-            LockRecord = new LockRecordRepository(_context);
+            LockRecord = new LockRecordRepository(_context, _logger);
 
 
 

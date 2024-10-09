@@ -22,6 +22,10 @@ namespace AppExpedienteDHR.Core.Domain.Entities
         [ForeignKey("LockedByUserId")]
         public ApplicationUser LockedByUser { get; set; }
 
+        // Agregar la propiedad RowVersion para concurrencia optimista
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
         public LockRecord()
         {
             LockedAt = DateTime.Now;

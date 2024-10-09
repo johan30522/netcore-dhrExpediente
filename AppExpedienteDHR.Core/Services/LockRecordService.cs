@@ -27,6 +27,10 @@ namespace AppExpedienteDHR.Core.Services
             try
             {
                 int id = await _containerWork.LockRecord.LockRecord(IdLocked, EntityType, LockedByUserId);
+                if (id == 0)
+                {
+                    _logger.Error("Error al bloquear registro");
+                }
                 return id;
             }
             catch (Exception ex)

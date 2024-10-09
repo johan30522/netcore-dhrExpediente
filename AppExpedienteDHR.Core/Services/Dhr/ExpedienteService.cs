@@ -60,7 +60,7 @@ namespace AppExpedienteDHR.Core.Services.Dhr
 
         public async Task<ExpedienteViewModel> GetExpediente(int id)
         {
-            var expediente = await _containerWork.Expediente.Get(id);
+            var expediente = await _containerWork.Expediente.GetFirstOrDefault(e => e.Id == id, includeProperties: "Denunciante,PersonaAfectada");
             return _mapper.Map<ExpedienteViewModel>(expediente);
         }
 
@@ -69,16 +69,6 @@ namespace AppExpedienteDHR.Core.Services.Dhr
         {
             try
             {
-
-                //(IEnumerable<Expediente> expedientes, int total) = await _containerWork.Expediente.GetAllPaginated(
-                //    filter: null, // No se necesita un filtro inicial en este caso
-                //    includeProperties: "Denunciante", // Incluir la propiedad relacionada "Denunciante"
-                //    pageIndex: pageIndex,
-                //    pageSize: pageSize,
-                //    searchValue: searchValue,
-                //    searchColumns: "Denunciante.Nombre,Detalle", // Columnas donde se aplicará la búsqueda
-                //    sortColumn: sortColumn,
-                //    sortDirection: sortDirection); 
                 (IEnumerable<ExpedienteItemListViewModel> expedientes, int total) = await _containerWork.Expediente.GetExpedientesWithFlowPaginated(
                     pageIndex: pageIndex,
                     pageSize: pageSize,

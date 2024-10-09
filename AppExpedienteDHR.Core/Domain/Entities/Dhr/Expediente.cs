@@ -18,6 +18,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
         [StringLength(1000)]
         public string? Petitoria { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
+        public bool IncluyePersonaAfectada { get; set; } = false;
 
         // Navegaciones
         [ForeignKey("DenunciaId")]

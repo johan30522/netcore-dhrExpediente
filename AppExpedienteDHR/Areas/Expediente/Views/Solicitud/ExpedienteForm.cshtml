@@ -17,6 +17,8 @@
 
 <link rel="stylesheet" href="~/css/expedienteForm.css">
 <link rel="stylesheet" href="~/css/workflow.css">
+<link rel="stylesheet" href="~/css/denunciaForm.css">
+<link rel="stylesheet" href="~/css/file-upload.css">
 
 <div class="container">
     <div class="header-container mb-4 p-3 rounded shadow-sm">
@@ -77,10 +79,33 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="mb-3">
-                        <label for="Detalle" class="form-label"><strong>Detalle</strong></label>
-                        <textarea asp-for="Detalle" class="form-control" style="height: 100px;" disabled="@(!Model.IsEdit)"></textarea>
-                        <span asp-validation-for="Detalle" class="text-danger text-center"></span>
+                    <!-- Pestañas Verticales -->
+                    <div class="col-md-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-general-tab" data-bs-toggle="pill" href="#v-pills-general" role="tab" aria-controls="v-pills-general" aria-selected="true">Datos Generales</a>
+                            <a class="nav-link" id="v-pills-denunciante-tab" data-bs-toggle="pill" href="#v-pills-denunciante" role="tab" aria-controls="v-pills-denunciante" aria-selected="false">Denunciante</a>
+                            <a class="nav-link" id="v-pills-persona-afectada-tab" data-bs-toggle="pill" href="#v-pills-persona-afectada" role="tab" aria-controls="v-pills-persona-afectada" aria-selected="false">Persona Afectada</a>
+                        </div>
+                    </div>
+
+                    <!-- Contenido de las Pestañas -->
+                    <div class="col-md-9">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <!-- Sección de Datos Generales -->
+                            <div class="tab-pane fade show active" id="v-pills-general" role="tabpanel" aria-labelledby="v-pills-general-tab">
+                                <partial name="/Areas/Expediente/Views/Shared/_DatosDenunciaPartial.cshtml" model="Model" />
+                            </div>
+
+                            <!-- Sección del Denunciante -->
+                            <div class="tab-pane fade" id="v-pills-denunciante" role="tabpanel" aria-labelledby="v-pills-denunciante-tab">
+                                <partial name="/Areas/Expediente/Views/Shared/_DenunciantePartial.cshtml" model="Model" />
+                            </div>
+
+                            <!-- Sección de Persona Afectada -->
+                            <div class="tab-pane fade" id="v-pills-persona-afectada" role="tabpanel" aria-labelledby="v-pills-persona-afectada-tab">
+                                <partial name="/Areas/Expediente/Views/Shared/_PersonaAfectadaPartial.cshtml" model="Model" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -96,8 +121,10 @@
     @section Scripts {
         @{
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
-            <script src="~/js/lockRecord.js"></script>
-            <script src="~/js/flow/workflowSolictud.js"></script>
+                <script src="~/js/lockRecord.js"></script>
+                <script src="~/js/flow/workflowSolictud.js"></script>
+                <script src="~/js/dhr/denuncia.js"></script>
+                <script src="~/js/file-upload.js"></script>
         }
         <script>
             const expedienteId = '@expedienteId';
@@ -112,6 +139,47 @@
 
 
             $(document).ready(function () {
+
+
+                //Inicializa el manejo de bloqueos de registro
+                // si  tiene un expedienteId y esta en modo edición
+                if (isEditMode && expedienteId !== '0') {
+                    console.log("Iniciando bloqueo de registro");
+                    initLockRecord(lockRecordId);
+                }
+                if (isEditMode) {
+                    // Por defecto: si la denuncia es nueva si tiene un id, los campos están deshabilitados
+                    if (!denunciaId) { // si no tiene denunciaId
+                        // Deshabilitar los campos de la denuncia si no está en modo edición
+                        limpiarCamposPersonaAfectada();
+                    } else {
+                        // carga los campos de canton y distrito segun seleccion
+                        var provinciaSeleccionada = "@(Model.Denunciante?.ProvinciaCodigo)";
+                        var cantonSeleccionado = "@(Model.Denunciante?.CantonCodigo)";
+                        var distritoSeleccionado = "@(Model.Denunciante?.DistritoCodigo)";
+
+                        if (provinciaSeleccionada) {
+                            cargarCantonesYDistritos(provinciaSeleccionada, cantonSeleccionado, distritoSeleccionado);
+                        }
+                    }
+                }
+
+
+                //Inicializa el manejo de bloqueos de registro
+                // si  tiene un expedienteId y esta en modo edición
+                if (isEditMode && expedienteId !== '0') {
+                    console.log("Iniciando bloqueo de registro");
+                    initLockRecord(lockRecordId);
+                }
+                if (isEditMode) {
+                    // Por defecto: si la denuncia es nueva si tiene un id, los campos están deshabilitados
+                    if (!denunciaId) {
+                        // Deshabilitar los campos de la denuncia si no está en modo edición
+                        limpiarCamposPersonaAfectada();
+                    }
+                }
+
+
                 $('#modalSeleccionarAccion').on('show.bs.modal', function (event) {
 
                     // Asumimos que estos valores (flowId y currentStateId) se obtienen de tu vista actual
@@ -130,6 +198,19 @@
                     } else {
                         window.history.back(); // O usa el historial si no hay vista guardada
                     }
+                });
+
+                //Tabs
+                // Restaurar la pestaña activa desde localStorage
+                var activeTab = localStorage.getItem('activeTab');
+                if (activeTab) {
+                    $('#v-pills-tab a[href="' + activeTab + '"]').tab('show');
+                }
+
+                // Guardar la pestaña activa en localStorage al cambiar de pestaña
+                $('#v-pills-tab a').on('shown.bs.tab', function (e) {
+                    var tabId = $(e.target).attr('href');
+                    localStorage.setItem('activeTab', tabId);
                 });
             });
 

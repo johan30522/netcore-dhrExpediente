@@ -4,7 +4,7 @@
     // Manejar cambio de provincia y cargar cantones
     $('#provinciaSelect').change(function () {
         var provinciaId = $(this).val();
-        $.get('/Denuncia/Solicitud/GetCantones', { provinciaId: provinciaId }, function (cantones) {
+        $.get('/General/Utils/GetCantones', { provinciaId: provinciaId }, function (cantones) {
             var cantonSelect = $('#cantonSelect');
             cantonSelect.empty();
             cantonSelect.append('<option value="">Seleccione un cantón</option>');
@@ -19,7 +19,7 @@
     // Manejar cambio de cantón y cargar distritos
     $('#cantonSelect').change(function () {
         var cantonId = $(this).val();
-        $.get('/Denuncia/Solicitud/GetDistritos', { cantonId: cantonId }, function (distritos) {
+        $.get('/General/Utils/GetDistritos', { cantonId: cantonId }, function (distritos) {
             var distritoSelect = $('#distritoSelect');
             distritoSelect.empty();
             distritoSelect.append('<option value="">Seleccione un distrito</option>');
@@ -52,7 +52,7 @@
         }
 
         // Llamada al API para obtener el ciudadano
-        $.get('/Denuncia/Solicitud/GetCiudadano', { cedula: cedula }, function (data) {
+        $.get('/General/Utils/GetCiudadano', { cedula: cedula }, function (data) {
             // Si se obtiene la información del ciudadano, llenar los campos
             $('#nombreDenunciante').val(data.nombre);
             $('#primerApellidoDenunciante').val(data.apellido1);
@@ -100,34 +100,7 @@
     });
 
 
-    //// Validar el campo de Aceptar Términos y SweetAlert para confirmar el envío del formulario
-    //$('#formDenuncia').on('submit', function (e) {
-    //    e.preventDefault(); // Detener el envío del formulario
-
-    //    // Validar el checkbox de Acepta los Términos
-    //    var aceptaTerminos = $('#aceptaTerminosCheckbox').is(':checked');
-    //    if (!aceptaTerminos) {
-    //        $('#aceptaTerminosCheckbox').addClass('is-invalid');
-    //        return;
-    //    } else {
-    //        $('#aceptaTerminosCheckbox').removeClass('is-invalid').addClass('is-valid');
-    //    }
-
-    //    // Mostrar el SweetAlert de confirmación
-    //    Swal.fire({
-    //        title: '¿Está seguro de que desea guardar?',
-    //        text: "No podrá deshacer esta acción.",
-    //        icon: 'warning',
-    //        showCancelButton: true,
-    //        confirmButtonText: 'Sí, guardar',
-    //        cancelButtonText: 'No, cancelar'
-    //    }).then((result) => {
-    //        if (result.isConfirmed) {
-    //            // Enviar el formulario si el usuario confirma
-    //            $('form').off('submit').submit();
-    //        }
-    //    });
-    //});
+    
 
 });
 
@@ -143,7 +116,7 @@ function limpiarCamposPersonaAfectada() {
 function cargarCantonesYDistritos(provinciaSeleccionada, cantonSeleccionado, distritoSeleccionado) {
     if (provinciaSeleccionada) {
         // Cargar los cantones según la provincia seleccionada
-        $.get('/Denuncia/Solicitud/GetCantones', { provinciaId: provinciaSeleccionada }, function (cantones) {
+        $.get('/General/Utils/GetCantones', { provinciaId: provinciaSeleccionada }, function (cantones) {
             var cantonSelect = $('#cantonSelect');
             cantonSelect.empty();
             cantonSelect.append('<option value="">Seleccione un cantón</option>');
@@ -154,7 +127,7 @@ function cargarCantonesYDistritos(provinciaSeleccionada, cantonSeleccionado, dis
 
             // Si hay un cantón seleccionado, cargar los distritos correspondientes
             if (cantonSeleccionado) {
-                $.get('/Denuncia/Solicitud/GetDistritos', { cantonId: cantonSeleccionado }, function (distritos) {
+                $.get('/General/Utils/GetDistritos', { cantonId: cantonSeleccionado }, function (distritos) {
                     var distritoSelect = $('#distritoSelect');
                     distritoSelect.empty();
                     distritoSelect.append('<option value="">Seleccione un distrito</option>');

@@ -1,8 +1,10 @@
 ﻿using AppExpedienteDHR.Core.Models;
+using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ServiceContracts.Dhr;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.Services.Dhr;
 using AppExpedienteDHR.Core.ViewModels.Dhr;
+using AppExpedienteDHR.Core.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +18,24 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
         private readonly IExpedienteService _expedienteService;
         private readonly IWorkflowService _workflowService;
         private readonly Serilog.ILogger _logger;
+        private readonly ILoadFormPropsService _loadFormPropsService;
+        private readonly ILockRecordService _lockRecordService;
+        private readonly IUserService _userService;
 
-        public SolicitudController(IExpedienteService expedienteService, IWorkflowService workflowService, Serilog.ILogger logger)
+        public SolicitudController(
+            IExpedienteService expedienteService, 
+            IWorkflowService workflowService, 
+            Serilog.ILogger logger, 
+            ILoadFormPropsService loadFormPropsService, 
+            ILockRecordService lockRecordService,
+            IUserService userService
+            )
         {
             _expedienteService = expedienteService;
             _workflowService = workflowService;
+            _loadFormPropsService = loadFormPropsService;
+            _lockRecordService = lockRecordService;
+            _userService = userService;
             _logger = logger;
         }
 
@@ -56,7 +71,7 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task <IActionResult> Create()
         {
             ViewData["Breadcrumbs"] = new List<Breadcrumb>
             {
@@ -64,6 +79,7 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
                 new Breadcrumb { Title = "Solicitud", Url = Url.Action("Create", "Solicitud"), IsActive = true }
             };
             var model = new ExpedienteViewModel();
+            model= await _loadFormPropsService.LoadCatalogsForExpediente(model);
             model.IsEdit = true;
             return View("ExpedienteForm", model);
         }
@@ -73,6 +89,11 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             if (id == 0)
             {
                 return RedirectToAction("Index");
+            }
+            UserViewModel curUser = await _userService.GetCurrentUser();
+            if (curUser == null)
+            {
+                return RedirectToAction("Info", new { id = id });
             }
             // se obtiene el encabezado de Flujo de la solicitud
             var flowRequestHeader = await _workflowService.GetFlowRequestHeader(id, "Expediente");
@@ -89,6 +110,25 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             }
             // se obtiene el expediente
             var model = await _expedienteService.GetExpediente(id);
+            if (model == null)
+            {
+                return RedirectToAction("Index");
+            }
+            // verificar si el registro esta bloqueado
+            var (isLocked, lockedByUserName) = await _lockRecordService.IsRecordLocked(id, "Expediente");
+            if (isLocked)
+            {
+                TempData["ErrorMessage"] = "El registro está siendo editado por: " + lockedByUserName;
+                return RedirectToAction("Info", new { id });
+            }
+            // bloquear el registro
+            int lockid = await _lockRecordService.LockRecord(model.Id, "Expediente", curUser.Id);
+            if (lockid == 0)
+            {
+                TempData["ErrorMessage"] = "El registro está siendo editado por otro usuario";
+                return RedirectToAction("Info", new { id });
+            }
+
             // Se agregan las migas de pan
             // Obtén el valor de la vista previa desde sessionStorage en el cliente
             string previousView = HttpContext.Session.GetString("PreviousView") ?? "Index";
@@ -104,14 +144,15 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             }
 
             //Agregan campos de control
+            model.LockedRecordId = lockid;
             model.FlowWfId = flowRequestHeader.FlowId;
             model.FlowHeaderWfId = flowRequestHeader.Id;
             model.StateWfId = flowRequestHeader.CurrentStateId;
             model.StateWfName = flowRequestHeader.CurrentState.Name;
             model.FlowWfName = flowRequestHeader.Flow.Name;
             model.CreatedDate = flowRequestHeader.CreatedDate;
-
-
+            // cargan los catálogos
+            model= await _loadFormPropsService.LoadCatalogsForExpediente(model);
             model.IsEdit = true;
             return View("ExpedienteForm", model);
         }
@@ -156,6 +197,8 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             model.CreatedDate = flowRequestHeader.CreatedDate;
 
             model.IsEdit = false;
+            // cargan los catálogos
+            model= await _loadFormPropsService.LoadCatalogsForExpediente(model);
             return View("ExpedienteForm", model);
         }
         [HttpPost]
