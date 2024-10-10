@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AppExpedienteDHR.Core.ViewModels.User;
 using AppExpedienteDHR.Core.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using AppExpedienteDHR.Core.Models;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
@@ -21,6 +22,10 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                {
+                    new Breadcrumb { Title = "Configuración", Url = Url.Action("Index", "User"), IsActive = false }
+                };
             return View();
         }
 
@@ -29,6 +34,11 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         {
             UserViewModel userViewModel = new UserViewModel();
             IEnumerable<SelectListItem> roles = await _userService.GetListUserRoles();
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                {
+                    new Breadcrumb { Title = "Configuración", Url = Url.Action("Index", "User"), IsActive = false },
+                    new Breadcrumb { Title = "Crear Usuario", Url = Url.Action("Create", "User"), IsActive = true }
+                };
 
             UserFormViewModel userFormViewModel = new UserFormViewModel
             {
@@ -59,6 +69,11 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewData["Breadcrumbs"] = new List<Breadcrumb>
+                {
+                    new Breadcrumb { Title = "Configuración", Url = Url.Action("Index", "User"), IsActive = false },
+                    new Breadcrumb { Title = "Editar Usuario", Url = Url.Action("Create", "User"), IsActive = true }
+                };
             List<string> userRoles = await _userService.GetUserRoles(id);
             IEnumerable<SelectListItem> roles = await _userService.GetListUserRoles();
 

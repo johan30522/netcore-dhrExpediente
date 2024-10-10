@@ -5,6 +5,7 @@ using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.Services.Dhr;
 using AppExpedienteDHR.Core.ViewModels.Dhr;
 using AppExpedienteDHR.Core.ViewModels.User;
+using AppExpedienteDHR.Utils.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -204,6 +205,11 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(ExpedienteViewModel model)
         {
+            if (!model.IncluyePersonaAfectada)
+            {
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "PersonaAfectada");
+
+            }
             if (ModelState.IsValid)
             {
                 // si el modelo tiene un id, es porque es una edición

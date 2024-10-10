@@ -49,7 +49,7 @@
                                 <span class="visually-hidden">(current)</span>
                             </a>
                         </li>
-                        @if (User.IsInRole(Roles.Admin))
+                       @*  @if (User.IsInRole(Roles.Admin))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Administración</a>
@@ -60,7 +60,7 @@
                                     <div class="dropdown-divider"></div>
                                 </div>
                             </li>
-                        }
+                        } *@
                     </ul>
                     @if (SignInManager.IsSignedIn(User))
                     {

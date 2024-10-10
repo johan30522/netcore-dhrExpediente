@@ -99,15 +99,47 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         }
         public async Task<bool> KeepAliveLock(int Id)
         {
-            LockRecord lockRecord = await _context.LockRecords.FirstOrDefaultAsync(l => l.Id == Id);
-            if (lockRecord != null)
+            const int maxIntentos = 3;
+            int intentos = 0;
+
+            while (intentos < maxIntentos)
             {
-                lockRecord.LockedAt = DateTime.Now;
-                int rowsAffected = await _context.SaveChangesAsync();
-                return rowsAffected > 0;
-               
+                try
+                {
+                    LockRecord lockRecord = await _context.LockRecords.FirstOrDefaultAsync(l => l.Id == Id);
+                    if (lockRecord != null)
+                    {
+                        // Guardar la versión original del RowVersion
+                        _context.Entry(lockRecord).OriginalValues["RowVersion"] = lockRecord.RowVersion;
+
+                        lockRecord.LockedAt = DateTime.Now;
+                        int rowsAffected = await _context.SaveChangesAsync();
+
+                        return rowsAffected > 0; // Si se guardaron los cambios, retornamos true
+                    }
+                    return false;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    // Loggear advertencia si hay un conflicto de concurrencia
+                    _logger.Warning(ex, "Conflicto de concurrencia al intentar actualizar el lock {Id}. Intento {intentos}", Id, intentos);
+                    intentos++;
+
+                    if (intentos >= maxIntentos)
+                    {
+                        _logger.Error(ex, "Se superaron los intentos para mantener vivo el lock {Id}", Id);
+                        throw; // Lanzar la excepción si se supera el número de intentos
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Loggear cualquier otra excepción
+                    _logger.Error(ex, "Error inesperado al intentar mantener vivo el lock {Id}", Id);
+                    throw;
+                }
             }
-            return false;
+
+            return false; // Retornar false si no se pudo actualizar el registro
         }
 
 

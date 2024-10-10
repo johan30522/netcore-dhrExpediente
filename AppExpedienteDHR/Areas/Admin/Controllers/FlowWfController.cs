@@ -1,11 +1,9 @@
-﻿using AppExpedienteDHR.Core.Services;
-using AppExpedienteDHR.Core.ViewModels.User;
+﻿
 using AppExpedienteDHR.Core.ViewModels.Workflow;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AppExpedienteDHR.Utils.Validation;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
-using NuGet.Protocol;
 using AppExpedienteDHR.Core.Models;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
@@ -31,7 +29,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         {
             ViewData["Breadcrumbs"] = new List<Breadcrumb>
                 {
-                    new Breadcrumb { Title = "Flujos", Url = Url.Action("Index", "FlowWf"), IsActive = true }
+                    new Breadcrumb { Title = "Configuración", Url = Url.Action("Index", "FlowWf"), IsActive = true }
                 };
             return View();
         }
@@ -41,7 +39,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         {
             ViewData["Breadcrumbs"] = new List<Breadcrumb>
                 {
-                    new Breadcrumb { Title = "Flujos", Url = Url.Action("Index", "FlowWf"), IsActive = false },
+                    new Breadcrumb { Title = "Configuración", Url = Url.Action("Index", "FlowWf"), IsActive = false },
                     new Breadcrumb { Title = "Crear Flujo", Url = Url.Action("Create", "FlowWf"), IsActive = true }
                 };
 
@@ -57,7 +55,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         {
             ViewData["Breadcrumbs"] = new List<Breadcrumb>
                 {
-                    new Breadcrumb { Title = "Flujos", Url = Url.Action("Index", "FlowWf"), IsActive = false },
+                    new Breadcrumb { Title = "Configuración", Url = Url.Action("Index", "FlowWf"), IsActive = false },
                     new Breadcrumb { Title = "Editar Flujo", Url = Url.Action("Edit", "FlowWf"), IsActive = true }
                 };
             FlowWfViewModel flowViewModel = await _flowWfService.GetFlow(id);

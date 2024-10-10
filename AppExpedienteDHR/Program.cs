@@ -113,6 +113,7 @@ builder.Services.AddScoped<IDenuncianteService, DenuncianteService>();
 builder.Services.AddScoped<IExpedienteService, ExpedienteService>();
 builder.Services.AddScoped<IAdjuntoService, AdjuntoService>();
 builder.Services.AddScoped<ILoadFormPropsService, LoadFormPropsService>();
+builder.Services.AddScoped<IPersonaAfectadaService, PersonaAfectadaService>();
 
 
 
@@ -138,6 +139,9 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true; // Asegura que la cookie de la sesión solo sea accesible vía HTTP
     options.Cookie.IsEssential = true; // Hace que la cookie de sesión sea esencial para el funcionamiento de la app
 });
+
+// se habilita MemoryCache
+builder.Services.AddMemoryCache();
 
 
 var app = builder.Build();

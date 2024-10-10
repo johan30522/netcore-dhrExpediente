@@ -19,6 +19,7 @@ function setKeepAliveLockRecord(recordId) {
             .then(response => response.json())
             .then(data => {
                 //console.log("heartbeat enviado");
+                //console.log(`Resultado del heartbeat: ${data.success}`);
                 if (!data.success) {
                     console.log(`No se puede mantener el bloqueo. Error: ${data.error}`);
                     alert("No se pudo mantener el bloqueo. Posiblemente la solicitud ha sido desbloqueada.");

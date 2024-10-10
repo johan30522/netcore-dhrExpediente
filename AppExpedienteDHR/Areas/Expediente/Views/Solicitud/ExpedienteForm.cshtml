@@ -124,7 +124,7 @@
                 <script src="~/js/lockRecord.js"></script>
                 <script src="~/js/flow/workflowSolictud.js"></script>
                 <script src="~/js/dhr/denuncia.js"></script>
-                <script src="~/js/file-upload.js"></script>
+                // <script src="~/js/file-upload.js"></script>
         }
         <script>
             const expedienteId = '@expedienteId';
@@ -142,14 +142,9 @@
 
 
                 //Inicializa el manejo de bloqueos de registro
-                // si  tiene un expedienteId y esta en modo edición
-                if (isEditMode && expedienteId !== '0') {
-                    console.log("Iniciando bloqueo de registro");
-                    initLockRecord(lockRecordId);
-                }
                 if (isEditMode) {
                     // Por defecto: si la denuncia es nueva si tiene un id, los campos están deshabilitados
-                    if (!denunciaId) { // si no tiene denunciaId
+                    if (!expedienteId) { // si no tiene expedienteId
                         // Deshabilitar los campos de la denuncia si no está en modo edición
                         limpiarCamposPersonaAfectada();
                     } else {
@@ -163,21 +158,13 @@
                         }
                     }
                 }
-
-
                 //Inicializa el manejo de bloqueos de registro
                 // si  tiene un expedienteId y esta en modo edición
                 if (isEditMode && expedienteId !== '0') {
                     console.log("Iniciando bloqueo de registro");
                     initLockRecord(lockRecordId);
                 }
-                if (isEditMode) {
-                    // Por defecto: si la denuncia es nueva si tiene un id, los campos están deshabilitados
-                    if (!denunciaId) {
-                        // Deshabilitar los campos de la denuncia si no está en modo edición
-                        limpiarCamposPersonaAfectada();
-                    }
-                }
+
 
 
                 $('#modalSeleccionarAccion').on('show.bs.modal', function (event) {

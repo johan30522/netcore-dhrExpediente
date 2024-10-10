@@ -18,44 +18,118 @@ namespace AppExpedienteDHR.Core.Services.Dhr
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
+        private readonly IDenuncianteService _denuncianteService;
+        private readonly IPersonaAfectadaService _personaAfectadaService;
 
 
-        public ExpedienteService(IContainerWork containerWork, IMapper mapper, IWorkflowService workflowService, IConfiguration configuration, ILogger logger)
+        public ExpedienteService(
+            IContainerWork containerWork,
+            IMapper mapper, 
+            IWorkflowService workflowService,
+            IConfiguration configuration, 
+            ILogger logger,
+            IDenuncianteService denuncianteService,
+            IPersonaAfectadaService personaAfectadaService
+            )
         {
             _containerWork = containerWork;
             _mapper = mapper;
             _workflowService = workflowService;
             _configuration = configuration;
             _logger = logger;
+            _denuncianteService = denuncianteService;
+            _personaAfectadaService = personaAfectadaService;
+
         }
 
 
         public async Task<ExpedienteViewModel> CreateExpediente(ExpedienteViewModel viewModel)
         {
-            var expediente = _mapper.Map<Expediente>(viewModel);
-            await _containerWork.Expediente.Add(expediente);
-            await _containerWork.Save();
-
-
-            //Obtiene el Flujo de trabajo de Expediente
-            //TODO: El id del flujo de trabajo debe ser parametrizado
-            var flow = await _containerWork.FlowWf.Get(_configuration.GetValue<int>("FlowAppCodes:Expediente"));
-            if (flow == null)
+            try
             {
-                throw new Exception("No se encontró el flujo de trabajo de Expediente");
+                Expediente expediente = _mapper.Map<Expediente>(viewModel);
+                Denunciante denunciante;
+                PersonaAfectada personaAfectada;
+
+
+                if(viewModel.Denunciante != null)
+                {
+                   denunciante = await _denuncianteService.CreateOrUpdate(viewModel.Denunciante);
+                expediente.Denunciante = null;
+                expediente.DenuncianteId = denunciante.Id;
+                }
+                if (expediente.IncluyePersonaAfectada == true)
+                {
+                    if (viewModel.PersonaAfectada != null)
+                    {
+                        personaAfectada = await _personaAfectadaService.CreateOrUpdate(viewModel.PersonaAfectada);
+                        expediente.PersonaAfectada = null;
+                        expediente.PersonaAfectadaId = personaAfectada.Id;
+                    }
+                }
+                else
+                {
+                    expediente.PersonaAfectadaId = null;
+                    expediente.PersonaAfectada = null;
+                }
+                await _containerWork.Expediente.Add(expediente);
+                await _containerWork.Save();
+                //Obtiene el Flujo de trabajo de Expediente
+                var flow = await _containerWork.FlowWf.Get(_configuration.GetValue<int>("FlowAppCodes:Expediente"));
+                if (flow == null)
+                {
+                    throw new Exception("No se encontró el flujo de trabajo de Expediente");
+                }
+                //Crea el encabezado del flujo de trabajo
+                var flowRequestHeader = await _workflowService.CreateFlowRequestHeader<Expediente>(expediente.Id, "Expediente", flow.Id);
+
+                return _mapper.Map<ExpedienteViewModel>(expediente);
             }
-            //Crea el encabezado del flujo de trabajo
-            var flowRequestHeader = await _workflowService.CreateFlowRequestHeader<Expediente>(expediente.Id, "Expediente", flow.Id);
-
-
-            return _mapper.Map<ExpedienteViewModel>(expediente);
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error creating Expediente");
+                throw;
+            }
         }
 
         public async Task UpdateExpediente(ExpedienteViewModel viewModel)
         {
-            var expediente = _mapper.Map<Expediente>(viewModel);
+            try
+            { 
+            Expediente expediente = _mapper.Map<Expediente>(viewModel);
+            Denunciante denunciante;
+            PersonaAfectada personaAfectada;
+
+           // Crea o actualiza el denunciante
+           if (viewModel.Denunciante != null)
+            {
+                denunciante = await _denuncianteService.CreateOrUpdate(viewModel.Denunciante);
+                expediente.Denunciante = null;
+                expediente.DenuncianteId = denunciante.Id;
+            }
+
+           // Si el expediente incluye persona afectada, crea o actualiza la persona afectada
+           if (expediente.IncluyePersonaAfectada == true)
+            {
+                if (viewModel.PersonaAfectada != null)
+                {
+                    personaAfectada = await _personaAfectadaService.CreateOrUpdate(viewModel.PersonaAfectada);
+                    expediente.PersonaAfectada = null;
+                    expediente.PersonaAfectadaId = personaAfectada.Id;
+                }
+            } else
+                    {
+                expediente.PersonaAfectadaId = null;
+                expediente.PersonaAfectada = null;
+            }
             await _containerWork.Expediente.Update(expediente);
             await _containerWork.Save();
+                }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error updating Expediente");
+                throw;
+            }
         }
 
         public async Task<ExpedienteViewModel> GetExpediente(int id)

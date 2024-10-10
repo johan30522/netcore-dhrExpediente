@@ -11,7 +11,10 @@
         <!-- Tarjeta de Módulo 1 -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card shadow-sm">
-                <img src="~/images/Denuncia.jpg" class="card-img-top" alt="Módulo 1">
+                <a href="@Url.Action("Index", "Solicitud", new { area = "Denuncia" })">
+                    <img src="~/images/Denuncia.jpg" class="card-img-top" alt="Module 1">
+                </a>
+              
                 <div class="card-body text-center">
                     <h5 class="card-title mt-3">Denuncias</h5>
                     <p class="card-text">Módulo de mantenimiento de denuncias.</p>
@@ -24,7 +27,10 @@
         <!-- Tarjeta de Módulo 2 -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card shadow-sm">
-                <img src="~/images/Expediente.jpg" class="card-img-top" alt="Módulo 2">
+                <a href="@Url.Action("Index", "Solicitud", new { area = "Expediente" })">
+                    <img src="~/images/Expediente.jpg" class="card-img-top" alt="Module 1">
+                </a>
+
                 <div class="card-body text-center">
                     <h5 class="card-title mt-3">Expediente</h5>
                     <p class="card-text">Flujo de Expediente DHR.</p>
@@ -37,7 +43,10 @@
         <!-- Tarjeta de Módulo 3 -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card shadow-sm">
-                <img src="~/images/Documentacion.jpg" class="card-img-top" alt="Módulo 2">
+
+                <a href="@Url.Action("Index", "Solicitud", new { area = "Expediente" })">
+                    <img src="~/images/Documentacion.jpg" class="card-img-top" alt="Module 1">
+                </a>
                 <div class="card-body text-center">
                     <h5 class="card-title mt-3">Documentación</h5>
                     <p class="card-text">Módulo de Administración de Documentos.</p>
@@ -53,10 +62,12 @@
         {
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card shadow-sm">
-                    <img src="~/images/workflow.jpg" class="card-img-top" alt="Módulo 2">
+                    <a href="@Url.Action("Index", "FlowWf", new { area = "Admin" })">
+                        <img src="~/images/Documentacion.jpg" class="card-img-top" alt="Module 1">
+                    </a>
                     <div class="card-body text-center">
-                        <h5 class="card-title mt-3">Flujos de Trabajo</h5>
-                        <p class="card-text">Administración de flujos de trabajo del Sistema.</p>
+                        <h5 class="card-title mt-3">Configuración General</h5>
+                        <p class="card-text">Módulo de Administración.</p>
                     </div>
                     <div class="card-footer text-muted">
                         <a class="btn btn-primary" asp-area="Admin" asp-controller="FlowWf" asp-action="Index">Ir al Módulo</a>
