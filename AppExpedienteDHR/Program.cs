@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using Microsoft.Extensions.Options;
 using AppExpedienteDHR.Core.Models;
+using AppExpedienteDHR.Core.ServiceContracts.Admin;
+using AppExpedienteDHR.Core.Services.Admin;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,6 +79,7 @@ builder.Services.AddAutoMapper(typeof(FlowWfProfile));
 builder.Services.AddAutoMapper(typeof(GroupWfProfile));
 builder.Services.AddAutoMapper(typeof(ActionRuleWfProfile));
 builder.Services.AddAutoMapper(typeof(DhrProfile));
+builder.Services.AddAutoMapper(typeof(AdminProfile));
 
 
 
@@ -114,6 +117,13 @@ builder.Services.AddScoped<IExpedienteService, ExpedienteService>();
 builder.Services.AddScoped<IAdjuntoService, AdjuntoService>();
 builder.Services.AddScoped<ILoadFormPropsService, LoadFormPropsService>();
 builder.Services.AddScoped<IPersonaAfectadaService, PersonaAfectadaService>();
+
+//services admin
+builder.Services.AddScoped<IEventoTipologiaService, EventoTipologiaService>();
+builder.Services.AddScoped<IDescriptorTipologiaService, DescriptorTipologiaService>();
+builder.Services.AddScoped<IEspecificidadTipologiaService, EspecificidadTipologiaService>();
+builder.Services.AddScoped<IDerechoTipologiaService, DerechoTipologiaService>();
+
 
 
 

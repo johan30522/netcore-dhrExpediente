@@ -1,10 +1,12 @@
 ﻿using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.General;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.Workflow;
+using AppExpedienteDHR.Core.Domain.RepositoryContracts.Admin;
 using AppExpedienteDHR.Infrastructure.Data;
 using AppExpedienteDHR.Infrastructure.Repositories;
 using AppExpedienteDHR.Infrastructure.Repositories.Workflow;
 using AppExpedienteDHR.Infrastructure.Repositories.General;
+using AppExpedienteDHR.Infrastructure.Repositories.Admin;
 using AppExpedienteDHR.Core.Domain.Entities.Dhr;
 using AppExpedienteDHR.Infrastructure.Repositories.Dhr;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.Dhr;
@@ -64,6 +66,12 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             PersonaAfectada = new PersonaAfectadaRepository(_context);
             Adjunto = new AdjuntoRepository(_context);
 
+            // Admin repositories
+            Derecho = new DerechoRepository(_context);
+            Especificidad = new EspecificidadRepository(_context);
+            Descriptor = new DescriptorRepository(_context);
+            Evento = new EventoRepository(_context);
+
 
             LockRecord = new LockRecordRepository(_context, _logger);
 
@@ -111,6 +119,13 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         public IPersonaAfectadaRepository PersonaAfectada { get; private set; }
         public IAdjuntoRepository Adjunto { get; private set; }
 
+        #endregion
+
+        #region Admin repositories
+        public IDerechoRepository Derecho { get; private set; }
+        public IEspecificidadRepository Especificidad { get; private set; }
+        public IDescriptorRepository Descriptor { get; private set; }
+        public IEventoRepository Evento { get; private set; }
         #endregion
 
         public ILockRecordRepository LockRecord { get; private set; }

@@ -54,6 +54,17 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> DenunciaWeb()
+        {
+            var model = new DenunciaViewModel();
+            model = await _loadFormPropsService.LoadCatalogsForDenuncia(model);
+            model.IsEdit = true;
+            return View("DenunciaWeb", model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {

@@ -1,0 +1,29 @@
+﻿.custom-context-menu {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    width: 150px;
+}
+
+.custom-context-menu-item {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+    .custom-context-menu-item:hover {
+        background-color: #f0f0f0;
+    }
+
+
+/* Ajusta la barra de búsqueda */
+.search-bar {
+    width: 100%;
+    gap: 8px;
+}
+
+.search-input {
+    width: 200px; /* Ajuste del ancho del campo de búsqueda */
+}
+
+button.btn-sm i {
+    margin-right: 5px; /* Espacio entre icono y texto */
+}

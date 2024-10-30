@@ -1,0 +1,74 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Lista de Derechos";
+}
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Tipologías</title>
+    <link href="https://unpkg.com/tabulator-tables@5.2.0/dist/css/tabulator.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/admin/tabulator-custom.css">
+    <style>
+        #table-container {
+            max-width: 100%;
+            margin: 20px;
+        }
+
+        .tabulator-cell a {
+            margin-right: 10px;
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/tabulator-tables@5.2.0/dist/js/tabulator.min.js"></script>
+</head>
+<body>
+
+
+    <!-- Campo de búsqueda -->
+    <div class="container mt-5">
+        <div class="container mt-5">
+            <h1>Gestión de Tipologías</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Botón de Crear Derecho alineado a la izquierda -->
+                <button class="btn btn-success btn-sm" onclick="openModalDerecho(null)">
+                    <i class="fas fa-plus"></i> Crear Derecho
+                </button>
+
+                <!-- Campo de Búsqueda y botones alineados a la derecha -->
+                <div class="d-flex align-items-center">
+                    <input class="form-control form-control-sm me-2 search-input" type="text" id="searchInput" placeholder="Buscar...">
+                    <button class="btn btn-primary btn-sm me-2" onclick="searchTable()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="btn btn-info btn-sm" onclick="clearSearch()">
+                        <i class="fas fa-broom"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenedor de la tabla -->
+            <div id="table-container"></div>
+
+            <!-- Modales para Crear/Editar -->
+            <div id="modalContainer"></div>
+        </div>
+
+        <!-- Contenedor de la tabla -->
+        <div id="table-container"></div>
+
+        <!-- Modales para Crear/Editar -->
+        <div id="modalContainer"></div>
+
+    </div>
+
+    <script src="~/js/admin/tipologia.js"></script>
+</body>
+</html>

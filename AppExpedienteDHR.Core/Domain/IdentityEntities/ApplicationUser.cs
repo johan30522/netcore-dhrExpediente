@@ -19,6 +19,9 @@ namespace AppExpedienteDHR.Core.Domain.IdentityEntities
         [Display(Name = "Puesto")]
         public string? Position { get; set; }
 
+        public bool? IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
+
 
 
         // Relación con los roles

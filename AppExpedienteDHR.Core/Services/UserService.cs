@@ -43,7 +43,8 @@ namespace AppExpedienteDHR.Core.Services
         {
             try
             {
-                IEnumerable<ApplicationUser> users = await _containerWork.User.GetAll(includeProperties: "UserRoles.Role");
+                // obtener los usuarios que no estén eliminados con IsDeleted en falso o null y obtiene los roles
+                IEnumerable<ApplicationUser> users = await _containerWork.User.GetAll(u => u.IsDeleted == false || u.IsDeleted == null, includeProperties: "UserRoles.Role");
 
                 IEnumerable<UserViewModel> userViewModels = _mapper.Map<IEnumerable<UserViewModel>>(users);
 
@@ -241,7 +242,10 @@ namespace AppExpedienteDHR.Core.Services
                 {
                     throw new Exception("Usuario no encontrado");
                 }
-                var result = await _userManager.DeleteAsync(user);
+                // Elimina el usuario con soft delete
+                user.IsDeleted = true;
+                user.DeletedAt = DateTime.Now;
+                await _userManager.UpdateAsync(user);
             }
             catch (Exception ex)
             {

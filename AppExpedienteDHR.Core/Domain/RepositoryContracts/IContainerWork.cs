@@ -2,6 +2,7 @@
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.Workflow;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.General;
 using AppExpedienteDHR.Core.Domain.RepositoryContracts.Dhr;
+using AppExpedienteDHR.Core.Domain.RepositoryContracts.Admin;
 
 
 namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
@@ -50,6 +51,13 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
         IPersonaAfectadaRepository PersonaAfectada { get; }
         IAdjuntoRepository Adjunto { get; }
         ILockRecordRepository LockRecord { get; }
+
+        //Admin
+        IDerechoRepository Derecho { get; }
+        IEspecificidadRepository Especificidad { get; }
+        IDescriptorRepository Descriptor { get; }
+        IEventoRepository Evento { get; }
+
 
 
 

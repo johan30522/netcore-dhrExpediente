@@ -8,6 +8,7 @@
 
 #sidebar-wrapper {
     width: 250px;
+    overflow-y: auto; /* Habilita el scroll si el contenido es más grande */
     position: relative;
     /*transition: all 0.3s ease;*/
     background-color: #f8f9fa;
@@ -77,3 +78,12 @@
     color: #14A085;
     font-weight: bold; /* Texto en negrita */
 }
+
+/* Icono de rotación para el indicador */
+.rotate-icon {
+    transition: transform 0.3s ease;
+}
+
+    .rotate-icon.collapsed {
+        transform: rotate(-90deg);
+    }

@@ -53,7 +53,9 @@ function loadDataTable(tableId, ajaxUrl, columns) {
     return dataTable;
 }
 
-function Delete(url) {
+function Delete(url, tableId) {
+    console.log(url);
+    console.log(tableId);
     Swal.fire({
         title: '¿Estás seguro de que quieres borrar?',
         text: 'No podrás recuperar los datos borrados',

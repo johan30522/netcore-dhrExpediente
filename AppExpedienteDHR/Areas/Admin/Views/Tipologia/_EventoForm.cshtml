@@ -1,0 +1,30 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Admin
+@model EventoViewModel
+
+<div id="modalEvento" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Evento" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Evento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="eventoForm">
+                    <div class="form-group">
+                        <label for="Codigo">Código</label>
+                        <input type="text" class="form-control" id="Codigo" name="Codigo" value="@Model?.Codigo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Descripcion">Descripción</label>
+                        <input type="text" class="form-control" id="Descripcion" name="Descripcion" value="@Model?.Descripcion" />
+                    </div>
+                    <input type="hidden" id="Id" value="@Model?.Id" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveEvento()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

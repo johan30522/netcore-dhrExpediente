@@ -25,6 +25,17 @@
             </button>
         </div>
         <div class="list-group list-group-flush">
+
+            <a href="#tipologiaSubmenu" class="list-group-item list-group-item-action bg-light d-flex justify-content-between align-items-center" data-bs-toggle="collapse">
+                Tipología
+                <i class="fas fa-chevron-down rotate-icon" id="tipologia-icon"></i>
+            </a>
+            <div id="tipologiaSubmenu" class="collapse">
+                <a class="list-group-item list-group-item-action bg-light ms-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Derechos" ? "selected" : "")"
+                   asp-area="Admin" asp-controller="Tipologia" asp-action="Derechos">Derechos</a>
+            </div>
+
+
             <a class="list-group-item list-group-item-action bg-light @(ViewContext.RouteData.Values["controller"]?.ToString() == "FlowWf" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "selected" : "")"
                asp-area="Admin" asp-controller="FlowWf" asp-action="Index">Flujos de Trabajo</a>
             <a class="list-group-item list-group-item-action bg-light @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "selected" : "")"
@@ -107,6 +118,26 @@
             if (!$("#wrapper").hasClass("toggled")) {
                 $("#open-sidebar").hide();
             }
+
+            // agrega icono rote cuando el menu este expandido o colapsado a tipologia
+            $("#tipologiaSubmenu").on("show.bs.collapse", function () {
+                $("#tipologia-icon").removeClass("collapsed");
+                localStorage.setItem("tipologiaMenuState", "open");
+            }).on("hide.bs.collapse", function () {
+                $("#tipologia-icon").addClass("collapsed");
+                localStorage.setItem("tipologiaMenuState", "closed");
+            });
+            // Restaura el estado del menú colapsable desde localStorage para tipologia
+            const tipologiaMenuState = localStorage.getItem("tipologiaMenuState");
+            if (tipologiaMenuState === "open") {
+                $("#tipologiaSubmenu").addClass("show");
+                $("#tipologia-icon").removeClass("collapsed");
+            } else {
+                $("#tipologiaSubmenu").removeClass("show");
+                $("#tipologia-icon").addClass("collapsed");
+            }
+
+
         });
 
         // Alternar el sidebar cuando el botón de cerrar es clicado

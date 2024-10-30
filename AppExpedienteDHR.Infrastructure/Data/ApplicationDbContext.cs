@@ -1,6 +1,7 @@
 ﻿using AppExpedienteDHR.Core.Domain.Entities;
 using AppExpedienteDHR.Core.Domain.Entities.Dhr;
 using AppExpedienteDHR.Core.Domain.Entities.General;
+using AppExpedienteDHR.Core.Domain.Entities.Admin;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using AppExpedienteDHR.Core.Domain.IdentityEntities;
 using Microsoft.AspNetCore.Identity;
@@ -55,6 +56,15 @@ namespace AppExpedienteDHR.Infrastructure.Data
         public DbSet<Adjunto> Adjuntos { get; set; }
 
         #endregion
+
+        #region Admin Entities
+        public DbSet<Derecho> Derechos { get; set; }
+        public DbSet<Evento> Eventos { get; set; }
+        public DbSet<Descriptor> Descriptores { get; set; }
+        public DbSet<Especificidad> Especificidades { get; set; }
+        #endregion
+
+
 
         public DbSet<LockRecord> LockRecords { get; set; }
 
@@ -226,7 +236,7 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .HasForeignKey(pa => pa.SexoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
- 
+
 
             #endregion
 
@@ -238,7 +248,6 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .HasForeignKey(lr => lr.LockedByUserId)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
-
 
             #region Workflow entities Fluent API configuration
 
@@ -354,6 +363,25 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(gu => gu.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
+
+            #region Admin entities Fluent API configuration
+
+            // Configuración de Derecho -> Evento (uno a muchos)
+            modelBuilder.Entity<Derecho>()
+               .HasMany(d => d.Eventos)
+               .WithOne(e => e.Derecho)
+               .HasForeignKey(e => e.DerechoId);
+            // Configuración de Evento -> Descriptores (uno a muchos)
+            modelBuilder.Entity<Evento>()
+                .HasMany(e => e.Descriptores)
+                .WithOne(d => d.Evento)
+                .HasForeignKey(d => d.EventoId);
+            // Configuración de Evento -> Especificidades (uno a muchos)
+            modelBuilder.Entity<Evento>()
+                .HasMany(e => e.Especificidades)
+                .WithOne(e => e.Evento)
+                .HasForeignKey(e => e.EventoId);
             #endregion
         }
     }

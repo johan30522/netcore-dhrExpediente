@@ -4,16 +4,19 @@ using AppExpedienteDHR.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AppExpedienteDHR.Infrastructure.Migrations
+namespace AppExpedienteDHR.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241011154646_UpdateTableUser")]
+    partial class UpdateTableUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,152 +24,6 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Derecho", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Derechos", "adm");
-                });
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Descriptor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EventoId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventoId");
-
-                    b.ToTable("Descriptores", "adm");
-                });
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Especificidad", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("EventoId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Normativa")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventoId");
-
-                    b.ToTable("Especifidades", "adm");
-                });
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Evento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DerechoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Normativa")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ODS")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DerechoId");
-
-                    b.ToTable("Eventos", "adm");
-                });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Category", b =>
                 {
@@ -1281,39 +1138,6 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Descriptor", b =>
-                {
-                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Admin.Evento", "Evento")
-                        .WithMany("Descriptores")
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Evento");
-                });
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Especificidad", b =>
-                {
-                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Admin.Evento", "Evento")
-                        .WithMany("Especificidades")
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Evento");
-                });
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Evento", b =>
-                {
-                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Admin.Derecho", "Derecho")
-                        .WithMany("Eventos")
-                        .HasForeignKey("DerechoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Derecho");
-                });
-
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", b =>
                 {
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denunciante", "Denunciante")
@@ -1710,18 +1534,6 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Derecho", b =>
-                {
-                    b.Navigation("Eventos");
-                });
-
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Admin.Evento", b =>
-                {
-                    b.Navigation("Descriptores");
-
-                    b.Navigation("Especificidades");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Denuncia", b =>
