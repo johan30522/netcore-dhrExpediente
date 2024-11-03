@@ -24,6 +24,8 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Admin
             {
                 derechoToUpdate.Codigo = derecho.Codigo;
                 derechoToUpdate.Descripcion = derecho.Descripcion;
+
+
                 await _context.SaveChangesAsync();
             }
         }

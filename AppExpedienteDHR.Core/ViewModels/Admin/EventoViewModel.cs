@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,10 +10,11 @@ namespace AppExpedienteDHR.Core.ViewModels.Admin
 {
     public class EventoViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required(ErrorMessage = "El código es obligatorio")]
         [StringLength(50, ErrorMessage = "El código no debe superar los 50 caracteres")]
+        [Remote(action: "ExistEventoCodeValidation", areaName: "Admin", controller: "Tipologia", AdditionalFields = "Id")]
         public string Codigo { get; set; }
 
         [Required(ErrorMessage = "La descripción es obligatoria")]
@@ -31,6 +33,5 @@ namespace AppExpedienteDHR.Core.ViewModels.Admin
 
         // Relación con el derecho
         public int? DerechoId { get; set; }
-        public DerechoViewModel? Derecho { get; set; }
     }
 }

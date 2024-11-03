@@ -9,16 +9,28 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="especificidadForm">
+                <form id="especificidadForm" method="post" asp-action="SaveEspecificidad">
+                    <input asp-for="Id" />
+                    <input asp-for="EventoId" value="@(ViewData["EventoId"])"/>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
                     <div class="form-group">
-                        <label for="Codigo">Código</label>
-                        <input type="text" class="form-control" id="Codigo" name="Codigo" value="@Model?.Codigo" />
+                        <label asp-for="Codigo" class="form-label"></label>
+                        <input asp-for="Codigo" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Codigo" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="Descripcion">Descripción</label>
-                        <input type="text" class="form-control" id="Descripcion" name="Descripcion" value="@Model?.Descripcion" />
+                        <label asp-for="Descripcion" class="form-label"></label>
+                        <input asp-for="Descripcion" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
                     </div>
-                    <input type="hidden" id="derechoId" value="@Model?.Id" />
+                    <div class="form-group">
+                        <label asp-for="Normativa" class="form-label"></label>
+                        <input asp-for="Normativa" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Normativa" class="text-danger"></span>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">

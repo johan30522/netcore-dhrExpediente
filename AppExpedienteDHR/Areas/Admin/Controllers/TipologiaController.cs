@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using AppExpedienteDHR.Core.ViewModels.Admin;
+using AppExpedienteDHR.Utils.Validation;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {
@@ -52,10 +53,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         public async Task<IActionResult> GetAllDerechos()
         {
             var derechos = await _derechoTipologiaService.GetDerechoTipologia();
-            return Json(new { data = derechos }, new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            });
+            return Json(new { data = derechos });
         }
 
         [HttpGet("{derechoId}")]
@@ -91,14 +89,23 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveDerecho(DerechoViewModel model)
         {
+            // si el id es null entonces se esta creando un nuevo derecho
+            if (model.Id==null)
+            {
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Id");
+
+            }
             if (ModelState.IsValid)
             {
-                if (model.Id == 0)
+                if (model.Id == 0 || model.Id == null)
                     await _derechoTipologiaService.InsertDerechoTipologia(model);
                 else
                     await _derechoTipologiaService.UpdateDerechoTipologia(model);
 
                 return Json(new { success = true });
+            }else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             }
             return PartialView("_DerechoForm", model);
         }
@@ -107,9 +114,16 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateOrEditEvento([FromQuery] int? id, [FromQuery] int derechoId)
         {
+
             EventoViewModel model = id.HasValue
                 ? await _eventoTipologiaService.GetEventoById(id.Value)
                 : new EventoViewModel { DerechoId = derechoId };
+
+            // Asegurarse de que el DerechoId esté en el modelo en caso de edición
+            if (model.DerechoId.HasValue)
+            {
+                ViewData["DerechoId"] = model.DerechoId;
+            }
 
             return PartialView("_EventoForm", model);
         }
@@ -117,9 +131,13 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveEvento(EventoViewModel model)
         {
+            if (model.Id == null)
+            {
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Id");
+            }
             if (ModelState.IsValid)
             {
-                if (model.Id == 0)
+                if (model.Id == 0 || model.Id == null)
                     await _eventoTipologiaService.InsertEvento(model);
                 else
                     await _eventoTipologiaService.UpdateEvento(model);
@@ -137,15 +155,24 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 ? await _especificidadTipologiaService.GetEspecificidadById(id.Value)
                 : new EspecificidadViewModel { EventoId = eventoId };
 
+            if (model.EventoId.HasValue)
+            {
+                ViewData["EventoId"] = model.EventoId;
+            }
+
             return PartialView("_EspecificidadForm", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrEditEspecificidad(EspecificidadViewModel model)
+        public async Task<IActionResult> SaveEspecificidad(EspecificidadViewModel model)
         {
+            if (model.Id == null)
+            {
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Id");
+            }
             if (ModelState.IsValid)
             {
-                if (model.Id == 0)
+                if (model.Id == 0 || model.Id == null)
                     await _especificidadTipologiaService.InsertEspecificidad(model);
                 else
                     await _especificidadTipologiaService.UpdateEspecificidad(model);
@@ -153,6 +180,30 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 return Json(new { success = true });
             }
             return PartialView("_EspecificidadForm", model);
+        }
+
+        // Delete item por nivel de tipologia (Derecho, Evento, Especificidad)
+        [HttpPost]
+        public async Task<IActionResult> DeleteTipologia([FromQuery] int id, [FromQuery] string tipologia)
+        {
+            if((id == 0) || string.IsNullOrEmpty(tipologia))
+            {
+                return Json(new { success = false });
+            }
+            switch (tipologia)
+            {
+                case "Derecho":
+                    await _derechoTipologiaService.DeleteDerechoTipologia(id);
+                    break;
+                case "Evento":
+                    await _eventoTipologiaService.DeleteEvento(id);
+                    break;
+                case "Especificidad":
+                    await _especificidadTipologiaService.DeleteEspecificidad(id);
+                    break;
+            }
+
+            return Json(new { success = true });
         }
 
         #endregion
@@ -184,7 +235,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
 
         #region validations 
         [HttpGet]
-        public async Task<IActionResult> ExistDerechoCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int id)
+        public async Task<IActionResult> ExistDerechoCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int? id)
         {
             var derecho = await _derechoTipologiaService.GetDerechoTipologiaByCode(codigo);
             if (derecho != null && derecho.Id != id)
@@ -195,7 +246,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExistEventoCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int id)
+        public async Task<IActionResult> ExistEventoCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int? id)
         {
             var evento = await _eventoTipologiaService.GetEventoByCode(codigo);
             if (evento != null && evento.Id != id)
@@ -206,7 +257,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExistEspecificidadCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int id)
+        public async Task<IActionResult> ExistEspecificidadCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int? id)
         {
             var especificidad = await _especificidadTipologiaService.GetEspecificidadByCode(codigo);
             if (especificidad != null && especificidad.Id != id)
@@ -216,7 +267,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return Json(true);
         }
         [HttpGet]
-        public async Task<IActionResult> ExisteDescriptorCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int id)
+        public async Task<IActionResult> ExisteDescriptorCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int? id)
         {
             var descriptor = await _descriptorTipologiaService.GetDescriptorByCode(codigo);
             if (descriptor != null && descriptor.Id != id)

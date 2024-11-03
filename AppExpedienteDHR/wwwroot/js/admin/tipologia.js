@@ -14,13 +14,18 @@ function loadAllData() {
         url: "http://localhost:5225/Admin/Tipologia/GetAllDerechos",
         type: "GET",
         success: function (response) {
-            const allData = parseData(response.data.$values);
+            const allData = parseData(response.data);
             initializeTabulator(allData);
         }
     });
 }
 
 function initializeTabulator(data) {
+
+    console.log(data); // Verifica la estructura final antes de asignarla a Tabulator
+
+    const savedPage = localStorage.getItem("currentPageTabulator") || 1; // Si no hay nada guardado, empieza en la página 1
+
     const table = new Tabulator("#table-container", {
         data: data, // Datos procesados para Tabulator
         layout: "fitDataFill",
@@ -30,10 +35,11 @@ function initializeTabulator(data) {
         paginationSizeSelector: [5, 10, 20],
         placeholder: "No se encontraron datos",
         dataTree: true, // Activar estructura jerárquica
+        dataTreeChildField: "_children",
         dataTreeStartExpanded: false, // Expandir nodos de primer nivel
         columns: [
             { title: "Código", field: "Codigo", width: "20%" },
-            { title: "Descripción", field: "Descripcion", width: "50%" },
+            { title: "Descripción / Evento / Especificidad", field: "Descripcion", width: "50%" },
             {
                 title: "Opciones",
                 field: "Acciones",
@@ -64,6 +70,16 @@ function initializeTabulator(data) {
         }
     });
 
+    // Esperar a que la tabla esté completamente inicializada para establecer la página
+    table.on("tableBuilt", function () {
+        table.setPage(parseInt(savedPage));
+    });
+
+    //// Guardar la página actual en localStorage cada vez que cambie la página
+    table.on("pageLoaded", function (pageno) {
+        localStorage.setItem("currentPageTabulator", pageno);
+    });
+
     // Búsqueda en la tabla
     $("#searchInput").on("input", function () {
         const searchText = $(this).val().toLowerCase();
@@ -74,7 +90,7 @@ function initializeTabulator(data) {
 // Función para obtener elementos del menú contextual según el nivel
 function getContextMenuItems(data) {
     const menuItems = [
-       
+
     ];
 
     if (data.Nivel === "Derecho") {
@@ -86,27 +102,27 @@ function getContextMenuItems(data) {
             },
             {
                 label: `<i class="fas fa-trash-alt"></i> Eliminar Derecho`,
-                action: () => confirmDelete(data.Id, data.Nivel),
+                action: () => confirmDelete(data.Id, data.Nivel, data.Descripcion),
             },
             {
-            label: `<i class="fas fa-plus-circle"></i> Crear Evento`,
-            action: () => openModalEvento(null,data.Id),
-            //action: () => openModal(data),
-        });
+                label: `<i class="fas fa-plus-circle"></i> Crear Evento`,
+                action: () => openModalEvento(null, data.Id),
+                //action: () => openModal(data),
+            });
     } else if (data.Nivel === "Evento") {
         menuItems.push(
             {
                 label: `<i class="fas fa-edit"></i> Editar Evento`,
-                action: () => openModalEvento(data.Id,null),
+                action: () => openModalEvento(data.Id, null),
                 //action: () => openModal(data),
             },
             {
                 label: `<i class="fas fa-trash-alt"></i> Eliminar Evento`,
-                action: () => confirmDelete(data.Id, data.Nivel),
+                action: () => confirmDelete(data.Id, data.Nivel, data.Descripcion),
             },
             {
                 label: `<i class="fas fa-plus-circle"></i> Crear Especificidad`,
-                action: () => openModalEspecificidad(null,data.Id),
+                action: () => openModalEspecificidad(null, data.Id),
             },
             {
                 label: `<i class="fas fa-cog"></i> Administrar Descriptores`,
@@ -122,7 +138,7 @@ function getContextMenuItems(data) {
             },
             {
                 label: `<i class="fas fa-trash-alt"></i> Eliminar Especificidad`,
-                action: () => confirmDelete(data.Id, data.Nivel),
+                action: () => confirmDelete(data.Id, data.Nivel, data.Descripcion),
             }
         );
     }
@@ -132,28 +148,30 @@ function getContextMenuItems(data) {
 
 
 
-// Convertir datos a formato para Tabulator
+
+
 function parseData(derechos) {
-    return derechos.map(derecho => {
-        return {
-            Id: derecho.Id,
-            Codigo: derecho.Codigo,
-            Descripcion: derecho.Descripcion,
-            Nivel: "Derecho",
-            _children: derecho.Eventos.$values.map(evento => ({
-                Id: evento.Id,
-                Codigo: evento.Codigo,
-                Descripcion: evento.Descripcion,
-                Nivel: "Evento",
-                _children: evento.Especificidades.$values.map(especificidad => ({
-                    Id: especificidad.Id,
-                    Codigo: especificidad.Codigo,
-                    Descripcion: especificidad.Descripcion,
-                    Nivel: "Especificidad"
-                }))
-            }))
-        };
-    });
+
+    return derechos.map(derecho => ({
+        Id: derecho.id,
+        Codigo: derecho.codigo,
+        Descripcion: derecho.descripcion,
+        Nivel: "Derecho",
+        _children: derecho.eventos ? derecho.eventos.map(evento => ({
+            Id: evento.id,
+            Codigo: evento.codigo,
+            Descripcion: evento.descripcion,
+            Nivel: "Evento",
+            _children: evento.especificidades ? evento.especificidades.map(especificidad => ({
+                Id: especificidad.id,
+                Codigo: especificidad.codigo,
+                Descripcion: especificidad.descripcion,
+                Nivel: "Especificidad",
+                _children: null // Siempre se asigna un arreglo vacío para especificidades
+            })) : null // Siempre un arreglo vacío para eventos sin especificidades
+        })) : null // Siempre un arreglo vacío para derechos sin eventos
+    }));
+
 }
 
 // Función para crear un evento
@@ -166,10 +184,9 @@ function createEspecificidad(eventoId) {
     window.location.href = `/Admin/Tipologia/CreateEspecificidad?eventoId=${eventoId}`;
 }
 
-// Función de eliminación con confirmación de SweetAlert
-function confirmDelete(id, nivel) {
+function confirmDelete(id, nivel, descripcion) {
     Swal.fire({
-        title: `¿Está seguro de eliminar este ${nivel}?`,
+        title: `¿Está seguro de eliminar "${descripcion}"?`,
         text: "Esta acción no se puede deshacer.",
         icon: "warning",
         showCancelButton: true,
@@ -187,7 +204,7 @@ function confirmDelete(id, nivel) {
 // Función para eliminar un elemento
 function deleteItem(id, nivel) {
     $.ajax({
-        url: `/Admin/Tipologia/Delete${nivel}?id=${id}`,
+        url: `/Admin/Tipologia/DeleteTipologia?id=${id}&tipologia=${nivel}`,
         type: "POST",
         success: function () {
             Swal.fire("Eliminado", `${nivel} eliminado con éxito.`, "success");
@@ -229,25 +246,31 @@ function openModalDerecho(id = null) {
         });
 
         modalDerecho.show();
+        // Reactivar validaciones en el formulario del modal
+        $.validator.unobtrusive.parse('#derechoForm');
     });
 }
 
 function saveDerecho() {
-    const id = $("#derechoId").val();
-    const codigo = $("#Codigo").val();
-    const descripcion = $("#Descripcion").val();
-    const data = { Id: id, Codigo: codigo, Descripcion: descripcion };
-    const url = id ? `/Admin/Tipologia/EditDerecho` : `/Admin/Tipologia/CreateDerecho`;
+
+
+    if (!$('#derechoForm').valid()) {
+        return; // Si el formulario no es válido, detener el proceso
+    }
+    const form = $('#derechoForm');
 
     $.ajax({
-        url: url,
+        url: form.attr('action'),
         type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        success: function () {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalDerecho'));
-            modal.hide();
-            loadAllData(); // Recargar datos en la tabla
+        data: form.serialize(),
+        success: function (response) {
+            if (response.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalDerecho'));
+                modal.hide();
+                loadAllData(); // Recargar datos en la tabla
+            } else {
+                //$('#modalContainer').html(response);
+            }
         },
         error: function () {
             Swal.fire("Error", "Hubo un problema al guardar el derecho.", "error");
@@ -258,6 +281,8 @@ function saveDerecho() {
 function openModalEvento(id = null, derechoId = null) {
     $.get(`/Admin/Tipologia/CreateOrEditEvento?id=${id}&derechoId=${derechoId}`, function (data) {
         $('#modalContainer').html(data);
+
+       
         // Inicializar el modal con las opciones necesarias para que no se cierre al hacer clic fuera
         var modalEvento = new bootstrap.Modal(document.getElementById('modalEvento'), {
             backdrop: 'static',   // Evita que se cierre al hacer clic fuera del modal
@@ -265,28 +290,33 @@ function openModalEvento(id = null, derechoId = null) {
         });
 
         modalEvento.show();
+        $.validator.unobtrusive.parse('#eventoForm');
     });
 }
 
 function saveEvento() {
-    const id = $("#eventoId").val();
-    const codigo = $("#Codigo").val();
-    const descripcion = $("#Descripcion").val();
-    const data = { Id: id, Codigo: codigo, Descripcion: descripcion };
-    const url = id ? `/Admin/Tipologia/EditEvento` : `/Admin/Tipologia/CreateEvento`;
+    console.log('salvar evento');
+    if (!$('#eventoForm').valid()) {
+        return; // Si el formulario no es válido, detener el proceso
+    }
+    const form = $('#eventoForm');
+    console.log(form.serialize());
 
     $.ajax({
-        url: url,
+        url: form.attr('action'),
         type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        success: function () {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalEvento'));
-            modal.hide();
-            loadAllData(); // Recargar datos en la tabla
+        data: form.serialize(),
+        success: function (response) {
+            if (response.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalEvento'));
+                modal.hide();
+                loadAllData(); // Recargar datos en la tabla
+            } else {
+                //$('#modalContainer').html(response);
+            }
         },
         error: function () {
-            Swal.fire("Error", "Hubo un problema al guardar el evento.", "error");
+            Swal.fire("Error", "Hubo un problema al guardar el Evento.", "error");
         }
     });
 }
@@ -300,25 +330,28 @@ function openModalEspecificidad(id = null, eventoId = null) {
         });
 
         modalEspecificidad.show();
+        $.validator.unobtrusive.parse('#especificidadForm');
     });
 }
 
 function saveEspecificidad() {
-    const id = $("#eventoId").val();
-    const codigo = $("#Codigo").val();
-    const descripcion = $("#Descripcion").val();
-    const data = { Id: id, Codigo: codigo, Descripcion: descripcion };
-    const url = id ? `/Admin/Tipologia/EditEspecificidad` : `/Admin/Tipologia/CreateEspecificidad`;
+    if (!$('#especificidadForm').valid()) {
+        return; // Si el formulario no es válido, detener el proceso
+    }
+    const form = $('#especificidadForm');
 
     $.ajax({
-        url: url,
+        url: form.attr('action'),
         type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        success: function () {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalEspecificidad'));
-            modal.hide();
-            loadAllData(); // Recargar datos en la tabla
+        data: form.serialize(),
+        success: function (response) {
+            if (response.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalEspecificidad'));
+                modal.hide();
+                loadAllData(); // Recargar datos en la tabla
+            } else {
+                //$('#modalContainer').html(response);
+            }
         },
         error: function () {
             Swal.fire("Error", "Hubo un problema al guardar la especificidad.", "error");

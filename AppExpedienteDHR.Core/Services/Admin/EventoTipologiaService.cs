@@ -6,6 +6,7 @@ using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 
 using Serilog;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace AppExpedienteDHR.Core.Services.Admin
@@ -16,16 +17,24 @@ namespace AppExpedienteDHR.Core.Services.Admin
         private readonly IContainerWork _containerWork;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly IMemoryCache _cache;
+        private readonly MemoryCacheEntryOptions _cacheOptions;
 
         public EventoTipologiaService(
             IContainerWork containerWork,
             IMapper mapper,
-            ILogger logger
+            ILogger logger,
+            IMemoryCache cache
         )
         {
             _containerWork = containerWork;
             _mapper = mapper;
             _logger = logger;
+            _cache = cache;
+            _cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60) // Duración de caché de 60 minutos
+            };
         }
 
         public async Task<bool> DeleteEvento(int id)
@@ -33,11 +42,12 @@ namespace AppExpedienteDHR.Core.Services.Admin
             try
                 {
                 // busca por el id 
-                var evento = await _containerWork.Evento.GetFirstOrDefault(x => x.Id == id && x.IsDeleted == false || x.IsDeleted == null);
+                var evento = await _containerWork.Evento.GetFirstOrDefault(x => x.Id == id && (x.IsDeleted == false || x.IsDeleted == null));
                 if (evento != null) {
                     evento.IsDeleted = true;
                     evento.DeletedAt = DateTime.Now;
                     await _containerWork.Save();
+                    _cache.Remove("DerechosCache");
                     return true;
                 } else { return false; }
 
@@ -53,7 +63,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var evento = await _containerWork.Evento.GetFirstOrDefault(x => x.Id == id && x.IsDeleted == false || x.IsDeleted == null);
+                var evento = await _containerWork.Evento.GetFirstOrDefault(x => x.Id == id && (x.IsDeleted == false || x.IsDeleted == null));
                 return _mapper.Map<EventoViewModel>(evento);
             }
             catch (Exception ex)
@@ -67,7 +77,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var evento = await _containerWork.Evento.GetFirstOrDefault(x => x.Codigo == code && x.IsDeleted == false || x.IsDeleted == null);
+                var evento = await _containerWork.Evento.GetFirstOrDefault(x => x.Codigo == code && (x.IsDeleted == false || x.IsDeleted == null));
                 return _mapper.Map<EventoViewModel>(evento);
             }
             catch (Exception ex)
@@ -81,7 +91,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var eventos = await _containerWork.Evento.GetAll(x => x.IsDeleted == false || x.IsDeleted == null && x.DerechoId == derechoId);
+                var eventos = await _containerWork.Evento.GetAll(x => (x.IsDeleted == false || x.IsDeleted == null) && x.DerechoId == derechoId);
                 return _mapper.Map<IEnumerable<EventoViewModel>>(eventos);
             }
             catch (Exception ex)
@@ -98,8 +108,9 @@ namespace AppExpedienteDHR.Core.Services.Admin
                 var eventoEntity = _mapper.Map<Evento>(evento);
                 eventoEntity.IsDeleted = false;
 
-             
+                await _containerWork.Evento.Add(eventoEntity);
                 await _containerWork.Save();
+                _cache.Remove("DerechosCache");
                 return _mapper.Map<EventoViewModel>(eventoEntity);
             }
             catch (Exception ex)
@@ -113,12 +124,14 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var eventoEntity = await _containerWork.Evento.GetFirstOrDefault(x => x.Id == evento.Id && x.IsDeleted == false || x.IsDeleted == null);
+                var eventoEntity = await _containerWork.Evento.GetFirstOrDefault(x => x.Id == evento.Id && (x.IsDeleted == false || x.IsDeleted == null));
                 if (eventoEntity != null)
                 {
                     Evento eventoToUpdate = _mapper.Map<Evento>(evento);
 
                     await _containerWork.Evento.Update(eventoToUpdate);
+                    await _containerWork.Save();
+                    _cache.Remove("DerechosCache");
 
                     return _mapper.Map<EventoViewModel>(eventoEntity);
                 }

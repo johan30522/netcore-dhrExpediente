@@ -6,6 +6,7 @@ using AppExpedienteDHR.Core.Domain.RepositoryContracts;
 
 using Serilog;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace AppExpedienteDHR.Core.Services.Admin
@@ -15,17 +16,25 @@ namespace AppExpedienteDHR.Core.Services.Admin
         private readonly IContainerWork _containerWork;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly IMemoryCache _cache;
+        private readonly MemoryCacheEntryOptions _cacheOptions;
 
 
         public EspecificidadTipologiaService(
             IContainerWork containerWork,
             IMapper mapper,
+            IMemoryCache cache,
             ILogger logger
         )
         {
             _containerWork = containerWork;
             _mapper = mapper;
             _logger = logger;
+            _cache = cache;
+            _cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60) // Duración de caché de 60 minutos
+            };
         }
 
         public async Task<bool> DeleteEspecificidad(int id)
@@ -33,11 +42,12 @@ namespace AppExpedienteDHR.Core.Services.Admin
             try
                 {
                 // busca por el id 
-                var especificidad = await _containerWork.Especificidad.GetFirstOrDefault(x => x.Id == id && x.IsDeleted == false || x.IsDeleted == null);
+                var especificidad = await _containerWork.Especificidad.GetFirstOrDefault(x => x.Id == id && (x.IsDeleted == false || x.IsDeleted == null));
                 if (especificidad != null) {
                     especificidad.IsDeleted = true;
                     especificidad.DeletedAt = DateTime.Now;
                     await _containerWork.Save();
+                    _cache.Remove("DerechosCache");
                     return true;
                 } else { return false; }
 
@@ -53,7 +63,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var especificidad = await _containerWork.Especificidad.GetFirstOrDefault(x => x.Id == id && x.IsDeleted == false || x.IsDeleted == null);
+                var especificidad = await _containerWork.Especificidad.GetFirstOrDefault(x => x.Id == id && (x.IsDeleted == false || x.IsDeleted == null));
                 return _mapper.Map<EspecificidadViewModel>(especificidad);
             }
             catch (Exception ex)
@@ -67,7 +77,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var especificidad = await _containerWork.Especificidad.GetFirstOrDefault(x => x.Codigo == code && x.IsDeleted == false || x.IsDeleted == null);
+                var especificidad = await _containerWork.Especificidad.GetFirstOrDefault(x => x.Codigo == code && (x.IsDeleted == false || x.IsDeleted == null));
                 return _mapper.Map<EspecificidadViewModel>(especificidad);
             }
             catch (Exception ex)
@@ -81,7 +91,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var especificidad = await _containerWork.Especificidad.GetAll(x => x.IsDeleted == false || x.IsDeleted == null && x.EventoId == eventoId);
+                var especificidad = await _containerWork.Especificidad.GetAll(x => (x.IsDeleted == false || x.IsDeleted == null) && x.EventoId == eventoId);
                 return _mapper.Map<IEnumerable<EspecificidadViewModel>>(especificidad);
             }
             catch (Exception ex)
@@ -97,8 +107,9 @@ namespace AppExpedienteDHR.Core.Services.Admin
             {
                 var especificidadEntity = _mapper.Map<Especificidad>(especificidad);
                 especificidadEntity.IsDeleted = false;
-
+                await _containerWork.Especificidad.Add(especificidadEntity);
                 await _containerWork.Save();
+                _cache.Remove("DerechosCache");
                 return _mapper.Map<EspecificidadViewModel>(especificidadEntity);
             }
             catch (Exception ex)
@@ -113,7 +124,9 @@ namespace AppExpedienteDHR.Core.Services.Admin
             try
             {
                 var especificidadEntity = _mapper.Map<Especificidad>(especificidad);
+                await _containerWork.Especificidad.Update(especificidadEntity);
                 await _containerWork.Save();
+                _cache.Remove("DerechosCache");
                 return _mapper.Map<EspecificidadViewModel>(especificidadEntity);
             }
             catch (Exception ex)

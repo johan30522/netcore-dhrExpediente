@@ -21,6 +21,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Admin
                 especificidadToUpdate.Codigo = especificidad.Codigo;
                 especificidadToUpdate.Descripcion = especificidad.Descripcion;
                 especificidadToUpdate.Normativa = especificidad.Normativa;
+
                 await _context.SaveChangesAsync();
             }
         }

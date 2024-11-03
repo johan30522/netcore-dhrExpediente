@@ -22,6 +22,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Admin
                 eventoToUpdate.Descripcion = evento.Descripcion;
                 eventoToUpdate.Normativa = evento.Normativa;
                 eventoToUpdate.ODS = evento.ODS;
+
                 await _context.SaveChangesAsync();
             }
         }

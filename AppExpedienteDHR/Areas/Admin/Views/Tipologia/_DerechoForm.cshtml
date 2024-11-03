@@ -1,7 +1,4 @@
-﻿
-
-
-@using AppExpedienteDHR.Core.ViewModels.Admin
+﻿@using AppExpedienteDHR.Core.ViewModels.Admin
 @model DerechoViewModel
 
 <div id="modalDerecho" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Derecho" aria-hidden="true">
@@ -12,16 +9,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="derechoForm">
+                <form id="derechoForm" method="post" asp-action="SaveDerecho">
+                    <input type="hidden" asp-for="Id"/>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                     <div class="form-group">
-                        <label for="Codigo">Código</label>
-                        <input type="text" class="form-control" id="Codigo" name="Codigo" value="@Model?.Codigo" />
+                        <label asp-for="Codigo" class="form-label"></label>
+                        <input asp-for="Codigo" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Codigo" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="Descripcion">Descripción</label>
-                        <input type="text" class="form-control" id="Descripcion" name="Descripcion" value="@Model?.Descripcion" />
+                        <label asp-for="Descripcion" class="form-label"></label>
+                        <input asp-for="Descripcion" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
                     </div>
-                    <input type="hidden" id="Id" value="@Model?.Id" />
                 </form>
             </div>
             <div class="modal-footer">

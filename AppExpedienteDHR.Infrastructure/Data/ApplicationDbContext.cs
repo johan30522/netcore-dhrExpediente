@@ -7,6 +7,8 @@ using AppExpedienteDHR.Core.Domain.IdentityEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using AppExpedienteDHR.Core.Domain.EntityContracts;
+using System.Linq.Expressions;
 
 namespace AppExpedienteDHR.Infrastructure.Data
 {
@@ -72,6 +74,17 @@ namespace AppExpedienteDHR.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Configura el filtro global solo en entidades que implementan ISoftDeletable
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+                {
+                    // Aplica el filtro para omitir entidades marcadas como eliminadas
+                    modelBuilder.Entity(entityType.ClrType)
+                        .HasQueryFilter(CreateSoftDeleteFilter(entityType.ClrType));
+                }
+            }
 
             #region Identity entities Fluent API configuration
             // Configura la relación entre ApplicationUser y IdentityUserRole
@@ -383,6 +396,20 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .WithOne(e => e.Evento)
                 .HasForeignKey(e => e.EventoId);
             #endregion
+        }
+        // Método auxiliar para crear el filtro global para el soft delete
+        private static LambdaExpression CreateSoftDeleteFilter(Type entityType)
+        {
+            var parameter = Expression.Parameter(entityType, "e");
+            var isDeletedProperty = Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted));
+            // Filtrar para incluir solo registros donde IsDeleted es null o false
+            var isNotDeleted = Expression.Equal(isDeletedProperty, Expression.Constant(false, typeof(bool?)));
+
+            var isNull = Expression.Equal(isDeletedProperty, Expression.Constant(null, typeof(bool?)));
+
+            var filter = Expression.OrElse(isNotDeleted, isNull);
+
+            return Expression.Lambda(filter, parameter);
         }
     }
 }

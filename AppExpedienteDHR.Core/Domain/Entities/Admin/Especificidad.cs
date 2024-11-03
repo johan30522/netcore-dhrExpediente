@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppExpedienteDHR.Core.Domain.EntityContracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace AppExpedienteDHR.Core.Domain.Entities.Admin
 {
     [Table("Especifidades", Schema = "adm")]
-    public class Especificidad : CommonProps
+    public class Especificidad : CommonProps, ISoftDeletable
     {
 
         [Required]

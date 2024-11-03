@@ -9,7 +9,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Admin
 {
     public class DescriptorViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required(ErrorMessage = "El código es obligatorio")]
         [StringLength(50, ErrorMessage = "El código no debe superar los 50 caracteres")]

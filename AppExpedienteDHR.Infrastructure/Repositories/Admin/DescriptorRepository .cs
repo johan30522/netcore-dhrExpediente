@@ -20,6 +20,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Admin
             {
                 descriptorToUpdate.Codigo = descriptor.Codigo;
                 descriptorToUpdate.Nombre = descriptor.Nombre;
+
                 await _context.SaveChangesAsync();
             }
         }
