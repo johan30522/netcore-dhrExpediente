@@ -14,6 +14,7 @@ namespace AppExpedienteDHR.Core.ServiceContracts.Dhr
         Task<(List<DenunciaItemListViewModel> items, int totalItems)> GetDenunciasPaginadas(
              int pageIndex, int pageSize, string searchValue, string sortColumn, string sortDirection);
         Task<bool> CreateExpediente(int idDenuncia);
+        Task<DenunciaAdjuntoViewModel> GetAnexoById(int id);
 
     }
 }

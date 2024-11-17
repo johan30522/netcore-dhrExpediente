@@ -3,6 +3,8 @@ using AppExpedienteDHR.Core.Domain.RepositoryContracts.Dhr;
 using AppExpedienteDHR.Core.ViewModels.Dhr;
 using AppExpedienteDHR.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 
 
@@ -23,6 +25,13 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Dhr
             if (expedienteToUpdate != null)
             {
                 expedienteToUpdate.Detalle = expediente.Detalle;
+                expedienteToUpdate.Petitoria = expediente.Petitoria;
+                expedienteToUpdate.IncluyePersonaAfectada = expediente.IncluyePersonaAfectada;
+                expedienteToUpdate.DerechoId = expediente.DerechoId;
+                expedienteToUpdate.EventoId = expediente.EventoId;
+                expedienteToUpdate.EspecificidadId = expediente.EspecificidadId;
+                expedienteToUpdate.DescriptorId = expediente.DescriptorId;
+
                 await _context.SaveChangesAsync();
             }
         }
@@ -38,7 +47,9 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Dhr
             try
             {
                 // Consulta base para Expedientes, asegurando que no estén eliminados
-                var expedientesQuery = _context.Expedientes.Where(e => e.IsDeleted == false || e.IsDeleted == null);
+                var expedientesQuery = _context.Expedientes
+                    .Include(e => e.Denunciante)
+                    .Where(e => e.IsDeleted == false || e.IsDeleted == null);
 
                 // Consulta base para FlowRequestHeaderWf, asegurando que no estén eliminados y que el tipo sea 'Expediente'
                 var flowHeaderQuery = _context.FlowRequestHeaderWfs
@@ -55,7 +66,10 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Dhr
                                 EstadoActual = flowHeader.CurrentState.Name,
                                 TipoSolicitud = flowHeader.RequestType,
                                 FechaCreacionFlujo = flowHeader.CreatedDate,
-                                FlujoCompletado = flowHeader.IsCompleted
+                                FlujoCompletado = flowHeader.IsCompleted,
+                                DenuncianteFullName = expediente.Denunciante != null
+                                    ? $"{expediente.Denunciante.Nombre} {expediente.Denunciante.PrimerApellido} {expediente.Denunciante.SegundoApellido}".Trim()
+                                    : string.Empty
                             };
 
                 // Aplicar búsqueda si es necesario
@@ -72,14 +86,31 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Dhr
                 // Contar el total de elementos antes de aplicar la paginación
                 int totalItems = await query.CountAsync();
 
-                // Aplicar ordenación si es necesario
+                // Evaluar la consulta en el cliente(memoria) para poder aplicar la ordenación por DenuncianteFullName
+                var orderedQuery = query.AsEnumerable(); // Forzar la evaluación en memoria aquí
+
+
+
+
+                // Aplicar ordenación
                 if (!string.IsNullOrEmpty(sortColumn))
                 {
-                    query = query.OrderBy($"{sortColumn} {sortDirection}");
+                    if (sortColumn.Equals("DenuncianteFullName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Ordenamiento en memoria para DenuncianteFullName
+                        orderedQuery = sortDirection.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                            ? query.AsEnumerable().OrderBy(q => q.DenuncianteFullName)
+                            : query.AsEnumerable().OrderByDescending(q => q.DenuncianteFullName);
+                    }
+                    else
+                    {
+                        // Ordenamiento en la base de datos para otras columnas
+                        query = query.OrderBy($"{sortColumn} {sortDirection}");
+                    }
                 }
 
                 // Aplicar paginación
-                var items = await query.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+                var items = orderedQuery.Skip(pageIndex * pageSize).Take(pageSize).ToList();
 
                 return (items, totalItems);
             }

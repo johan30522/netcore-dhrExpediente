@@ -20,7 +20,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         public int FlowId { get; set; } // Referencia al flujo asociado
         public int CurrentStateId { get; set; } // Estado actual de la solicitud en el flujo
 
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow; // Fecha de creación de la solicitud en el flujo
+        public DateTime CreatedDate { get; set; } = DateTime.Now; // Fecha de creación de la solicitud en el flujo
         public string CreatedByUserId { get; set; } // Usuario que inició el flujo
 
         public DateTime? CompletedDate { get; set; } // Fecha de finalización del flujo (opcional)

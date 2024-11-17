@@ -1,0 +1,69 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Workflow
+@model ExpedienteViewModel
+
+<link href="~/lib/tabulator/dist/css/tabulator.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/admin/tabulator-custom.css">
+
+<style>
+    #table-container {
+        max-width: 100%;
+        margin: 20px;
+    }
+
+    .tabulator-cell a {
+        margin-right: 10px;
+        color: blue;
+        cursor: pointer;
+    }
+</style>
+@if (Model.IsEdit)
+{
+    <button type="button" class="btn btn-primary" onclick="openTipologiaModal()" disabled="@(!Model.IsEdit)"><i class="fas fa-link"></i>Asignar Tipología</button>
+}
+
+<div id="modalTipologia" class="modal fade" tabindex="-1" aria-labelledby="modalTipologiaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Asignar Tipología</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="tipologia-tree-container"></div> <!-- Contenedor de Tabulator -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Campos para mostrar descripciones y almacenar IDs -->
+<div class="mb-3">
+    <label for="derecho-descripcion" class="form-label">Derecho</label>
+    <input asp-for="Derecho.Descripcion" type="text" class="form-control" id="derecho-descripcion" readonly disabled="@(!Model.IsEdit)" />
+    <input asp-for="DerechoId" type="hidden" id="DerechoId" name="DerechoId" /> <!-- Campo oculto para almacenar el ID -->
+</div>
+
+<div class="mb-3">
+    <label for="evento-descripcion" class="form-label">Evento</label>
+    <input asp-for="Evento.Descripcion" type="text" class="form-control" id="evento-descripcion" readonly disabled="@(!Model.IsEdit)" />
+    <input asp-for="EventoId" type="hidden" id="EventoId" name="EventoId" /> <!-- Campo oculto para almacenar el ID -->
+</div>
+
+<div class="mb-3">
+    <label for="especificidad-descripcion" class="form-label">Especificidad</label>
+    <input asp-for="Especificidad.Descripcion" type="text" class="form-control" id="especificidad-descripcion" readonly disabled="@(!Model.IsEdit)" />
+    <input asp-for="EspecificidadId" type="hidden" id="EspecificidadId" name="EspecificidadId" /> <!-- Campo oculto para almacenar el ID -->
+</div>
+
+<!-- Campo para seleccionar Descriptor, cargado dinámicamente -->
+<div class="mb-3">
+    <label for="DescriptorId" class="form-label">Descriptor</label>
+    <select asp-for="DescriptorId" id="DescriptorId" name="DescriptorId" class="form-select" readonly disabled="@(!Model.IsEdit)">
+        <option value="">Seleccione un descriptor</option>
+    </select>
+</div>
+
+
+

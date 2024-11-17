@@ -68,5 +68,7 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             var denunciante = await _containerWork.Denunciante.Get(id);
             return _mapper.Map<DenuncianteViewModel>(denunciante);
         }
+
+     
     }
 }

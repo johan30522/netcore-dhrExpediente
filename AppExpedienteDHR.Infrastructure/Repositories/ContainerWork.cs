@@ -62,6 +62,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             Denuncia = new DenunciaRepository(_context);
             Denunciante = new DenuncianteRepository(_context);
             DenunciaAdjunto = new DenunciaAdjuntoRepository(_context);
+            ExpedienteAdjunto = new ExpedienteAdjuntoRepository(_context);
             Expediente = new ExpedienteRepository(_context);
             PersonaAfectada = new PersonaAfectadaRepository(_context);
             Adjunto = new AdjuntoRepository(_context);
@@ -115,6 +116,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         public IDenunciaRepository Denuncia { get; private set; }
         public IDenuncianteRepository Denunciante { get; private set; }
         public IDenunciaAdjuntoRepository DenunciaAdjunto { get; private set; }
+        public IExpedienteAdjuntoRepository ExpedienteAdjunto { get; private set; }
         public IExpedienteRepository Expediente { get; private set; }
         public IPersonaAfectadaRepository PersonaAfectada { get; private set; }
         public IAdjuntoRepository Adjunto { get; private set; }

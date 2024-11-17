@@ -48,6 +48,7 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
         IExpedienteRepository Expediente { get; }
         IDenunciaRepository Denuncia { get; }
         IDenunciaAdjuntoRepository DenunciaAdjunto { get; }
+        IExpedienteAdjuntoRepository ExpedienteAdjunto { get; }
         IPersonaAfectadaRepository PersonaAfectada { get; }
         IAdjuntoRepository Adjunto { get; }
         ILockRecordRepository LockRecord { get; }

@@ -1,0 +1,53 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Dhr
+@model ExpedienteViewModel
+
+<br/>
+<br/>
+<br/>
+<div class="d-flex justify-content-around mb-1">
+    <h4 class="text-center">Archivos Adjuntos</h4>
+    <!-- Botón para agregar un nuevo anexo -->
+    @if (Model.IsEdit)
+    {
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarAnexo">
+            <i class="fas fa-upload"></i> &nbsp; Nuevo
+        </button>
+
+    }
+</div>
+<!-- Tabla para mostrar los anexos -->
+<div style="max-height: 400px; overflow-y: auto;">
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre Archivo</th>
+                <th>Fecha Subida</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var anexo in Model.ExpedienteAdjuntos)
+            {
+                <tr>
+                    <td>@anexo.NombreArchivo</td>
+                    <td>@anexo.FechaSubida.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    <td>
+                        <a href="@Url.Action("DescargarAnexo", "Solicitud", new { anexoId = anexo.Id })" class="btn btn-info btn-sm">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        @if (Model.IsEdit)
+                        {
+                            <button class="btn btn-danger btn-sm" onclick="eliminarAnexo(@anexo.Id)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+         

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<AppExpedienteDHR.Core.ViewModels.Admin.DescriptorViewModel>
+
+
+
+<table id="descriptorsTable" class="table table-bordered" style="width: 100%;">
+    <thead>
+        <tr>
+            <th class="text-center">Código</th>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="descriptorsTableBody">
+        @foreach (var descriptor in Model)
+
+        {
+            <tr>
+                <td class="text-center">@descriptor.Codigo</td>
+                <td class="text-center">@descriptor.Nombre</td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-warning" onclick="editDescriptor(@descriptor.Id)">
+                        <i class="fas fa-edit"></i>
+
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="confirmDeleteDescriptor(@descriptor.Id, '@descriptor.Nombre')"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+

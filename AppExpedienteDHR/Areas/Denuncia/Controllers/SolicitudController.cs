@@ -10,6 +10,7 @@ using AppExpedienteDHR.Core.Models;
 using AppExpedienteDHR.Core.ServiceContracts;
 using AppExpedienteDHR.Core.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
+using AppExpedienteDHR.Core.Services.Dhr;
 
 namespace AppExpedienteDHR.Areas.Denuncia.Controllers
 {
@@ -226,8 +227,13 @@ namespace AppExpedienteDHR.Areas.Denuncia.Controllers
         {
             try
             {
+
+                var anexoExpediente = await _denunciaService.GetAnexoById(anexoId);
+
+
+
                 // Buscar el archivo adjunto por su ID
-                var anexo = await _adjuntoService.GetAnexo(anexoId);
+                var anexo = await _adjuntoService.GetAnexo(anexoExpediente.AdjuntoId);
                 if (anexo == null)
                 {
                     return NotFound();

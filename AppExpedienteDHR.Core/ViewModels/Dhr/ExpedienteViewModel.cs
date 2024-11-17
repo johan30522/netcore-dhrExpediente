@@ -1,5 +1,6 @@
 ﻿
 
+using AppExpedienteDHR.Core.Domain.Entities.Admin;
 using AppExpedienteDHR.Core.Domain.Entities.General;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
@@ -22,12 +23,21 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
         public int? PersonaAfectadaId { get; set; }
         public bool IncluyePersonaAfectada { get; set; } = false;
 
+        public int? DerechoId { get; set; }
+        public int? EventoId { get; set; }
+        public int? EspecificidadId { get; set; }
+        public int? DescriptorId { get; set; }
+
+
 
         // Archivos adjuntos (Subidos por el usuario)
         public IFormFile[]? Files { get; set; } // Aquí se capturan los archivos adjuntos
 
 
-
+        public Derecho? Derecho { get; set; }
+        public Evento? Evento { get; set; }
+        public Especificidad? Especificidad { get; set; }
+        public Descriptor? Descriptor { get; set; }
         // Relacionados
         public DenunciaViewModel? Denuncia { get; set; }
         public DenuncianteViewModel Denunciante { get; set; }
@@ -42,5 +52,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
         public IEnumerable<Pais> ListPaises { get; set; } = new List<Pais>();
         public IEnumerable<Escolaridad> ListEscolaridades { get; set; } = new List<Escolaridad>();
         public IEnumerable<Provincia> ListProvincias { get; set; } = new List<Provincia>();
+
+        public IEnumerable<ExpedienteAdjuntoViewModel>? ExpedienteAdjuntos { get; set; }
     }
 }

@@ -1,0 +1,40 @@
+﻿@using AppExpedienteDHR.Core.ViewModels.Admin
+@model DescriptorListViewModel
+
+<div id="modalManageDescriptors" class="modal fade" tabindex="-1" aria-labelledby="manageDescriptorsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Administrar Descriptores</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Tabla de Descriptores -->
+                    <div class="col-md-7">
+                        <partial name="_DescriptorTableBody" model="Model.Descriptores" />
+                    </div>
+
+                    <!-- Formulario de Crear/Editar Descriptor -->
+                    <div class="col-md-5">
+                        <h5 id="formDescriptorTitle">Crear Descriptor</h5>
+                        <form id="descriptorForm">
+                            <input type="hidden" name="Id" id="descriptorId" />
+                            <input type="hidden" name="EventoId" value="@Model.EventoId" />
+                            <div class="mb-3">
+                                <label for="codigoDescriptor" class="form-label">Código</label>
+                                <input type="text" class="form-control" name="Codigo" id="codigoDescriptor" autocomplete="off" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="nombreDescriptor" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="Nombre" id="nombreDescriptor" autocomplete="off" required />
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="saveDescriptor()">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

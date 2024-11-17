@@ -20,9 +20,8 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         [Required]
         [StringLength(450)]
         public string PerformedByUserId { get; set; } // Id del usuario que realizó la acción
-        public DateTime ActionDate { get; set; } = DateTime.UtcNow;
+        public DateTime ActionDate { get; set; } = DateTime.Now;
         [Required]
-        [StringLength(500)]
         public string Comments { get; set; }
 
 

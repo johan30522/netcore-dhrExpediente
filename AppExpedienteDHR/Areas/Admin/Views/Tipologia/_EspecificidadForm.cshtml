@@ -10,8 +10,8 @@
             </div>
             <div class="modal-body">
                 <form id="especificidadForm" method="post" asp-action="SaveEspecificidad">
-                    <input asp-for="Id" />
-                    <input asp-for="EventoId" value="@(ViewData["EventoId"])"/>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="EventoId" value="@(ViewData["EventoId"])" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 

@@ -1,4 +1,5 @@
 ﻿
+using AppExpedienteDHR.Core.Domain.Entities.Admin;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,6 +21,14 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
         public bool IncluyePersonaAfectada { get; set; } = false;
 
+        public int? DerechoId { get; set; }
+        public int? EventoId { get; set; }
+        public int? EspecificidadId { get; set; }
+        public int? DescriptorId { get; set; }
+
+
+
+
         // Navegaciones
         [ForeignKey("DenunciaId")]
         public Denuncia? Denuncia { get; set; }
@@ -27,5 +36,12 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Dhr
         public Denunciante? Denunciante { get; set; }
         [ForeignKey("PersonaAfectadaId")]
         public PersonaAfectada PersonaAfectada { get; set; }
+
+        public Derecho? Derecho { get; set; }
+        public Evento? Evento { get; set; }
+        public Especificidad? Especificidad { get; set; }
+        public Descriptor? Descriptor { get; set; }
+
+        public ICollection<ExpedienteAdjunto> ExpedienteAdjuntos { get; set; }
     }
 }

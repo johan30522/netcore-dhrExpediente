@@ -14,3 +14,12 @@
     font-size: 1rem;
     color: #6c757d;
 }
+
+/* Ocultar el mensaje de "Upgrade" en TinyMCE */
+.tox-promotion {
+    display: none !important;
+}
+
+.tox-statusbar__branding {
+    display: none !important;
+}

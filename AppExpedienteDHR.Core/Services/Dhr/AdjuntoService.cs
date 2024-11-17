@@ -36,7 +36,7 @@ namespace AppExpedienteDHR.Core.Services.Dhr
             {
                 NombreOriginal = archivo.FileName,
                 Ruta = nombreUnico,
-                FechaSubida = DateTime.UtcNow
+                FechaSubida = DateTime.Now
             };
 
             var rutaCompleta = Path.Combine(_rutaBaseArchivos, nombreUnico);

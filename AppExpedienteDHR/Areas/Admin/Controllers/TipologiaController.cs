@@ -50,6 +50,7 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         #region Api Calls
         // Api para obtener todos los derechos
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllDerechos()
         {
             var derechos = await _derechoTipologiaService.GetDerechoTipologia();
@@ -182,6 +183,8 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             return PartialView("_EspecificidadForm", model);
         }
 
+
+
         // Delete item por nivel de tipologia (Derecho, Evento, Especificidad)
         [HttpPost]
         public async Task<IActionResult> DeleteTipologia([FromQuery] int id, [FromQuery] string tipologia)
@@ -204,6 +207,54 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
             }
 
             return Json(new { success = true });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageDescriptors(int eventoId)
+        {
+            var descriptors = await _descriptorTipologiaService.GetDescriptors(eventoId);
+            var model = new DescriptorListViewModel
+            {
+                EventoId = eventoId,
+                Descriptores = descriptors.ToList()
+            };
+            return PartialView("_ManageDescriptores", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDescriptorsForEvent(int eventoId)
+        {
+            var descriptors = await _descriptorTipologiaService.GetDescriptors(eventoId);
+            return PartialView("_DescriptorTableBody", descriptors);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SaveDescriptor(DescriptorViewModel descriptor)
+        {
+            if (descriptor.Id == 0 || descriptor.Id ==null)
+                await _descriptorTipologiaService.InsertDescriptor(descriptor);
+            else
+                await _descriptorTipologiaService.UpdateDescriptor(descriptor);
+
+            return Json(new { success = true, eventoId = descriptor.EventoId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDescriptor(int id)
+        {
+            var descriptor = await _descriptorTipologiaService.GetDescriptorById(id);
+            if (descriptor == null)
+                return NotFound();
+
+            return Json(descriptor);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDescriptor(int id)
+        {
+            var result = await _descriptorTipologiaService.DeleteDescriptor(id);
+            return Json(new { success = result });
         }
 
         #endregion
@@ -265,6 +316,17 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 return Json("El código ya existe");
             }
             return Json(true);
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetDescriptorsByEventoId([FromQuery(Name = "eventoId")] int eventoId)
+        {
+            // Obtén los descriptores asociados al EventoId (filtrados por el evento correspondiente)
+            var descriptors = await _descriptorTipologiaService.GetDescriptors(eventoId);
+
+            // Retorna la lista en formato JSON
+            return Json(descriptors);
+
         }
         [HttpGet]
         public async Task<IActionResult> ExisteDescriptorCodeValidation([FromQuery(Name = "Codigo")] string codigo, [FromQuery(Name = "Id")] int? id)

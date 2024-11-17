@@ -10,6 +10,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Dhr
     {
         public int Id { get; set; }
         public int DenunciaId { get; set; }
+        public int AdjuntoId { get; set; }
         public string RutaArchivo { get; set; }
         public string NombreArchivo { get; set; }
         public DateTime FechaSubida { get; set; }

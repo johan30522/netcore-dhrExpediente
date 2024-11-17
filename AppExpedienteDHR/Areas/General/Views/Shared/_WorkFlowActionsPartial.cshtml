@@ -16,26 +16,28 @@
             </div>
             <div class="modal-body">
                 <form id="formSeleccionarAccion">
-                    <!-- Lista de acciones disponibles -->
                     <div class="form-group">
                         <label for="actionSelect">Acción</label>
                         <select class="form-control" id="actionSelect" required>
                             <option value="">Cargando acciones...</option>
                         </select>
                     </div>
-
-                    <!-- Comentarios -->
                     <div class="form-group mt-3">
                         <label for="actionComments">Comentarios</label>
                         <textarea class="form-control" id="actionComments" rows="3" placeholder="Comentarios" required></textarea>
                     </div>
                 </form>
+                <!-- Spinner de procesamiento dentro del modal (oculto por defecto) -->
+                <div id="processingSpinner" class="d-none text-center mt-3">
+                    <span class="spinner-border text-primary" role="status" aria-hidden="true"></span>
+                    <span>Procesando, por favor espera...</span>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times"></i> Cancelar
                 </button>
-                <button type="button" class="btn btn-primary" onclick="guardarYProcesarAccion(@Model,'@requestType')">
+                <button type="button" class="btn btn-primary" id="btnContinuar" onclick="guardarYProcesarAccion(@Model, '@requestType')">
                     <i class="fas fa-cogs"></i> Continuar
                 </button>
             </div>

@@ -20,7 +20,7 @@
     <table id="@tableId" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
-                <th>Detalle</th>
+                <th>Denunciante</th>
                 <th>Estado</th>
                 <th>Fecha</th>
                 <th>Acciones</th>
@@ -39,16 +39,7 @@
             const tableId = '@tableId'; // Usamos la variable tableId aquí
             const ajaxUrl = '/Expediente/Solicitud/GetAllExpedientes';
             const columns = [
-                {
-                    "data": "expedienteDetalle",
-                    "width": "40%",
-                    "render": function (data) {
-                        if (data.length > 60) {
-                            return data.substring(0, 60) + "...";
-                        }
-                        return data;
-                    }
-                },
+                { "data": "denuncianteFullName", "width": "20%" },
                 { "data": "estadoActual", "width": "20%" },
                 {
                     "data": "fechaCreacionFlujo",

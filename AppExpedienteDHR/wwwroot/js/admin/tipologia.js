@@ -358,3 +358,118 @@ function saveEspecificidad() {
         }
     });
 }
+
+// Funciónes para gestionar descriptores
+function openModalDescriptor(eventoId) {
+    $.get(`/Admin/Tipologia/ManageDescriptors?eventoId=${eventoId}`, function (data) {
+        $('#modalContainer').html(data);
+
+        // Destruye DataTable si ya está inicializado antes de volver a crear uno nuevo
+        if ($.fn.DataTable.isDataTable('#descriptorsTable')) {
+            $('#descriptorsTable').DataTable().clear().destroy();
+        }
+
+        var modalDescriptor = new bootstrap.Modal(document.getElementById('modalManageDescriptors'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+        modalDescriptor.show();
+
+
+        // Inicializa DataTable solo si no ha sido inicializado ya
+        // Inicializa DataTable
+        $('#descriptorsTable').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            autoWidth: false,
+            responsive: true,
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+            "width": "100%"
+        });
+    });
+}
+
+// Recargar solo la tabla de descriptores
+function refreshDescriptorTable(eventoId) {
+    $.get(`/Admin/Tipologia/GetDescriptorsForEvent?eventoId=${eventoId}`, function (data) {
+        $('#descriptorsTableBody').html(data); // Actualiza el tbody de la tabla de descriptores en el modal
+    });
+}
+
+function saveDescriptor() {
+
+    if (!$('#descriptorForm')[0].checkValidity()) {
+        $('#descriptorForm').addClass('was-validated');
+        return;
+    }
+
+    const formData = $('#descriptorForm').serialize();
+
+    $.post('/Admin/Tipologia/SaveDescriptor', formData, function (response) {
+        if (response.success) {
+            Swal.fire("Guardado", "El descriptor ha sido guardado exitosamente", "success");
+            refreshDescriptorTable(response.eventoId); // Recargar solo la tabla de descriptores
+            $('#formDescriptorTitle').text('Crear Descriptor');
+            $('#descriptorForm')[0].reset(); // Limpiar el formulario después de guardar
+            $('#descriptorForm').removeClass('was-validated'); // Restablecer validaciones
+        } else {
+            Swal.fire("Error", "Hubo un problema al guardar el descriptor", "error");
+        }
+    });
+}
+
+function editDescriptor(id) {
+    $.get(`/Admin/Tipologia/GetDescriptor?id=${id}`, function (data) {
+        $('#formDescriptorTitle').text('Editar Descriptor');
+        $('#descriptorId').val(data.id);
+        $('#codigoDescriptor').val(data.codigo);
+        $('#nombreDescriptor').val(data.nombre);
+    });
+}
+
+function confirmDeleteDescriptor(id, nombre) {
+    Swal.fire({
+        title: `¿Está seguro de eliminar el descriptor "${nombre}"?`,
+        text: "Esta acción no se puede deshacer.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            deleteDescriptor(id);
+        }
+    });
+}
+
+function deleteDescriptor(id) {
+    $.post(`/Admin/Tipologia/DeleteDescriptor?id=${id}`, function (response) {
+        if (response.success) {
+            Swal.fire("Eliminado", "El descriptor ha sido eliminado", "success");
+            refreshDescriptorTable(response.eventoId);
+        } else {
+            Swal.fire("Error", "Hubo un problema al eliminar el descriptor", "error");
+        }
+    });
+}

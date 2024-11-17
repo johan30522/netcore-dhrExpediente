@@ -278,5 +278,22 @@ namespace AppExpedienteDHR.Core.Services.Dhr
 
 
         }
+        public async Task<DenunciaAdjuntoViewModel> GetAnexoById(int id)
+        {
+            try
+            {
+                var anexo = await _containerWork.DenunciaAdjunto.Get(id);
+                if (anexo == null)
+                {
+                    throw new Exception("El anexo no fue encontrado.");
+                }
+                return _mapper.Map<DenunciaAdjuntoViewModel>(anexo);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting attachment by id");
+                throw;
+            }
+        }
     }
 }

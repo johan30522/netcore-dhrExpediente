@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppExpedienteDHR.Areas.Expediente.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Area("Expediente")]
     [Route("Expediente/[controller]/[action]")]
     public class SolicitudController : Controller
@@ -22,6 +22,7 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
         private readonly ILoadFormPropsService _loadFormPropsService;
         private readonly ILockRecordService _lockRecordService;
         private readonly IUserService _userService;
+        private readonly IAdjuntoService _adjuntoService;
 
         public SolicitudController(
             IExpedienteService expedienteService, 
@@ -29,7 +30,8 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             Serilog.ILogger logger, 
             ILoadFormPropsService loadFormPropsService, 
             ILockRecordService lockRecordService,
-            IUserService userService
+            IUserService userService,
+            IAdjuntoService adjuntoService
             )
         {
             _expedienteService = expedienteService;
@@ -38,6 +40,7 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             _lockRecordService = lockRecordService;
             _userService = userService;
             _logger = logger;
+            _adjuntoService = adjuntoService;
         }
 
 
@@ -208,6 +211,11 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             if (!model.IncluyePersonaAfectada)
             {
                 ModelStateHelper.RemoveModelStateForObject(ModelState, "PersonaAfectada");
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Evento");
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Derecho");
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Especificidad");
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Descriptor");
+                ModelStateHelper.RemoveModelStateForObject(ModelState, "Denunciante");
 
             }
             if (ModelState.IsValid)
@@ -236,10 +244,7 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
             var length = Request.Form["length"].FirstOrDefault(); // Obtiene la cantidad de registros a mostrar
 
             var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault();// Obtiene la columna a ordenar
-            if (sortColumn == "denuncianteNombre")
-            {
-                sortColumn = "denunciante.Nombre";
-            }
+
             var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();// Obtiene la dirección de ordenamiento
             var searchValue = Request.Form["search[value]"].FirstOrDefault(); // Obtiene el valor de búsqueda
 
@@ -301,5 +306,68 @@ namespace AppExpedienteDHR.Areas.Expediente.Controllers
 
             ViewData["Breadcrumbs"] = breadcrumbs;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AgregarAnexo(int id, IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+
+                await _expedienteService.AgregarAnexoExpediente(id, file);
+
+                return Ok();
+            }
+            return BadRequest("El archivo es requerido.");
+        }
+        [HttpPost]
+        public async Task<IActionResult> EliminarAnexo(int anexoId)
+        {
+            try
+            {
+                await _adjuntoService.EliminarArchivoAsync(anexoId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                //_logger.Error(ex, "Error eliminando el anexo");
+                return BadRequest("Error eliminando el anexo.");
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> DescargarAnexo(int anexoId)
+        {
+            try
+            {
+
+                //Obtiene el anexo de expediente
+                var anexoExpediente = await _expedienteService.GetAnexoById(anexoId);
+
+
+
+                // Buscar el archivo adjunto por su ID
+                var anexo = await _adjuntoService.GetAnexo(anexoExpediente.AdjuntoId);
+                if (anexo == null)
+                {
+                    return NotFound();
+                }
+
+                // Obtener el archivo como un array de bytes
+                var archivoBytes = await _adjuntoService.DescargarArchivoAsync(anexo.Ruta);
+
+                // Devolver el archivo como una descarga
+                return File(archivoBytes, "application/octet-stream", anexo.NombreOriginal);
+            }
+            catch (Exception ex)
+            {
+                //_logger.Error(ex, "Error al descargar el anexo con ID: {AnexoId}", anexoId);
+                return BadRequest("Error al descargar el archivo.");
+            }
+        }
+
+
     }
+
+    
 }

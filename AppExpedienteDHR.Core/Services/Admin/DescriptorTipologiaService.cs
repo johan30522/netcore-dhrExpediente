@@ -34,7 +34,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
             try
             {
                 // busca por el id 
-                var descriptor = await _containerWork.Descriptor.GetFirstOrDefault(x => x.Id == id && (x.IsDeleted == false || x.IsDeleted == null));
+                var descriptor = await _containerWork.Descriptor.GetFirstOrDefault(x => x.Id == id );
                 if (descriptor != null) {
                     descriptor.IsDeleted = true;
                     descriptor.DeletedAt = DateTime.Now;
@@ -54,7 +54,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var descriptor = await _containerWork.Descriptor.GetFirstOrDefault(x => x.Id == id && (x.IsDeleted == false || x.IsDeleted == null));
+                var descriptor = await _containerWork.Descriptor.GetFirstOrDefault(x => x.Id == id );
                 return _mapper.Map<DescriptorViewModel>(descriptor);
             }
             catch (Exception ex)
@@ -67,7 +67,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var descriptor = await _containerWork.Descriptor.GetFirstOrDefault(x => x.Codigo == code && (x.IsDeleted == false || x.IsDeleted == null));
+                var descriptor = await _containerWork.Descriptor.GetFirstOrDefault(x => x.Codigo == code);
                 return _mapper.Map<DescriptorViewModel>(descriptor);
             }
             catch (Exception ex)
@@ -81,7 +81,7 @@ namespace AppExpedienteDHR.Core.Services.Admin
         {
             try
             {
-                var descriptor = await _containerWork.Descriptor.GetAll(x => (x.IsDeleted == false || x.IsDeleted == null) && x.EventoId == eventoId);
+                var descriptor = await _containerWork.Descriptor.GetAll(x =>  x.EventoId == eventoId);
                 return _mapper.Map<IEnumerable<DescriptorViewModel>>(descriptor);
             }
             catch (Exception ex)

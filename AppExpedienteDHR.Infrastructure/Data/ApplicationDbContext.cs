@@ -54,6 +54,7 @@ namespace AppExpedienteDHR.Infrastructure.Data
         public DbSet<Denuncia> Denuncias { get; set; }
         public DbSet<PersonaAfectada> PersonasAfectadas { get; set; }
         public DbSet<DenunciaAdjunto> DenunciaAdjuntos { get; set; }
+        public DbSet<ExpedienteAdjunto> ExpedienteAdjuntos { get; set; }
         public DbSet<Expediente> Expedientes { get; set; }
         public DbSet<Adjunto> Adjuntos { get; set; }
 
@@ -248,6 +249,12 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(pa => pa.SexoId)
                 .OnDelete(DeleteBehavior.Restrict);
+            // Configuración de Denuncia -> DenunciaAdjunto (uno a muchos)
+            modelBuilder.Entity<ExpedienteAdjunto>()
+                .HasOne(da => da.Expediente)
+                .WithMany(d => d.ExpedienteAdjuntos)
+                .HasForeignKey(da => da.ExpedienteId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 
@@ -401,12 +408,11 @@ namespace AppExpedienteDHR.Infrastructure.Data
         private static LambdaExpression CreateSoftDeleteFilter(Type entityType)
         {
             var parameter = Expression.Parameter(entityType, "e");
-            var isDeletedProperty = Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted));
+
             // Filtrar para incluir solo registros donde IsDeleted es null o false
+            var isDeletedProperty = Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted));
             var isNotDeleted = Expression.Equal(isDeletedProperty, Expression.Constant(false, typeof(bool?)));
-
             var isNull = Expression.Equal(isDeletedProperty, Expression.Constant(null, typeof(bool?)));
-
             var filter = Expression.OrElse(isNotDeleted, isNull);
 
             return Expression.Lambda(filter, parameter);

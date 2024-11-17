@@ -1,10 +1,6 @@
 ﻿using AppExpedienteDHR.Core.Domain.Entities.Dhr;
 using AppExpedienteDHR.Core.ViewModels.Dhr;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace AppExpedienteDHR.Core.ServiceContracts.Dhr
 {
@@ -14,6 +10,8 @@ namespace AppExpedienteDHR.Core.ServiceContracts.Dhr
         Task UpdateDenunciante(DenuncianteViewModel viewModel);
         Task<DenuncianteViewModel> GetDenunciante(int id);
         Task<Denunciante> CreateOrUpdate(DenuncianteViewModel viewModel);
+
+
 
     }
 }

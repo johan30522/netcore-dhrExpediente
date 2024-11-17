@@ -1,0 +1,26 @@
+﻿<div class="modal fade" id="modalAgregarAnexo" tabindex="-1" aria-labelledby="modalAgregarAnexoLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarAnexoLabel">Agregar Anexo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAgregarAnexo" enctype="multipart/form-data">
+                    <!-- Área de arrastrar archivos -->
+                    <div class="file-drop-area">
+                        <span class="fake-btn">Arrastrar archivo o hacer clic</span>
+                        <span class="file-msg">Ningún archivo seleccionado</span>
+                        <input type="file" name="Files" id="fileInput" class="file-input" required />
+                    </div>
+                    <!-- Aquí se muestra la lista de archivos seleccionados -->
+                    <ul id="fileList" class="file-list"></ul>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarAnexo()">Guardar Anexo</button>
+            </div>
+        </div>
+    </div>
+</div>

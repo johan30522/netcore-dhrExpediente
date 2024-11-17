@@ -177,7 +177,7 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             if(nextState.IsFinalState)
             {
                 flowRequestHeader.IsCompleted = true;
-                flowRequestHeader.CompletedDate = DateTime.UtcNow;
+                flowRequestHeader.CompletedDate = DateTime.Now;
             }
             await _unitOfWork.Save();
 
@@ -232,7 +232,7 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             var history = new FlowHistoryWf
             {
                 RequestFlowHeaderId = requestHeaderFlowId,
-                ActionDate = DateTime.UtcNow,
+                ActionDate = DateTime.Now,
                 PreviousStateId = action.StateId,
                 NewStateId = nextState.Id,
                 ActionPerformedId = action.Id,
@@ -269,7 +269,7 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
                 FlowId = flowId, // Flujo asociado
                 CurrentStateId = initialFlowState.Id, // Estado inicial del flujo
                 CreatedByUserId = userId, // Usuario que inicia el flujo
-                CreatedDate = DateTime.UtcNow // Fecha de creación
+                CreatedDate = DateTime.Now // Fecha de creación
             };
 
             await _unitOfWork.RequestFlowHeaderWf.Add(flowRequestHeader);
@@ -304,6 +304,7 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             {
                 return await _unitOfWork.FlowHistoryWf.GetAll(
                     filter: h => h.RequestFlowHeaderId == requestFlowHeaderId,
+                    orderBy: q => q.OrderByDescending(h => h.ActionDate),
                     includeProperties: "PreviousState,NewState,ActionPerformed,PerformedByUser"
                 );
             }

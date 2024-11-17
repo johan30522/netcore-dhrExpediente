@@ -26,7 +26,14 @@ namespace AppExpedienteDHR.Core.Profiles
                 .ForMember(dest => dest.Denuncia, opt => opt.MapFrom(src => src.Denuncia))
                 .ForMember(dest => dest.PersonaAfectada, opt => opt.MapFrom(src => src.PersonaAfectada))    
                 .ForMember(dest => dest.Denunciante, opt => opt.MapFrom(src => src.Denunciante))
+                .ForMember(dest => dest.ExpedienteAdjuntos, opt => opt.MapFrom(src => src.ExpedienteAdjuntos))
                 .ReverseMap();
+
+            CreateMap<ExpedienteAdjunto, ExpedienteAdjuntoViewModel>()
+            .ForMember(dest => dest.RutaArchivo, opt => opt.MapFrom(src => src.Adjunto.Ruta))
+            .ForMember(dest => dest.NombreArchivo, opt => opt.MapFrom(src => src.Adjunto.NombreOriginal))
+            .ForMember(dest => dest.FechaSubida, opt => opt.MapFrom(src => src.Adjunto.FechaSubida))
+            .ReverseMap();
 
 
             // reverse map
@@ -37,6 +44,8 @@ namespace AppExpedienteDHR.Core.Profiles
             CreateMap<DenuncianteViewModel, Denunciante>().ReverseMap();
             CreateMap<ExpedienteViewModel, Expediente>().ReverseMap();
             CreateMap<PersonaAfectadaViewModel, PersonaAfectada>().ReverseMap();
+            CreateMap<Adjunto, AdjuntoViewModel>().ReverseMap();
+
 
 
 

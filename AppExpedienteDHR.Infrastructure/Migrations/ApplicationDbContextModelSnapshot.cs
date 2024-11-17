@@ -395,10 +395,22 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.Property<int?>("DenuncianteId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DerechoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DescriptorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Detalle")
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int?>("EspecificidadId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EventoId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
@@ -424,9 +436,40 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
 
                     b.HasIndex("DenuncianteId");
 
+                    b.HasIndex("DerechoId");
+
+                    b.HasIndex("DescriptorId");
+
+                    b.HasIndex("EspecificidadId");
+
+                    b.HasIndex("EventoId");
+
                     b.HasIndex("PersonaAfectadaId");
 
                     b.ToTable("Expedientes", "dhr");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.ExpedienteAdjunto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdjuntoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpedienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdjuntoId");
+
+                    b.HasIndex("ExpedienteId");
+
+                    b.ToTable("ExpedienteAdjuntos");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", b =>
@@ -842,8 +885,7 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
 
                     b.Property<string>("Comments")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -1430,6 +1472,22 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .HasForeignKey("DenuncianteId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Admin.Derecho", "Derecho")
+                        .WithMany()
+                        .HasForeignKey("DerechoId");
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Admin.Descriptor", "Descriptor")
+                        .WithMany()
+                        .HasForeignKey("DescriptorId");
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Admin.Especificidad", "Especificidad")
+                        .WithMany()
+                        .HasForeignKey("EspecificidadId");
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Admin.Evento", "Evento")
+                        .WithMany()
+                        .HasForeignKey("EventoId");
+
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", "PersonaAfectada")
                         .WithMany()
                         .HasForeignKey("PersonaAfectadaId");
@@ -1438,7 +1496,34 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
 
                     b.Navigation("Denunciante");
 
+                    b.Navigation("Derecho");
+
+                    b.Navigation("Descriptor");
+
+                    b.Navigation("Especificidad");
+
+                    b.Navigation("Evento");
+
                     b.Navigation("PersonaAfectada");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.ExpedienteAdjunto", b =>
+                {
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Adjunto", "Adjunto")
+                        .WithMany()
+                        .HasForeignKey("AdjuntoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente", "Expediente")
+                        .WithMany("ExpedienteAdjuntos")
+                        .HasForeignKey("ExpedienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adjunto");
+
+                    b.Navigation("Expediente");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", b =>
@@ -1737,6 +1822,11 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.Navigation("Denuncias");
 
                     b.Navigation("Expedientes");
+                });
+
+            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.Expediente", b =>
+                {
+                    b.Navigation("ExpedienteAdjuntos");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.Dhr.PersonaAfectada", b =>

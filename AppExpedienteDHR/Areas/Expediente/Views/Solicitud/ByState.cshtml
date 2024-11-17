@@ -21,7 +21,7 @@
         <thead>
             <tr>
                 <th></th> <!-- Nueva columna para los íconos de expansión -->
-                <th>Detalle</th>
+                <th>Denunciante</th>
                 <th>Estado</th>
                 <th>Fecha</th>
                 <th>Acciones</th>
@@ -45,16 +45,7 @@
                     "defaultContent": '<i class="fas fa-chevron-right"></i>', // Ícono por defecto
                     "width": "5%"
                 },
-                {
-                    "data": "expedienteDetalle",
-                    "width": "40%",
-                    "render": function (data) {
-                        if (data.length > 60) {
-                            return data.substring(0, 60) + "...";
-                        }
-                        return data;
-                    }
-                },
+                { "data": "denuncianteFullName", "width": "20%" },
                 { "data": "estadoActual", "width": "20%" },
                 {
                     "data": "fechaCreacionFlujo",

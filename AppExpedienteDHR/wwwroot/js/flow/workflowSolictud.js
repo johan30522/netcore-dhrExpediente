@@ -19,9 +19,9 @@ function cargarAccionesDisponibles(flowId, currentStateId) {
 }
 
 // Función para guardar y procesar acción
+let isProcessing = false;
+
 function guardarYProcesarAccion(flowHeaderId, requestType) {
-    // Guardar la solicitud antes de procesar la acción
-    const form = $('#formSeleccionarAccion');
     const actionId = $('#actionSelect').val();
     const comments = $('#actionComments').val();
 
@@ -43,17 +43,23 @@ function guardarYProcesarAccion(flowHeaderId, requestType) {
         return;
     }
 
+    // Configurar el estado de procesamiento
+    isProcessing = true;
+    window.onbeforeunload = function () {
+        return isProcessing ? "La solicitud está en proceso. ¿Seguro que deseas salir?" : null;
+    };
 
+    // Mostrar el spinner y deshabilitar los elementos del modal
+    $('#processingSpinner').removeClass('d-none'); // Muestra el spinner
+    $('#modalSeleccionarAccion .form-control, #btnContinuar, .btn-close').prop('disabled', true); // Deshabilitar todos los controles
 
-    // Primera llamada: Guardar la solicitud
+    // Procesar la solicitud
     $.post(`/${requestType}/Solicitud/Save`, $('#formExpediente').serialize(), function () {
-        // Segunda llamada: Procesar la acción en el flujo
         $.post('/General/Workflow/ProcessAction', {
             requestId: flowHeaderId,
             actionId: actionId,
             comments: comments
         }, function (response) {
-            // Mostrar mensaje de confirmación antes de redirigir
             Swal.fire({
                 icon: 'success',
                 title: 'Proceso exitoso',
@@ -61,18 +67,35 @@ function guardarYProcesarAccion(flowHeaderId, requestType) {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const requestId = response.requestId;
-                    const requestType = response.requestType;
-                    const redirectUrl = `/${requestType}/Solicitud/Info/${requestId}`;
+                    const redirectUrl = `/${response.requestType}/Solicitud/Info/${response.requestId}`;
+                    isProcessing = false; // Desactivar confirmación de navegación
                     window.location.href = redirectUrl;
                 }
             });
-
         }).fail(function () {
-            alert("Error al procesar la acción.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al procesar la acción.'
+            });
+        }).always(function () {
+            // Restaurar el estado original después del procesamiento
+            $('#processingSpinner').addClass('d-none'); // Oculta el spinner
+            $('#modalSeleccionarAccion .form-control, #btnContinuar, .btn-close').prop('disabled', false); // Habilitar todos los controles
+            isProcessing = false; // Desactivar confirmación de navegación
+            window.onbeforeunload = null;
         });
     }).fail(function () {
-        alert("Error al guardar la solicitud.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al guardar la solicitud.'
+        });
+    }).always(function () {
+        $('#processingSpinner').addClass('d-none'); // Oculta el spinner
+        $('#modalSeleccionarAccion .form-control, #btnContinuar, .btn-close').prop('disabled', false); // Habilitar todos los controles
+        isProcessing = false;
+        window.onbeforeunload = null;
     });
 }
 
