@@ -58,11 +58,12 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
         IEspecificidadRepository Especificidad { get; }
         IDescriptorRepository Descriptor { get; }
         IEventoRepository Evento { get; }
+        IEmailTemplateRepository EmailTemplate { get; }
 
 
 
 
-         Task Save();
+        Task Save();
         IRepository<T> GetRepository<T>() where T : class;
 
     }

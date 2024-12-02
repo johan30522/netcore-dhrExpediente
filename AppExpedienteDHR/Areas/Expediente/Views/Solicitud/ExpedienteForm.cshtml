@@ -144,6 +144,7 @@
             <script src="~/lib/tinymce/js/tinymce/tinymce.min.js"></script>
             <script src="~/js/dhr/expediente.js"></script>
         }
+
         <script>
             const expedienteId = '@expedienteId';
             const lockRecordId = '@lockRecordId';
@@ -152,6 +153,16 @@
 
             console.log(`is edit mode ${isEditMode}`);
 
+            // // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
+            // if (performance.navigation.type === 2) {
+            //     console.log("recarga la pagina ya que se dio en atras");
+            //     location.reload(true); // Forzar recarga de la página desde el servidor
+            // }
+
+            if (performance.getEntriesByType("navigation")[0].type === "back_forward") {
+                console.log("La página se accedió usando el botón 'Atrás' del navegador. Recargando...");
+                location.reload(true); // Forzar recarga desde el servidor
+            }
 
             if (!expedienteId) { // si no tiene expedienteId
                 // Deshabilitar los campos de la denuncia si no está en modo edición
@@ -179,10 +190,6 @@
                 initLockRecord(lockRecordId);
             }
 
-            // Verificar si la página se está accediendo a través del historial (por ejemplo, al hacer clic en "Atrás")
-            if (performance.navigation.type === 2) {
-                location.reload(true); // Forzar recarga de la página desde el servidor
-            }
 
             //Cuando el documento esta listo
             $(document).ready(function () {

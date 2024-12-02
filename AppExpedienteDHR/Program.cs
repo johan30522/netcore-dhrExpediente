@@ -123,6 +123,8 @@ builder.Services.AddScoped<IEventoTipologiaService, EventoTipologiaService>();
 builder.Services.AddScoped<IDescriptorTipologiaService, DescriptorTipologiaService>();
 builder.Services.AddScoped<IEspecificidadTipologiaService, EspecificidadTipologiaService>();
 builder.Services.AddScoped<IDerechoTipologiaService, DerechoTipologiaService>();
+builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+builder.Services.AddScoped<ITemplateRenderer, TemplateRenderer>();
 
 
 
@@ -166,7 +168,7 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
+// Permite el uso de archivos estáticos
 app.UseStaticFiles();
 
 app.UseRouting();

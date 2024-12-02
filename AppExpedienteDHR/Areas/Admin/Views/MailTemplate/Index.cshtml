@@ -1,0 +1,26 @@
+﻿
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var template in Model)
+        {
+            <tr>
+                <td>@template.Name</td>
+                <td>@(template.IsActive ? "Activo" : "Inactivo")</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = template.Id })">Editar</a> |
+                    <a href="@Url.Action("Preview", new { id = template.Id })">Vista Previa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="@Url.Action("Create")" class="btn btn-primary">Crear Nueva Plantilla</a>

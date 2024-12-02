@@ -72,6 +72,8 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             Especificidad = new EspecificidadRepository(_context);
             Descriptor = new DescriptorRepository(_context);
             Evento = new EventoRepository(_context);
+            EmailTemplate = new EmailTemplateRepository(_context);
+
 
 
             LockRecord = new LockRecordRepository(_context, _logger);
@@ -128,6 +130,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         public IEspecificidadRepository Especificidad { get; private set; }
         public IDescriptorRepository Descriptor { get; private set; }
         public IEventoRepository Evento { get; private set; }
+        public IEmailTemplateRepository EmailTemplate { get; private set; }
         #endregion
 
         public ILockRecordRepository LockRecord { get; private set; }

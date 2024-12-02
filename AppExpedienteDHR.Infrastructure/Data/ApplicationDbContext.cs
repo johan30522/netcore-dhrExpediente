@@ -65,6 +65,7 @@ namespace AppExpedienteDHR.Infrastructure.Data
         public DbSet<Evento> Eventos { get; set; }
         public DbSet<Descriptor> Descriptores { get; set; }
         public DbSet<Especificidad> Especificidades { get; set; }
+        public DbSet<EmailTemplate> EmailTemplates { get; set; }
         #endregion
 
 

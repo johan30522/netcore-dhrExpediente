@@ -12,6 +12,7 @@ namespace AppExpedienteDHR.Core.Profiles
             CreateMap<Descriptor, DescriptorViewModel>().ReverseMap();
             CreateMap<Especificidad, EspecificidadViewModel>().ReverseMap();
             CreateMap<Evento, EventoViewModel>().ReverseMap();
+            CreateMap<EmailTemplate, EmailTemplateViewModel>().ReverseMap();
 
         }
 
