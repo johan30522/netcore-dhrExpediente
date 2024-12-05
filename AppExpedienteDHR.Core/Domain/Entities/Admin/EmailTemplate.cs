@@ -18,6 +18,8 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Admin
 
         [Required]
         public string BodyTemplate { get; set; } // Plantilla HTML enriquecida
+        [Required]
+        public string EntityName { get; set; } // Nombre de la entidad a la que pertenece
 
         public bool IsActive { get; set; } = true; // Indica si está activa
 

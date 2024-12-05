@@ -34,6 +34,9 @@
 
             <a class="list-group-item list-group-item-action bg-light @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "selected" : "")"
                asp-area="Admin" asp-controller="User" asp-action="Index">Usuarios</a>
+
+            <a class="list-group-item list-group-item-action bg-light @(ViewContext.RouteData.Values["controller"]?.ToString() == "MailTemplate" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "selected" : "")"
+               asp-area="Admin" asp-controller="MailTemplate" asp-action="Index">Plantillas de Correo</a>
         </div>
     </div>
 

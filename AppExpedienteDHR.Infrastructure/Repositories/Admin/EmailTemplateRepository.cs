@@ -17,6 +17,9 @@ namespace AppExpedienteDHR.Infrastructure.Repositories.Admin
             var emailTemplateToUpdate = await _context.EmailTemplates.FirstOrDefaultAsync(e => e.Id == emailTemplate.Id);
             if (emailTemplateToUpdate != null)
             {
+                emailTemplateToUpdate.Name = emailTemplate.Name;
+                emailTemplateToUpdate.EntityName = emailTemplate.EntityName;
+
                 emailTemplateToUpdate.BodyTemplate = emailTemplate.BodyTemplate;
                 emailTemplateToUpdate.SubjectTemplate = emailTemplate.SubjectTemplate;
                 await _context.SaveChangesAsync();

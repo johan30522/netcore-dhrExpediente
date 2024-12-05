@@ -1,26 +1,195 @@
-﻿
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Gestión de Plantillas de Correo";
+}
 
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Plantillas de Correo</h2>
+        <button class="btn btn-primary" id="btnCreate">Nueva Plantilla</button>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var template in Model)
-        {
+    <table id="templatesTable" class="table table-striped">
+        <thead>
             <tr>
-                <td>@template.Name</td>
-                <td>@(template.IsActive ? "Activo" : "Inactivo")</td>
-                <td>
-                    <a href="@Url.Action("Edit", new { id = template.Id })">Editar</a> |
-                    <a href="@Url.Action("Preview", new { id = template.Id })">Vista Previa</a>
-                </td>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Entidad</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
-<a href="@Url.Action("Create")" class="btn btn-primary">Crear Nueva Plantilla</a>
+        </thead>
+    </table>
+</div>
+
+<!-- Modal para Crear/Editar Plantillas -->
+<div class="modal fade" id="templateModal" tabindex="-1" aria-labelledby="templateModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="templateModalLabel">Nueva Plantilla</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="templateForm">
+                    <input type="hidden" id="templateId" />
+                    <div class="form-group mb-3">
+                        <label for="templateName">Nombre</label>
+                        <input type="text" id="templateName" class="form-control" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="entityName">Entidad Asociada</label>
+                        <input type="text" id="entityName" class="form-control" placeholder="Ej: Expediente" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="subjectTemplate">Asunto</label>
+                        <input type="text" id="subjectTemplate" class="form-control" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="bodyTemplate">Cuerpo (HTML)</label>
+                        <textarea id="bodyTemplate" class="form-control"></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="isActive" class="form-check-input" />
+                        <label for="isActive" class="form-check-label">Activo</label>
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Vista Previa -->
+<!-- Modal para Vista Previa -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h3 class="modal-title" id="previewModalLabel">Vista Previa del Correo</h3>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h5 class="text-secondary">Encabezado:</h5>
+                    <h5 id="previewSubject"></h5>
+                </div>
+                <hr />
+                <div class="mb-3">
+                    <h5 class="text-secondary">Cuerpo:</h5>
+                    <div id="previewBody" class="border p-3" style="background-color: #f9f9f9;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+
+
+
+
+@section Scripts {
+    <script src="~/js/datatable/datatable.js"></script>
+    <script>
+        let editor;
+
+        $(document).ready(function () {
+            // Inicializar CKEditor
+
+            editor = CKEDITOR.replace("bodyTemplate",{
+                allowedContent: true
+            });
+
+
+
+
+
+            // Cargar DataTable usando la librería genérica
+            const table = loadDataTable("templatesTable", "/admin/MailTemplate/GetAll", [
+                { data: "id" },
+                { data: "name" },
+                { data: "entityName" },
+                {
+                    data: "isActive",
+                    render: data => data ? "Activo" : "Inactivo"
+                },
+                {
+                    data: "id",
+                    render: data => `
+                        <button class="btn btn-sm btn-primary btn-edit" data-id="${data}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-info btn-preview" data-id="${data}"><i class="fa fa-eye"></i></button>
+                        <button class="btn btn-sm btn-danger btn-delete" data-id="${data}"><i class="fas fa-trash-alt"></i></button>
+
+                    `
+                }
+            ]);
+
+            // Abrir modal para crear
+            $("#btnCreate").click(() => {
+                $("#templateId").val("");
+                $("#templateName").val("");
+                $("#entityName").val("");
+                $("#subjectTemplate").val("");
+                editor.setData("");
+                $("#isActive").prop("checked", true);
+                $("#templateModalLabel").text("Nueva Plantilla");
+                $("#templateModal").modal("show");
+            });
+
+            // Guardar Plantilla
+            $("#templateForm").submit(function (e) {
+                e.preventDefault();
+                const data = {
+                    id: $("#templateId").val(),
+                    name: $("#templateName").val(),
+                    entityName: $("#entityName").val(),
+                    subjectTemplate: $("#subjectTemplate").val(),
+                    bodyTemplate: editor.getData(),
+                    isActive: $("#isActive").is(":checked")
+                };
+                $.post("/admin/MailTemplate/Save", data)
+                    .done(() => {
+                        $("#templateModal").modal("hide");
+                        table.ajax.reload();
+                    })
+                    .fail(err => alert("Error al guardar: " + err.responseText));
+            });
+
+            // Editar Plantilla
+            $("#templatesTable").on("click", ".btn-edit", function () {
+                const id = $(this).data("id");
+                $.get(`/admin/MailTemplate/GetById?id=${id}`, function (data) {
+                    $("#templateId").val(data.id);
+                    $("#templateName").val(data.name);
+                    $("#entityName").val(data.entityName);
+                    $("#subjectTemplate").val(data.subjectTemplate);
+                    editor.setData(data.bodyTemplate);
+                    $("#isActive").prop("checked", data.isActive);
+                    $("#templateModalLabel").text("Editar Plantilla");
+                    $("#templateModal").modal("show");
+                });
+            });
+
+            // Vista Previa
+            $("#templatesTable").on("click", ".btn-preview", function () {
+                const id = $(this).data("id");
+                const entityName = "Expediente"; // Aquí puedes cambiar a la entidad que desees probar
+                $.get(`/admin/MailTemplate/Preview?id=${id}&entityName=${entityName}`, function (data) {
+                    $("#previewSubject").text(data.subject);
+                    $("#previewBody").html(data.body);
+                    $("#previewModal").modal("show");
+                });
+            });
+
+            // Eliminar Plantilla
+            $("#templatesTable").on("click", ".btn-delete", function () {
+                const id = $(this).data("id");
+                Delete(`/admin/MailTemplate/Delete?id=${id}`, "templatesTable");
+            });
+        });
+    </script>
+}
