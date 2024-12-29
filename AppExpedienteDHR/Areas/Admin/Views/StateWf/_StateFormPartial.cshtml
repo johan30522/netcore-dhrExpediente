@@ -7,6 +7,7 @@
 
 <h3 class="text-center">@ViewData["Title"]</h3>
 <br />
+<link rel="stylesheet" href="~/css/flow/stateForm.css">
 
 <form id="stateForm" method="post"
       asp-action="Save">
@@ -49,21 +50,74 @@
     @* no se pueden crear acciones si es estado final, si esta selccionado  *@
     <div id="actionSections">
 
-            @if (Model.Id > 0)
-            {
-                <hr />
-                <div class="form-group">
-                    <div class="text-center">
-                        <label for="Actions">Acciones</label>
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="loadActionForm(@Model.Id)"> <i class="fas fa-plus"></i> Crear</button>
-                    <div id="actionsTableContainer">
-                        @await Html.PartialAsync("_ActionsTablePartial", Model.Actions)
-                    </div>
+        @if (Model.Id > 0)
+        {
+            <hr />
+            <div class="form-group">
+                <div class="text-center">
+                    <label for="Actions">Acciones</label>
                 </div>
-            }
-        
+                <button type="button" class="btn btn-primary" onclick="loadActionForm(@Model.Id)"> <i class="fas fa-plus"></i> Crear</button>
+                <div id="actionsTableContainer">
+                    @await Html.PartialAsync("_ActionsTablePartial", Model.Actions)
+                </div>
+            </div>
+        }
+
     </div>
+    @if (Model.Id > 0)
+    {
+        <h3>Definión de Notificaciones</h3>
+        <div id="notification-settings" class="container mt-4">
+            <!-- Activar notificaciones -->
+            <div class="form-check mb-3">
+                <label>
+                    <input class="form-check-input" asp-for="IsNotificationActive" type="checkbox" id="notifications-active" />
+                    <label class="form-check-label" for="notifications-active">
+                        Activar notificaciones
+                    </label>
+                </label>
+            </div>
+
+
+            <!-- Selección de grupos -->
+            <div id="notification-group-selection" class="mb-3" style="display: none;">
+                <label for="Notification-Groups">Notificar a estos Grupos:</label>
+                <select id="Notification-Groups" name="StateNotification.SelectedGroupIds" class="form-control" multiple="multiple" style="width: 100%;">
+                    @if (Model.StateNotification != null && Model.StateNotification.Groups != null)
+                    {
+                        @foreach (var group in Model.StateNotification.Groups)
+                        {
+                            <option value="@group.Id" selected=@(Model.StateNotification.SelectedGroupIds.Contains(group.Id) ? "selected" : null)>
+                                @group.Name
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <!-- Ingreso de destinatarios -->
+            <div id="recipient-emails" class="mb-3" style="display:none;">
+                <label class="form-label">Notificar a estos Correos:</label>
+                <div id="email-list" class="d-flex flex-wrap gap-2 mb-2"></div>
+                <!-- Campo oculto para almacenar correos vinculados al modelo -->
+                <input type="hidden" asp-for="StateNotification.To" id="toEmailsHidden" />
+                <input type="text" class="form-control" id="email-input" placeholder="Agregar correo y presiona Enter" />
+            </div>
+
+            <!-- Selección de plantilla -->
+            <div id="email-template-selection" class="mb-3" style="display:none;">
+                <label for="email-template" class="form-label">Plantilla de correo:</label>
+                <select asp-for="StateNotification.EmailTemplateId" id="email-template" class="form-select"
+                        data-selected-value="@Model.StateNotification.EmailTemplateId">
+                    <option value="">Seleccionar plantilla</option>
+                </select>
+            </div>
+        </div>
+    }
+
+
+   
 
 
 </form>

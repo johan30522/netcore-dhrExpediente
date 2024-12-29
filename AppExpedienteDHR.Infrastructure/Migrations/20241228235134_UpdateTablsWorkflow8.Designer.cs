@@ -4,16 +4,19 @@ using AppExpedienteDHR.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AppExpedienteDHR.Infrastructure.Migrations
+namespace AppExpedienteDHR.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241228235134_UpdateTablsWorkflow8")]
+    partial class UpdateTablsWorkflow8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1120,6 +1123,9 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
 
                     b.HasKey("GroupId", "NotificationId");
 
+                    b.HasIndex("GroupId")
+                        .IsUnique();
+
                     b.HasIndex("NotificationId");
 
                     b.ToTable("NotificationGroupsWfs");
@@ -1815,7 +1821,7 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.HasOne("AppExpedienteDHR.Core.Domain.IdentityEntities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -1837,8 +1843,8 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.NotificationGroupWf", b =>
                 {
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.GroupWf", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
+                        .WithOne()
+                        .HasForeignKey("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.NotificationGroupWf", "GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -37,6 +37,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             // Workflow repositories
             ActionWf = new ActionWfRepository(_context);
             StateWf = new StateWfRepository(_context);
+            NotificationGroupWf = new NotificationGroupRepository(_context);
             ActionGroupWf = new ActionGroupWfRepository(_context);
             GroupWf = new GroupWfRepository(_context);
             ActionRuleWf = new ActionRuleWfRepository(_context);
@@ -44,6 +45,8 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
             FlowWf = new FlowWfRepository(_context);
             GroupUserWf = new GroupUserWfRepository(_context);
             RequestFlowHeaderWf = new FlowRequestHeaderWfRepository(_context);
+            StateNotification = new StateNotificationRepository(_context);
+
 
             // General repositories
             Distrito = new DistritoRepository(_context);
@@ -91,6 +94,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         #region Workflow repositories
         public IActionWfRepository ActionWf { get; private set; }
         public IStateWfRepository StateWf { get; private set; }
+        public INotificationGroupWfRepository NotificationGroupWf { get; }
         public IActionGroupWfRepository ActionGroupWf { get; private set; }
         public IGroupWfRepository GroupWf { get; private set; }
         public IActionRuleWfRespository ActionRuleWf { get; private set; }
@@ -98,6 +102,7 @@ namespace AppExpedienteDHR.Infrastructure.Repositories
         public IFlowWfRepository FlowWf { get; private set; }
         public IGroupUserWfRepository GroupUserWf { get; private set; }
         public IFlowRequestHeaderWfRepository RequestFlowHeaderWf { get; private set; }
+        public IStateNotificationRepository StateNotification { get; private set; }
 
         #endregion
 

@@ -4,6 +4,9 @@ using AutoMapper;
 using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
 using Serilog;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
+using AppExpedienteDHR.Core.Domain.Entities.Admin;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace AppExpedienteDHR.Core.Services.WorkFlow
 {
@@ -12,6 +15,8 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
         private readonly IContainerWork _containerWork;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+
+
 
         public StateWfService(IContainerWork containerWork, IMapper mapper, ILogger logger)
         {
@@ -72,7 +77,10 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
 
                 StateWf state = await _containerWork.StateWf.GetFirstOrDefault(
                     s => s.Id == id && s.IsDeleted == false,
-                    includeProperties: "Actions");
+                    includeProperties: "Actions,StateNotification.NotificationGroups.Group");
+
+
+
                 StateWfViewModel stateViewModel = _mapper.Map<StateWfViewModel>(state);
                 return stateViewModel;
             }
@@ -105,6 +113,75 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
             {
                 StateWf state = _mapper.Map<StateWf>(stateViewModel);
                 await _containerWork.StateWf.Update(state);
+
+                await _containerWork.Save();
+
+                // si el estado cuenta con una definicion de notificacion se actualiza
+                if (state.IsNotificationActive)
+                {
+
+                    // si la notificacion no existe se crea, verifica si el estado tiene una notificacion asociada
+                    StateNotificationWf stateNotification = await _containerWork.StateNotification.GetFirstOrDefault(
+                        sn => sn.StateId == state.Id && sn.IsDeleted == false);
+                    // crea la notificacion
+                    int idStateNotification = 0;
+                    StateNotificationWf newStateNotification = new StateNotificationWf
+                    {
+                        StateId = state.Id,
+                        //State = state,
+                        EmailTemplateId = stateViewModel.StateNotification.EmailTemplateId,
+                        To = stateViewModel.StateNotification.To,
+                        Cc = stateViewModel.StateNotification.Cc,
+                        Bcc = stateViewModel.StateNotification.Bcc
+                    };
+                    if (stateNotification == null)
+                    {
+                        // si la notificacion no existe se crea
+                        await _containerWork.StateNotification.Add(newStateNotification);
+                        await _containerWork.Save();
+                        idStateNotification = newStateNotification.Id;
+                    }
+                    else
+                    {
+                        // si la notificacion existe solo se actualiza
+                        stateNotification.EmailTemplateId = newStateNotification.EmailTemplateId;
+                        stateNotification.To = newStateNotification.To;
+                        stateNotification.Cc = newStateNotification.Cc;
+                        stateNotification.Bcc = newStateNotification.Bcc;
+                        await _containerWork.StateNotification.Update(stateNotification);
+                        await _containerWork.Save();
+                        idStateNotification = stateNotification.Id;
+                    }
+                    // si tiene grupos de notificacion se actualizan, se eliminan los existentes y se crean los nuevos
+                    IEnumerable<NotificationGroupWf> notificationGroups = await _containerWork.NotificationGroupWf.GetAll(
+                        ng => ng.NotificationId == idStateNotification);
+                    if (notificationGroups != null && notificationGroups.Count() > 0)
+                    {
+                        // se eliminan los grupos existentes
+                        foreach (var notificationGroup in notificationGroups)
+                        {
+                            await _containerWork.NotificationGroupWf.Remove(notificationGroup);
+                        }
+                        await _containerWork.Save();
+                    }
+                    // se crean los nuevos grupos si existen
+                    if (stateViewModel.StateNotification.SelectedGroupIds != null)
+                    {
+                        foreach (var groupId in stateViewModel.StateNotification.SelectedGroupIds)
+                        {
+                            NotificationGroupWf notificationGroup = new NotificationGroupWf
+                            {
+                                NotificationId = stateNotification.Id,
+                                GroupId = groupId
+                            };
+                            await _containerWork.NotificationGroupWf.Add(notificationGroup);
+                        }
+                        await _containerWork.Save();
+                    }
+
+                }
+
+
             }
             catch (Exception ex)
             {

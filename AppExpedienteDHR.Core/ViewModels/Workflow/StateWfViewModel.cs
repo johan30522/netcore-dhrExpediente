@@ -19,7 +19,11 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
 
         public bool IsInitialState { get; set; }
         public bool IsFinalState { get; set; }
+        public bool IsNotificationActive { get; set; } = false;
 
         public List<ActionWfViewModel>? Actions { get; set; } = new List<ActionWfViewModel>();
+
+        public StateNotificationWfViewModel? StateNotification { get; set; }
+
     }
 }

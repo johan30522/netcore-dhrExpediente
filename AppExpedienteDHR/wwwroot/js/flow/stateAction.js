@@ -5,8 +5,6 @@
         $.validator.unobtrusive.parse('#actionForm'); // Reinicializar validaciones
         $('#actionModal').modal('show');
         InitActionForm(); // Inicializar eventos del formulario
-        // Habilitar scroll en el contenedor del formulario
-        console.log('Habilitando scroll en el contenedor del formulario ambos');
         // Habilitar scroll vertical en el contenedor del formulario
         $('#actionFormContainer').css({
             'max-height': '70vh',

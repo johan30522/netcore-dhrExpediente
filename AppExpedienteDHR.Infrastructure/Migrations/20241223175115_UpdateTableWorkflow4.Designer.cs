@@ -4,16 +4,19 @@ using AppExpedienteDHR.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AppExpedienteDHR.Infrastructure.Migrations
+namespace AppExpedienteDHR.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241223175115_UpdateTableWorkflow4")]
+    partial class UpdateTableWorkflow4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1120,9 +1123,13 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
 
                     b.HasKey("GroupId", "NotificationId");
 
-                    b.HasIndex("NotificationId");
+                    b.HasIndex("GroupId")
+                        .IsUnique();
 
-                    b.ToTable("NotificationGroupsWfs");
+                    b.HasIndex("NotificationId")
+                        .IsUnique();
+
+                    b.ToTable("NotificationGroups");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateNotificationWf", b =>
@@ -1162,7 +1169,7 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.HasIndex("StateId")
                         .IsUnique();
 
-                    b.ToTable("StateNotificationsWfs");
+                    b.ToTable("StateNotifications");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateWf", b =>
@@ -1200,9 +1207,14 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<int?>("StateNotificationId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FlowId");
+
+                    b.HasIndex("StateNotificationId");
 
                     b.ToTable("StateWfs");
                 });
@@ -1815,7 +1827,7 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.HasOne("AppExpedienteDHR.Core.Domain.IdentityEntities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -1837,15 +1849,15 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.NotificationGroupWf", b =>
                 {
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.GroupWf", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
+                        .WithOne()
+                        .HasForeignKey("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.NotificationGroupWf", "GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateNotificationWf", "StateNotification")
-                        .WithMany("NotificationGroups")
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithOne()
+                        .HasForeignKey("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.NotificationGroupWf", "NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -1862,9 +1874,9 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateWf", "State")
-                        .WithOne("StateNotification")
+                        .WithOne()
                         .HasForeignKey("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateNotificationWf", "StateId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EmailTemplate");
@@ -1880,7 +1892,13 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateNotificationWf", "StateNotification")
+                        .WithMany()
+                        .HasForeignKey("StateNotificationId");
+
                     b.Navigation("Flow");
+
+                    b.Navigation("StateNotification");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.IdentityEntities.ApplicationUserRole", b =>
@@ -2013,16 +2031,9 @@ namespace AppExpedienteDHR.Infrastructure.Migrations
                     b.Navigation("GroupUsers");
                 });
 
-            modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateNotificationWf", b =>
-                {
-                    b.Navigation("NotificationGroups");
-                });
-
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities.StateWf", b =>
                 {
                     b.Navigation("Actions");
-
-                    b.Navigation("StateNotification");
                 });
 
             modelBuilder.Entity("AppExpedienteDHR.Core.Domain.IdentityEntities.ApplicationUser", b =>

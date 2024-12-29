@@ -99,7 +99,8 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         #region API CALLS
         // Endpoint para DataTables
         [HttpGet]
-            public async Task<IActionResult> GetAll()
+        [Authorize] // Permitir acceso a cualquier usuario autenticado
+        public async Task<IActionResult> GetAll()
             {
                 var allObj = await _emailTemplateService.GetAllEmailTemplates();
                 return Json(new { data = allObj });

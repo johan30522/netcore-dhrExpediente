@@ -15,6 +15,11 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
         public bool IsInitialState { get; set; } // indica si es el estado inicial
         public bool IsFinalState { get; set; } // Indica si es el estado final
 
+        public bool IsNotificationActive { get; set; } = false; // Indica si se envía notificación
+
+
+
+
         // Foreign Key y navegación hacia FlowWf
         public int FlowId { get; set; }
         [ForeignKey("FlowId")]
@@ -22,5 +27,6 @@ namespace AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities
 
         // Relación uno a muchos con ActionWf
         public ICollection<ActionWf> Actions { get; set; } = new List<ActionWf>();
+        public StateNotificationWf? StateNotification { get; set; }
     }
 }

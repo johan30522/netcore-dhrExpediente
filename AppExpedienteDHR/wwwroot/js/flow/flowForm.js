@@ -51,7 +51,7 @@ function loadGroupForm(flowId, groupId = 0) {
 
     const url = groupId ? `/admin/GroupWf/GetGroup/${groupId}` : `/admin/GroupWf/GetGroupForm?flowId=${flowId}`;
     //const url = `/admin/GroupWf/GetGroupForm?flowId=${flowId}`;
-    $.get(url, function (data) { 
+    $.get(url, function (data) {
         $('#editFormContainer').html(data);
         initializeGroupUserSelect();
         $.validator.unobtrusive.parse('#groupForm'); // Reinicializar validaciones
@@ -60,8 +60,6 @@ function loadGroupForm(flowId, groupId = 0) {
         $(window).scrollTop(scrollPosition);
 
         $('#editFormContainer').fadeIn(); // Mostrar el contenedor del formulario
-
-
     });
 }
 
@@ -118,11 +116,7 @@ function saveGroup() {
     // Crear un objeto que contenga todos los datos del formulario y los usuarios seleccionados
     const formData = form.serializeArray();
 
-    //// Agregar los usuarios seleccionados al objeto de datos del formulario
-    //selectedUsers.forEach(user => {
-    //    formData.push({ name: 'selectedUsers', value: user });
-    //});
-     //Enviar la solicitud AJAX
+    //Enviar la solicitud AJAX
     $.ajax({
         url: form.attr('action'),
         type: 'POST',
@@ -303,9 +297,137 @@ function loadStateForm(flowId, stateId = 0) {
             }
             toggleActionSections(); // Asegurar que las acciones se muestren si no es un estado final
         });
-    });
-}
 
+
+        //Iniciliza campos de Notificacion
+
+        $('#notifications-active').change(function () {
+            const isActive = $(this).is(':checked');
+            $('#group-selection, #recipient-emails, #email-template-selection').toggle(isActive);
+        });
+
+        // inicializa correos al cargar la página (modo edición)
+        initializeNotificationEmailsTo();
+
+        // Cargar de Correo
+        loadEmailTemplates();
+
+        // Inicializa el select2 para seleccionar los grupos
+        initializeGroupSelect();
+
+    });
+
+
+
+}
+// Funcion para inicializar el Select2 de grupos
+function initializeGroupSelect() {
+    //Inicializa el select2 para seleccionar los grupos 
+    $('#Notification-Groups').select2({
+        placeholder: "Seleccione los grupos",
+        allowClear: true,
+        width: '100%',
+        language: {
+            noResults: function () {
+                return "No se encontraron resultados";
+            }
+        },
+        ajax: {
+            url: '/Admin/GroupWf/SearchGroups', // Cambia la ruta según tu controlador
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term // Término buscado
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: $.map(data.groups, function (item) { // Accede al array 'groups'
+                        return {
+                            text: item.name, // Texto que se mostrará en el select
+                            id: item.id // Valor del item en el select
+                        };
+                    })
+                };
+            },
+            cache: true
+        },
+    });
+
+    // Mostrar u ocultar el campo de selección de grupo basado en el estado del checkbox
+    $('#notifications-active').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('#notification-group-selection').show();
+        } else {
+            $('#notification-group-selection').hide();
+            // Limpiar la selección si se desactiva
+            $('#Notification-Groups').val(null).trigger('change');
+        }
+    }).trigger('change'); // Trigger para inicializar el estado correcto
+}
+// Función para inicializar correos al cargar la página (modo edición)
+function initializeNotificationEmailsTo() {
+
+
+    const emailString = $('#toEmailsHidden').val(); // Obtiene el valor del modelo
+    if (emailString) {
+        const emails = emailString.split(';'); // Divide los correos por ';'
+        emails.forEach(email => {
+            if (email.trim() !== '') {
+                $('#email-list').append(`
+                    <span class="email-tag">
+                        ${email} <span class="remove-email" data-email="${email}">x</span>
+                    `);
+            }
+        });
+    }
+
+    // Evento para agregar correos
+    $('#email-input').keypress(function (e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            const email = $(this).val().trim();
+            if (validateEmail(email)) {
+                $(this).removeClass('is-invalid');
+                $('#email-list').append(`
+                <span class="email-tag">
+                    ${email} <span class="remove-email" data-email="${email}">x</span>
+                </span>
+            `);
+                syncEmails();
+                $(this).val('');
+            } else {
+                $(this).addClass('is-invalid');
+            }
+        }
+    });
+    // Evento para eliminar correos
+    $('#email-list').on('click', '.remove-email', function () {
+        $(this).parent().remove();
+        syncEmails();
+    });
+
+    // Sincroniza los correos al enviar el formulario
+    $('form').on('submit', function () {
+        syncEmails();
+    });
+
+
+}
+/**
+ * Funcion permite sincronizar los correos
+ */
+function syncEmails() {
+    const emails = [];
+    $('#email-list .email-tag').each(function () {
+        emails.push($(this).text().trim().slice(0, -1)); // Remueve la "x" de cada correo
+    });
+    $('#toEmailsHidden').val(emails.join(';')); // Sincroniza el campo oculto con correos separados por ";"
+}
+/**
+ * Funcion permite validar el formulario de grupo
+ */
 function toggleActionSections() {
     if ($('#isFinalStateCheckbox').is(':checked')) {
         $('#actionSections').hide();
@@ -313,7 +435,6 @@ function toggleActionSections() {
         $('#actionSections').show();
     }
 }
-
 
 /**
  * Funcion permite validar el formulario de grupo
@@ -430,6 +551,43 @@ function deleteState(stateId) {
             });
         }
     });
+}
+
+
+/**
+ * Funcion permite iniccializar la tabla de acciones
+ */
+function loadEmailTemplates() {
+    $.ajax({
+        url: '/admin/MailTemplate/GetAll',
+        method: 'GET',
+        success: function (templates) {
+            // Agregar opciones dinámicamente
+            templates.data.forEach(template => {
+                $('#email-template').append(
+                    `<option value="${template.id}">${template.name}</option>`
+                );
+            });
+
+            // Seleccionar la opción correspondiente en modo edición
+            const selectedTemplateId = $('#email-template').data('selected-value');
+            if (selectedTemplateId) {
+                $('#email-template').val(selectedTemplateId);
+            }
+        },
+        error: function () {
+            alert('Error al cargar plantillas');
+        }
+    });
+}
+/**
+ * Funcion permite inicializar las validaciones de email
+ * @param {any} email
+ * @returns
+ */
+function validateEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
 }
 
 

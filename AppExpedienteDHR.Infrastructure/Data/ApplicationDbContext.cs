@@ -47,6 +47,9 @@ namespace AppExpedienteDHR.Infrastructure.Data
         public DbSet<ActionRuleWf> ActionRuleWfs { get; set; }
         public DbSet<FlowHistoryWf> FlowHistoryWfs { get; set; }
         public DbSet<FlowRequestHeaderWf> FlowRequestHeaderWfs { get; set; }
+        public DbSet<StateNotificationWf> StateNotificationsWfs { get; set; }
+        public DbSet<NotificationGroupWf> NotificationGroupsWfs { get; set; }
+
         #endregion
 
         #region Dhr Entities
@@ -378,12 +381,49 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 .HasForeignKey(fh => fh.ActionPerformedId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configuración de GroupUserWf -> ApplicationUser (muchos a uno)
-            modelBuilder.Entity<GroupUserWf>()
-                .HasOne(gu => gu.User)
-                .WithMany()
-                .HasForeignKey(gu => gu.UserId)
+            // Configuración de StateWf -> StateNotificationWf (uno a uno)
+            modelBuilder.Entity<StateWf>()
+                .HasOne(s => s.StateNotification)
+                .WithOne(sn => sn.State)
+                .HasForeignKey<StateNotificationWf>(sn => sn.StateId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Configuración de StateNotificationWf
+            modelBuilder.Entity<StateNotificationWf>(entity =>
+            {
+                entity.HasKey(sn => sn.Id); // Clave primaria
+
+                // Relación 1 a 1 con EmailTemplate
+                entity.HasOne(sn => sn.EmailTemplate)
+                      .WithOne()
+                      .HasForeignKey<StateNotificationWf>(sn => sn.EmailTemplateId);
+
+                // Relación 1 a muchos con NotificationGroupWf
+                entity.HasMany(sn => sn.NotificationGroups)
+                      .WithOne(ng => ng.StateNotification)
+                      .HasForeignKey(ng => ng.NotificationId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Configuración de NotificationGroupWf
+            modelBuilder.Entity<NotificationGroupWf>(entity =>
+            {
+                entity.HasKey(ng => new { ng.GroupId, ng.NotificationId }); // Clave compuesta
+
+                // Relación muchos a 1 con StateNotificationWf
+                entity.HasOne(ng => ng.StateNotification)
+                      .WithMany(sn => sn.NotificationGroups)
+                      .HasForeignKey(ng => ng.NotificationId);
+
+                // Relación muchos a 1 con GroupWf
+                entity.HasOne(ng => ng.Group)
+                      .WithMany()
+                      .HasForeignKey(ng => ng.GroupId);
+            });
+
+
+
+
             #endregion
 
             #region Admin entities Fluent API configuration

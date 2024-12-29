@@ -41,6 +41,8 @@ namespace AppExpedienteDHR.Core.Domain.RepositoryContracts
         IFlowWfRepository FlowWf { get; }
         IGroupUserWfRepository GroupUserWf { get; }
         IFlowRequestHeaderWfRepository RequestFlowHeaderWf { get; }
+        IStateNotificationRepository StateNotification { get; }
+        INotificationGroupWfRepository NotificationGroupWf { get; }
 
 
         //DHr

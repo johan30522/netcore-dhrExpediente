@@ -1,0 +1,20 @@
+﻿#email-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.email-tag {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+    .email-tag .remove-email {
+        color: red;
+        cursor: pointer;
+    }
