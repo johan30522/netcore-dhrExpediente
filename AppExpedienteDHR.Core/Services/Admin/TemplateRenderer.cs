@@ -22,41 +22,52 @@ namespace AppExpedienteDHR.Core.Services.Admin
         }
 
 
-        public async Task<string> RenderAsync(string template, IDictionary<string, object> model)
+        public async Task<string> RenderAsync(string template, object model)
         {
+            if (string.IsNullOrWhiteSpace(template))
+            {
+                _logger.Warning("La plantilla proporcionada está vacía o es nula.");
+                return "Error: Plantilla vacía o no válida.";
+            }
+
+            if (model == null)
+            {
+                _logger.Warning("El modelo proporcionado es nulo.");
+                return "Error: Modelo no válido.";
+            }
+
             try
             {
-                if (string.IsNullOrWhiteSpace(template))
-                    throw new ArgumentNullException(nameof(template));
-
-                if (model == null)
-                    throw new ArgumentNullException(nameof(model));
+                // Convertir el modelo en un diccionario
+                var modelDictionary = new Dictionary<string, object>
+                {
+                    [model.GetType().Name] = model
+                };
 
                 // Decodificar la plantilla
                 var decodedTemplate = WebUtility.HtmlDecode(template);
                 _logger.Information("Plantilla decodificada: {Template}", decodedTemplate);
 
-
+                // Intentar analizar la plantilla
                 var parser = new FluidParser();
                 if (!parser.TryParse(decodedTemplate, out var fluidTemplate, out var error))
                 {
-                    throw new Exception($"Error al analizar la plantilla: {error}");
+                    _logger.Warning("Error al analizar la plantilla: {Error}", error);
+                    return "Error: Plantilla mal formada.";
                 }
 
+                // Crear el contexto y renderizar
+                var context = new TemplateContext(modelDictionary, _options);
+                var renderedTemplate = fluidTemplate.Render(context);
 
-                var context = new TemplateContext(model, _options);
-                _logger.Information("Modelo proporcionado: {@Model}", model);
-
-                var returnValueStr = fluidTemplate.Render(context);
-                _logger.Information("Resultado renderizado: {Result}", returnValueStr);
-
-                return await Task.FromResult(returnValueStr);
-
+                _logger.Information("Plantilla renderizada exitosamente.");
+                return await Task.FromResult(renderedTemplate);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error al renderizar la plantilla");
-                throw new Exception("Error al renderizar la plantilla", ex);
+                // Registrar el error y devolver un mensaje predeterminado
+                _logger.Error(ex, "Error al renderizar la plantilla. Modelo: {@Model}", model);
+                return "Error: No se pudo renderizar la plantilla.";
             }
 
         }

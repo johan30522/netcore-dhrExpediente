@@ -1,5 +1,6 @@
 using AppExpedienteDHR.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using System.Diagnostics;
 
 namespace AppExpedienteDHR.Areas.Client.Controllers
@@ -25,10 +26,21 @@ namespace AppExpedienteDHR.Areas.Client.Controllers
             return View();
         }
 
+
+        [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(string? errorMessage = null, string? errorId = null, string? details = null, string? code = null)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorModel = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                Message = errorMessage ?? "Ha ocurrido un error inesperado.",
+                ErrorId = errorId,
+                TechnicalDetails = details, // Detalles técnicos del error
+                ExceptionCode = code // Código de la excepción
+            };
+
+            return View(errorModel);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
         [ForeignKey("EmailTemplateId")]
         public EmailTemplateViewModel? EmailTemplate { get; set; }
         [ForeignKey("GroupId")]
-        public IEnumerable<GroupWfViewModel>? Groups { get; set; }
+        public IEnumerable<GroupWfViewModel>? Groups { get; set; } = new List<GroupWfViewModel>();
 
 
 

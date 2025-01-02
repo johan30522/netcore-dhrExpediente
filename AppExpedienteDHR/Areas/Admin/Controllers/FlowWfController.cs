@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using AppExpedienteDHR.Utils.Validation;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
 using AppExpedienteDHR.Core.Models;
+using AppExpedienteDHR.Core.ServiceContracts.Utils;
 
 namespace AppExpedienteDHR.Areas.Admin.Controllers
 {

@@ -171,7 +171,7 @@ namespace AppExpedienteDHR.Core.Services.WorkFlow
                         {
                             NotificationGroupWf notificationGroup = new NotificationGroupWf
                             {
-                                NotificationId = stateNotification.Id,
+                                NotificationId = idStateNotification,
                                 GroupId = groupId
                             };
                             await _containerWork.NotificationGroupWf.Add(notificationGroup);

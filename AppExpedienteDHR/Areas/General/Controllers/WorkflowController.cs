@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AppExpedienteDHR.Core.ServiceContracts.Workflow;
+using AppExpedienteDHR.Core.ServiceContracts.Utils;
 
 
 namespace AppExpedienteDHR.Areas.General.Controllers
@@ -92,6 +93,8 @@ namespace AppExpedienteDHR.Areas.General.Controllers
                 return StatusCode(500, "Error al obtener el historial del flujo.");
             }
         }
+
+       
 
     }
 }

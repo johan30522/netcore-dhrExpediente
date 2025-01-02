@@ -1,0 +1,40 @@
+﻿@model ErrorViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Error Técnico</h1>
+<p>@Model.Message</p>
+
+@if (!string.IsNullOrEmpty(Model.ErrorId))
+{
+    <p>
+        <strong>ID del Error:</strong> @Model.ErrorId
+    </p>
+    <p>
+        Por favor, comparta este ID con el equipo de TI.
+    </p>
+}
+
+@if (!string.IsNullOrEmpty(Model.ExceptionCode))
+{
+    <p>
+        <strong>Código de Excepción:</strong> @Model.ExceptionCode
+    </p>
+    <p>
+        Este código puede ayudar al equipo de TI a identificar rápidamente el problema.
+    </p>
+}
+
+@if (!string.IsNullOrEmpty(Model.TechnicalDetails))
+{
+    <h3>Detalles Técnicos</h3>
+    <pre>@Model.TechnicalDetails</pre> <!-- Muestra el stack trace de forma legible -->
+}
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>ID de Solicitud:</strong> @Model.RequestId
+    </p>
+}

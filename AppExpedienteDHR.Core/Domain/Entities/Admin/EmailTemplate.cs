@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppExpedienteDHR.Core.Domain.Entities.WorkflowEntities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace AppExpedienteDHR.Core.Domain.Entities.Admin
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+        public ICollection<StateNotificationWf> StateNotifications { get; set; } = new List<StateNotificationWf>();
 
     }
 }

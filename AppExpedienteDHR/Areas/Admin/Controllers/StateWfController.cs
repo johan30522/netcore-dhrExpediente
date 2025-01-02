@@ -39,9 +39,14 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
         {
             var state = await _stateWfService.GetState(id);
 
+
             if (state == null)
             {
                 return NotFound();
+            }
+            if (state.StateNotification == null)
+            {
+                state.StateNotification = new StateNotificationWfViewModel();
             }
 
             return PartialView("_StateFormPartial", state);

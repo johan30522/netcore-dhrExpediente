@@ -394,9 +394,11 @@ namespace AppExpedienteDHR.Infrastructure.Data
                 entity.HasKey(sn => sn.Id); // Clave primaria
 
                 // Relación 1 a 1 con EmailTemplate
+                // Relación muchos a 1 con EmailTemplate
                 entity.HasOne(sn => sn.EmailTemplate)
-                      .WithOne()
-                      .HasForeignKey<StateNotificationWf>(sn => sn.EmailTemplateId);
+                      .WithMany(et => et.StateNotifications) // Agregar una colección en EmailTemplate
+                      .HasForeignKey(sn => sn.EmailTemplateId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
                 // Relación 1 a muchos con NotificationGroupWf
                 entity.HasMany(sn => sn.NotificationGroups)

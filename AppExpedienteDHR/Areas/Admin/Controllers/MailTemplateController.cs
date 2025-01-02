@@ -73,7 +73,6 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 if (template == null) return NotFound();
 
                 // Obtener el tipo de la entidad usando el nombre proporcionado
-                //var entityType = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == entityName);
                 var entityType = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(a => a.GetTypes())
                     .FirstOrDefault(t => t.Name == entityName);
@@ -83,8 +82,8 @@ namespace AppExpedienteDHR.Areas.Admin.Controllers
                 var exampleData = ExampleDataGenerator.GenerateExampleData(entityType);
 
                 // Renderizar las plantillas
-                var subject = await _templateRenderer.RenderAsync(template.SubjectTemplate, new Dictionary<string, object> { [entityName] = exampleData });
-                var body = await _templateRenderer.RenderAsync(template.BodyTemplate, new Dictionary<string, object> { [entityName] = exampleData });
+                var subject = await _templateRenderer.RenderAsync(template.SubjectTemplate, exampleData);
+                var body = await _templateRenderer.RenderAsync(template.BodyTemplate, exampleData);
 
                 return Json(new { subject, body });
             }

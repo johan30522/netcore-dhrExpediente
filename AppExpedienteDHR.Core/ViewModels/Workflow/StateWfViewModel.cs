@@ -23,7 +23,7 @@ namespace AppExpedienteDHR.Core.ViewModels.Workflow
 
         public List<ActionWfViewModel>? Actions { get; set; } = new List<ActionWfViewModel>();
 
-        public StateNotificationWfViewModel? StateNotification { get; set; }
+        public StateNotificationWfViewModel? StateNotification { get; set; } = new StateNotificationWfViewModel();
 
     }
 }

@@ -21,6 +21,9 @@ using Microsoft.Extensions.Options;
 using AppExpedienteDHR.Core.Models;
 using AppExpedienteDHR.Core.ServiceContracts.Admin;
 using AppExpedienteDHR.Core.Services.Admin;
+using AppExpedienteDHR.Core.ServiceContracts.Utils;
+using AppExpedienteDHR.Core.Services.Utils;
+using AppExpedienteDHR.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -98,6 +101,7 @@ builder.Services.AddScoped<IFlowWfService, FlowWfService>();
 builder.Services.AddScoped<IGroupWfService, GroupWfService>();
 builder.Services.AddScoped<IActionRuleWfService, ActionRuleWfService>();
 builder.Services.AddScoped<IWorkflowService, WorkflowService>();
+builder.Services.AddScoped<IRequestWfService, RequestWfService>();
 
 //services general
 builder.Services.AddScoped<IDistritoService, DistritoService>();
@@ -126,6 +130,9 @@ builder.Services.AddScoped<IDerechoTipologiaService, DerechoTipologiaService>();
 builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 builder.Services.AddScoped<ITemplateRenderer, TemplateRenderer>();
 
+//services Utils
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 
 
@@ -141,6 +148,9 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 // Configurar la opción de almacenamiento de archivos
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorage"));
+
+// Configurar la opción de envío de correos electrónicos
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 
 // Agrega soporte para la sesión
@@ -168,6 +178,9 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+// Registrar el middleware de excepciones personalizadas
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 // Permite el uso de archivos estáticos
 app.UseStaticFiles();
 
